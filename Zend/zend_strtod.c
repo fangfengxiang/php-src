@@ -600,6 +600,10 @@ Balloc
 		rv = (Bigint *)MALLOC(sizeof(Bigint) + (x-1)*sizeof(ULong));
 		if (!rv) {
 			FREE_DTOA_LOCK(0);
+			/* CVE-2026-109618 / 712e60f9: fail-stop; keep legacy bailout below. */
+			if (php70_security_is_hardened()) {
+				zend_mm_safe_error_hardened("Balloc() failed to allocate memory");
+			}
 			zend_error_noreturn(E_ERROR, "Balloc() failed to allocate memory");
 		}
 #else
@@ -613,6 +617,10 @@ Balloc
 			rv = (Bigint*)MALLOC(len*sizeof(double));
 			if (!rv) {
 				FREE_DTOA_LOCK(0);
+				/* CVE-2026-109618 / 712e60f9: fail-stop; keep legacy bailout below. */
+				if (php70_security_is_hardened()) {
+					zend_mm_safe_error_hardened("Balloc() failed to allocate memory");
+				}
 				zend_error_noreturn(E_ERROR, "Balloc() failed to allocate memory");
 			}
 #endif

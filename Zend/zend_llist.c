@@ -114,6 +114,11 @@ ZEND_API void zend_llist_destroy(zend_llist *l)
 		current = next;
 	}
 
+	/* CVE-2026-109619 / 712e60f9: tombstone endpoints after destruction. */
+	if (php70_security_is_hardened()) {
+		l->head = NULL;
+		l->tail = NULL;
+	}
 	l->count = 0;
 }
 

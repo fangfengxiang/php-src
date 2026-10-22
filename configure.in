@@ -124,6 +124,7 @@ PHP_EXTRA_VERSION=""
 PHP_VERSION="$PHP_MAJOR_VERSION.$PHP_MINOR_VERSION.$PHP_RELEASE_VERSION$PHP_EXTRA_VERSION"
 PHP_VERSION_ID=`expr [$]PHP_MAJOR_VERSION \* 10000 + [$]PHP_MINOR_VERSION \* 100 + [$]PHP_RELEASE_VERSION`
 
+
 dnl Allow version values to be used in Makefile
 PHP_SUBST(PHP_MAJOR_VERSION)
 PHP_SUBST(PHP_MINOR_VERSION)
@@ -926,6 +927,15 @@ fi
 AC_MSG_RESULT([$PHP_CONFIG_FILE_SCAN_DIR])
 
 test -n "$DEBUG_CFLAGS" && CFLAGS="$CFLAGS $DEBUG_CFLAGS"
+
+dnl Immutable mode: allocation failure paths must not call configuration APIs.
+PHP_ARG_ENABLE(php70-security, whether to enable PHP 7.0 security hardening,
+[  --disable-php70-security Disable security backport (unsafe reference build)], yes, no)
+if test "$PHP_PHP70_SECURITY" = "no"; then
+  AC_DEFINE(PHP70_SECURITY_HARDENED, 0, [PHP 7.0 security backport mode])
+else
+  AC_DEFINE(PHP70_SECURITY_HARDENED, 1, [PHP 7.0 security backport mode])
+fi
 
 PHP_ARG_ENABLE(sigchild, whether to enable PHP's own SIGCHLD handler,
 [  --enable-sigchild       Enable PHP's own SIGCHLD handler], no, no)
