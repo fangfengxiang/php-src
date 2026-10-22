@@ -1,5 +1,43 @@
 ﻿PHP 7.0 UPGRADE NOTES
 
+Unofficial PHP 7.0.33 security backport
+-------------------------------------
+
+This branch backports the minimal PHP 7.4 EOL mitigation for CVE-2026-109618
+and CVE-2026-109619. It is not an official PHP release or the complete fix
+from supported PHP branches. Other vulnerabilities since PHP 7.0 reached
+end of life are outside its scope. See docs/security/verification.md before
+considering deployment.
+
+The default build enables hardened behavior. --disable-php70-security builds
+an unsafe legacy comparison variant; it is not a production fallback. Selection
+is immutable at runtime. Always clean and rebuild when changing modes, and
+rebuild extensions with matching headers. docs/security/repair-map.md records
+the few representation/tooling invariants fixed in both modes.
+
+  . Allocation failure, including memory_limit exhaustion, immediately exits
+    the process with status 1. PHP shutdown functions, destructors, output
+    flushing and C exit callbacks do not run. A fatal diagnostic goes directly
+    to stderr; it does not pass through PHP error_log or display_errors.
+    Configure the SAPI supervisor to capture stderr and replace exited workers.
+    With threaded/in-process SAPIs the entire containing process is affected.
+  . Session upload progress is disabled even when its INI setting reports On.
+    Changing configuration cannot restore the removed callback behavior.
+    Ordinary sessions and file uploads are still supported.
+  . max_multipart_body_parts is a system/per-directory directive. Its default
+    -1 derives the limit from max_input_vars plus nonnegative max_file_uploads.
+    An explicit nonnegative value sets the limit; zero permits no parts.
+    Empty file controls count. Excess parts are rejected with a warning while
+    previously accepted fields/files are retained. The derived sum saturates
+    at the platform's maximum zend_long value.
+  . Only the first Content-Disposition and Content-Type headers for each part
+    are retained. Other headers and duplicates are ignored. This does not add
+    a streamed body-byte limit for missing or untrusted Content-Length.
+  . Public Zend/SAPI structures and API identifiers retain their PHP 7.0
+    layout. Rebuild external extensions using the patched headers: already
+    compiled inline allocation guards otherwise retain the old error path.
+    Custom allocators and third-party early callbacks need separate review.
+
 1. Backward Incompatible Changes
 2. New Features
 3. Changes in SAPI modules

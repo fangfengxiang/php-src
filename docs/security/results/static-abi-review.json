@@ -1,0 +1,38 @@
+{
+  "Zend/zend_types.h": {
+    "unchanged": true,
+    "sha256": "266e89819a0303b2f7def839f7881c8addddaf7f3b8a0733805f02b22f85d156"
+  },
+  "Zend/zend_globals.h": {
+    "unchanged": true,
+    "sha256": "f1f498034e2a255fb3f30724615f378c60db1e7042c39b1bce4b97b2e552867a"
+  },
+  "Zend/zend_globals_macros.h": {
+    "unchanged": true,
+    "sha256": "a2333bae3e84c46b84a5f4973aea24fb7e27a31005c783bb32dd8fc9c9177cad"
+  },
+  "Zend/zend_modules.h": {
+    "unchanged": true,
+    "sha256": "23a0a4b52e87198c8c44bb998d4b8b64e9be6cbf9ac3f567d5ac6acb0a30b697"
+  },
+  "Zend/zend_extensions.h": {
+    "unchanged": true,
+    "sha256": "c60b40a6ceb1c22cd5d0fc7f9ca621455b93e24126d1cca3d7999a767f013d46"
+  },
+  "main/SAPI.h": {
+    "unchanged": true,
+    "sha256": "38f357b17f97503da854419fc86703d12abc5f04206890351c4299e9bce3b7e1"
+  },
+  "main/php_globals.h": {
+    "unchanged": true,
+    "sha256": "e03cea7dc255d0aff73c182142604d785e4d5704306e107f8e30c1ad17ddcfff"
+  },
+  "ext/session/php_session.h": {
+    "unchanged": true,
+    "sha256": "25d3eac01ba968a478ed378a37933e638a31359b0cefa72a23ea1848c33bac96"
+  },
+  "generated_vm": {
+    "guards": 27,
+    "unchanged_after_removing_new_guards": true
+  }
+}

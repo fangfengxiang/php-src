@@ -223,14 +223,30 @@ FORMDATA 收集 session-name 字段的分支 `:2996` 不受 `use_only_cookies` �
 而 cookie/GET 的 `early_find_sid` 有该门控 (`:2886`)；不能把该配置当作上传
 回调的通用安全边界。
 
+早期 Session 不只涉及 `PS(id)`。`php_session_initialize()` 在
+`ext/session/session.c:502` 打开存储 handler、建立 Session 变量、读取持久化
+数据，再在 `:567` 调用 `php_session_decode()` (`:232`)。内置的
+`php_serialize`、`php_binary`、`php` decoder 分别在 `:904`、`:966`、`:1062`
+使用 `PHP_VAR_UNSERIALIZE_INIT/DESTROY`。
+
+这两个宏在 `ext/standard/php_var.h:91,106` 将请求分配的反序列化上下文发布到
+`BG(unserialize).data`，维护 `BG(unserialize).level`，嵌套调用可能复用它。
+反序列化可调用对象处理函数、类加载回调和延迟的 `__wakeup`
+(`ext/standard/var_unserializer.re:142,447,849,866`)；这些可引入非 OOM fatal。
+basic 模块的正常 RINIT 才清零 `BG(serialize_lock)` / `BG(unserialize)`
+(`ext/standard/basic_functions.c:3730-3736`)。因此成功 startup 后的解码操作也
+可能成为生产者，后续 pre-RINIT Session 解码是需要切断的消费者；不能把
+Session 分析缩减成只有两个 `PS` 字段。此处识别的是可中断状态关系，不是已
+运行的 PHP 7.0 利用证明。
+
 在存在后续消费者的情况下，状态发布后 fatal 导致 END 未执行、模块关闭被
 跳过或某个清理步骤被中断，可能留下指向请求内存的槽位。请求堆整体回收不
 会自动把这些全局槽位置空。后续请求在普通 RINIT 之前使用这些槽位构成 UAF
 所需的生命周期条件。**这是源码支持的风险链；本审计没有运行命令执行 PoC，
 不声称在 PHP 7.0 的每个 SAPI/配置上都已验证可利用。**
 
-关闭 upload progress 时必须从注册和 INI 处理处切断机制，覆盖设置为 `1` 的
-情况，并保留普通 `session_start()`、Session 读写与普通上传。仅把默认值改为
+关闭 upload progress 时必须在实际 Session 回调入口切断机制，覆盖 INI 设置为
+`1` 的情况，并保留普通 `session_start()`、Session 读写与普通上传。仅把默认值改为
 `0` 留下重新启用旁路，不满足官方最小缓解的意图。行为兼容性损失必须公开。
 
 ## Session 之外的早期入口

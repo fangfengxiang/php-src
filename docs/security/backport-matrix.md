@@ -4,6 +4,12 @@ Research date: 2026-10-22. This is a source-level adaptation plan for an
 **unofficial PHP 7.0.33 security backport**, not evidence of a complete fix or a
 new PHP project release. Runtime results belong in [verification.md](verification.md).
 
+Final organization (2026-10-23): [repair-map.md](repair-map.md) defines the A/B/C
+disposition of every site and the immutable, default-on hardened mode. The
+upstream name `zend_mm_safe_error_ex()` below refers to the official patch;
+this backport names its equivalent `zend_mm_safe_error_hardened()` and retains
+the original bailout expressions behind the compile-time legacy comparison mode.
+
 ## Pinned evidence and scope
 
 | Source | Exact revision | Authority and use |
@@ -56,7 +62,7 @@ coverage; execution status is recorded separately.
 | `Zend/zend_alloc.c` — fail-stop | Add fixed-buffer `zend_mm_safe_error_ex()`, use it from `zend_mm_safe_error()` and integer-overflow failures; change allocator panic and system-allocation failure termination from `exit()` to `_exit()`. | Move declarations to start of block; add missing huge-allocation rounding overflow check. | Same central `zend_mm_safe_error()` exists, including the old error/bailout/reentry sequence. Replace that sequence. Existing filename/line accessors are available. 7.0 huge allocation has no `new_size < size` guard; add it before limit checks. Preserve GC retry and successful allocation paths. | Additive exported helper; private heap layout unchanged. OOM now exits immediately. Test memory-limit exhaustion, physical allocation failure if controllable, debug build, system-allocation path, and FPM child replacement. |
 | `Zend/zend_alloc.h` — helper declaration | Declare `zend_mm_safe_error_ex()` inside C linkage. | Same declaration. | Directly applicable; needed by multiply/string/VM/hash callers and extensions compiling those headers. | Additive export; check declarations on normal/debug compilers and extension loading. |
 | `Zend/zend_execute_API.c` — shutdown state | Clear user error/exception handlers and stacks on the fast-shutdown branch; reset error-handling mode and exception; clear object-store buckets and top. | No corresponding 7.4 fast-shutdown branch; append unconditional resets after shutdown work. | 7.0 `shutdown_executor()` uses several `zend_try` blocks. Handlers can survive an interrupted destructor. Clear the same fields after those blocks. `zend_objects_store_destroy()` normally nulls buckets but does not reset `top`, and can be bypassed by bailout; set buckets NULL and top 1 unconditionally. Do not copy weakref or fast-shutdown APIs. | No field/layout changes. The final reset abandons already invalid request state rather than calling more destructors. Test normal/fatal sessions, handlers, shutdown diagnostics, same-worker requests. Residual pre-RINIT consumers still require audit. |
-| `Zend/zend_hash.c` — capacity failures and singleton constructor | Route `zend_hash_check_size()`, packed growth and hash resize overflow to fail-stop; add `zend_new_array_singleton()` with one-bucket initial size. | Route the three overflow sites; move singleton constructor to `zend_API.c`. | Same three overflow sites exist. Use `zend_mm_safe_error_ex()`. Keep 7.0's existing allocation representation and use the API helper for singleton creation. | No HashTable layout changes. Correct 7.0's existing `%zu`/`uint32_t` diagnostic mismatch when touching these sites. Require debug tests of packed→hash conversion and one→two→many growth. |
+| `Zend/zend_hash.c` — capacity failures and singleton constructor | Route `zend_hash_check_size()`, packed growth and hash resize overflow to fail-stop; add `zend_new_array_singleton()` with one-bucket initial size. Its `HT_SIZE_TO_MASK(1)` is `-2`, preserving an eight-byte index prefix. | Route the three overflow sites; move singleton constructor to `zend_API.c`. The community patch does not adapt the older single-index-prefix alignment. | Same three overflow sites exist. Use `zend_mm_safe_error_ex()`. Keep 7.0's representation and use the API helper for singleton creation, **plus preserve at least two hash-index slots** in mixed initialization and packed→hash conversion. Without this extra adaptation, a one-slot index prefix misaligns `Bucket`. | No HashTable layout changes. Correct 7.0's existing `%zu`/`uint32_t` diagnostic mismatch when touching these sites. Require pointer-alignment checks for direct mixed singleton creation, packed→hash conversion, copy and growth; debug/ASan alone do not detect alignment UB. |
 | `Zend/zend_hash.h` — singleton declaration | Add declaration of `zend_new_array_singleton()`. | Not changed; older API adaptation is declared in `zend_API.h`. | **No change required** because that 7.4 constructor does not exist. The equivalent exported declaration is in `zend_API.h`. | Explicitly mapped, not silently omitted. |
 | `Zend/zend_llist.c` — destroy tombstones | After destroying nodes, null `head` and `tail`, then clear count. | Same. | Directly applicable to 7.0 `zend_llist_destroy()`; prevents reachable list endpoints retaining freed nodes on normal completion. | No struct change. Normal list and request shutdown regressions; this alone cannot make a destructor interrupted by fatal error safe. |
 | `Zend/zend_multiply.h` — size arithmetic | `zend_safe_address_guarded()` and `zend_safe_addmult()` use fail-stop rather than an error bailout. | Same. | Same helpers exist. Change both fatal paths; do not change arithmetic or successful results. | Inline API code changes but no signatures/layout changes. Exercise `safe_emalloc` overflow in a bounded native harness where possible. |
@@ -76,8 +82,42 @@ coverage; execution status is recorded separately.
 | --- | --- | --- |
 | `Zend/zend_API.c` | Implement `_array_init_singleton()` by `_array_init(arg, 0 ...)`, then set `Z_ARRVAL_P(arg)->nTableSize = 1`. | Reuses 7.0's initialized metadata and destructor fields. `array_init_size(1)` alone is insufficient: `zend_hash_check_size()` rounds it to `HT_MIN_SIZE=8`. No struct changes. The 7.1 reference uses exactly this older API pattern. Require small-array mutation/COW tests. |
 | `Zend/zend_string.h` | Add `ZSTR_MAX_LEN` as `SIZE_MAX - ZEND_MM_ALIGNED_SIZE(_ZSTR_HEADER_SIZE + 1)`. | Available in later versions and added by 7.1 PR; bounds concatenation while allowing space for header, NUL and alignment. Macro only; no string representation changes. Actual 7.0 allocation arithmetic and supported platforms must compile. |
+| `Zend/zend_vm_gen.php` | Remove obsolete `/e` from the `preg_match_all()` pattern used to identify unused `zend_free_op` declarations (`/me` → `/m`). | `/e` is invalid in PHP 7+ and has no evaluation meaning for a matching operation. Retaining it prevents correct declaration removal when running the 7.0 generator. This is a build-tool compatibility correction; regenerate using baseline PHP 7.0.33. An exploratory PHP 8 host-generated header with constant-collision corruption was discarded, and must not be used as output. |
 | New/updated PHPT and integration tests | Add OOM no-cleanup, singleton arrays, Session progress disabled, duplicate/ignored headers, multipart limits, and same-worker lifecycle/FPM tests; adjust expectations for deliberately changed OOM behavior. | 7.1 adds useful test inputs, but its tests do not establish PHP 7.0 security. Upload-progress tests that assert removed behavior must be explicitly updated/identified; do not hide unrelated failures. |
 | Security and release documentation | Record provenance, feature loss, worker exit behavior, limitations and exact commands/results. | Do not copy the 7.1 PR's unofficial `7.1.34` metadata or suggest PHP 7.0 is supported. Retain PHP 7.0 API/version identity and label artifacts as unofficial backports. |
+
+## Additional singleton alignment invariant
+
+The direct PHP 7.1 constructor adaptation is insufficient on its own.
+PHP 7.0 `zend_hash_real_init_ex()` originally sets
+`nTableMask = -nTableSize` for a mixed array; `HT_SET_DATA_ADDR()` adds
+`HT_HASH_SIZE(nTableMask)` to the allocation base. At capacity one this is
+one `uint32_t` slot, or four bytes. `Bucket` embeds a `zval`, a `zend_ulong`
+and a pointer and requires eight-byte alignment on the tested 64-bit
+platform. A properly aligned allocation base plus four produces a
+misaligned `Bucket *`, even when normal tests happen to pass on hardware
+supporting unaligned access.
+
+Official PHP 7.4 avoids this through `HT_SIZE_TO_MASK(nTableSize)`, defined
+in `Zend/zend_types.h:318` as twice the negative table size. Its mixed
+initialization uses that mask for both allocation and data address. The
+7.1 community patch does not transplant or otherwise compensate for this
+representation difference. The PHP 7.0 backport must preserve a two-slot
+minimum prefix while retaining one `Bucket` of element capacity. Adapt
+both `zend_hash_real_init_ex()` and `zend_hash_packed_to_hash()`; the
+latter must use the same corrected mask in its allocation size and in
+the stored `nTableMask`. Normal capacities of two or more retain their
+existing representation.
+
+Other paths were checked: `zend_hash_extend()` rounds a growing capacity
+to at least `HT_MIN_SIZE`; `zend_hash_do_resize()` doubles one to two;
+`zend_array_dup()` copies the source mask; packed initialization,
+hash→packed conversion and renumbering sort use `HT_MIN_MASK=-2` already.
+OPcache's persistence compaction uses a minimum `HT_MIN_SIZE` prefix.
+No public field layout or global hash-density policy needs to change.
+Verify direct string-key singleton initialization, singleton packed→hash
+conversion, COW duplication, and subsequent growth with a pointer probe;
+an alignment sanitizer check is desirable in addition to ASan.
 
 ## OOM entrance equivalence and coverage limits
 
@@ -124,6 +164,16 @@ patched headers for that coverage; record the extension inventory and
 tested binaries separately. Intercepting every ordinary fatal error to
 compensate would change semantics beyond the official minimal patch and
 is not part of this adaptation.
+
+Static ABI review of the candidate found byte-for-byte unchanged public
+layout headers `Zend/zend_types.h`, `Zend/zend_globals.h`,
+`Zend/zend_globals_macros.h`, `main/SAPI.h`, `main/php_globals.h`, and
+`ext/session/php_session.h`. Module/extension headers are also unchanged.
+API constants remain `PHP_API_VERSION=20151012`,
+`ZEND_MODULE_API_NO=20151012`, and `ZEND_EXTENSION_API_NO=320151012`.
+Changed public headers add two declarations and two macros only. This is
+source-level evidence of retained layouts and identifiers, not a binary
+compatibility test across all extensions or build configurations.
 
 The fixed-buffer reporter avoids Zend allocation and `zend_error()`
 recursion. It still calls libc formatting/stderr functions, matching the

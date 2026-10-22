@@ -1,0 +1,109 @@
+{
+  "legacy": false,
+  "checks": [
+    {
+      "check": "build mode and ABI sizes",
+      "pass": true,
+      "data": {
+        "hardened": 1,
+        "module_api": 20151012,
+        "sizeof_zval": 16,
+        "sizeof_zend_string": 32,
+        "sizeof_HashTable": 56,
+        "sizeof_php_core_globals": 656,
+        "max_input_vars": 1000,
+        "memory_limit": 8388608
+      }
+    },
+    {
+      "check": "singleton alignment x[a]=v",
+      "pass": true,
+      "data": {
+        "nTableSize": 1,
+        "nTableMask": 4294967294,
+        "arData_mod_pointer_alignment": 0
+      }
+    },
+    {
+      "check": "singleton alignment x[999]=v",
+      "pass": true,
+      "data": {
+        "nTableSize": 1,
+        "nTableMask": 4294967294,
+        "arData_mod_pointer_alignment": 0
+      }
+    },
+    {
+      "check": "singleton alignment x[0]=v",
+      "pass": true,
+      "data": {
+        "nTableSize": 1,
+        "nTableMask": 4294967294,
+        "arData_mod_pointer_alignment": 0
+      }
+    },
+    {
+      "check": "emalloc",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "\nFatal error: Allowed memory size of 8388608 bytes exhausted (tried to allocate 67108864 bytes) in Command line code on line 1\n"
+    },
+    {
+      "check": "safe_emalloc",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\n"
+    },
+    {
+      "check": "estrndup",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\n"
+    },
+    {
+      "check": "zend_strndup",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\n"
+    },
+    {
+      "check": "system_malloc",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Out of memory\n"
+    },
+    {
+      "check": "inline_guard",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\n"
+    },
+    {
+      "check": "huge_rounding",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "\nmmap() failed: [12] Cannot allocate memory\n\nmmap() failed: [12] Cannot allocate memory\n\nFatal error: Out of memory (allocated 2097152) (tried to allocate 18446744073709547520 bytes) in Command line code on line 1\n"
+    },
+    {
+      "check": "metadata_overflow",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 bytes) in Command line code on line 1\n"
+    },
+    {
+      "check": "hash_capacity",
+      "pass": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "\nFatal error: Possible integer overflow in memory allocation (4294967295 * 32 + 32) in Command line code on line 1\n"
+    }
+  ]
+}
