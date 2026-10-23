@@ -21,7 +21,8 @@
 | legacy Debug | 通过 | 显式 `--disable-php70-security`，原始 OOM/Upload Progress 行为作为对照 |
 
 构建过程先遇到 Bison 3.8 生成器不兼容，改用匹配版本；曾发现旧对象引用旧 reporter 符号，
-随后执行完整 `make clean` 重建。未把这些失败尝试当成通过。VM 由未修改的 PHP 7.0 二进制
+随后执行完整 `make clean` 重建。最终组织调整的并行链接遇到 SIGKILL，改为单任务成功重建；
+Docker 中断的重测未记为通过，恢复后对最终源码重新完成干净比较。未把这些失败尝试当成通过。VM 由未修改的 PHP 7.0 二进制
 运行本分支生成器生成；27 个新增 guard 去除后，生成头与基线逐字一致。
 
 [build-configurations.json](results/build-configurations.json) 保存 configure 参数/宏，
@@ -54,7 +55,7 @@ ASan 的直接 allocator 检查有一个重要测试工具适配：PHP 7.0 原 `
 
 ## 同 worker 与 FPM
 
-Debug、Release、ASan、legacy 各完成 9 项检查：
+Debug、Release、ASan、legacy 各完成 9 项检查；未修改的干净基线也完成同样的 9 项对照：
 
 1. 连续正常请求保持相同 PID。
 2. Session 写入/读取跨请求持久化。
@@ -75,21 +76,23 @@ ASan 系统 allocator 另通过 7 项功能/早期诊断检查；memory_limit �
 
 | 运行 | 总数 | 通过 | 失败 | 预期失败 | 跳过 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 未修改基线 Debug | 14949 | 10157 | 46 | 45 | 4701 |
-| 最终 hardened Debug（含新增 11 项） | 14960 | 10164 | 51 | 45 | 4700 |
+| 未修改基线 Debug | 14949 | 10170 | 35 | 45 | 4699 |
+| 最终 hardened Debug（含新增 11 项） | 14960 | 10172 | 44 | 45 | 4699 |
 
 完整列表、状态变化及新增失败 diff 在 [phpt-summary.json](results/phpt-summary.json)。
-42 个失败与基线相同；新增 9 个失败逐项解释如下：
+最终比较两侧都从归档重新构建，在相同的容器内部文件系统运行，避免宿主挂载权限影响。
+35 个失败与基线相同；仅有 20 个状态差异，即 11 个新增通过和以下 9 个已解释失败：
 
 * 原来的 8 个 `ext/session/tests/rfc1867*.phpt` 正向测试期望 upload progress 存在；hardened 的
   必要兼容性变化使其不成立。文件上传部分仍执行，新测试另外断言 progress 不存在与上传内容正确。
 * `tests/lang/bug45392.phpt` 因官方 fail-stop reporter 在 stderr 前加换行，仅多一个空行。
   保留原期望以显示这种输出差异，不把它伪报通过。
 
-基线中 4 个 tokenizer 测试在 hardened 构建中不再失败，未将其归功于安全修复；这些文件未改动，
-两次旧工具链生成/清理状态存在差异。legacy 的 Session/basic/ordinary-fatal 定向运行共 317 项：
-306 通过、5 失败、2 预期失败、4 跳过；失败为一个同基线的权限测试及 4 个刻意要求 hardened
-行为的新测试。完整回归进程退出码为 1，未称作全绿；新增失败不存在未解释项。
+初次主机挂载/生成物环境下记录过基线 46、hardened 51 个失败，摘要保留在 JSON 的
+`initial_bind_mount_run` 中；不把这种环境差异归功于安全修复。上表以最终双侧干净运行的
+35/44 个失败为准，其余原测试状态完全一致。legacy 的 Session/basic/ordinary-fatal 在同类
+文件系统定向重跑共 317 项：307 通过、4 失败、2 预期失败、4 跳过；四个失败全是刻意要求
+hardened 行为的新测试。完整回归进程退出码为 1，未称作全绿；新增失败不存在未解释项。
 
 ## ABI 与扩展
 
@@ -100,7 +103,9 @@ arm64 Debug 实测 zval=16、zend_string=32、HashTable=56、php_core_globals=65
 未修改的 baseline 编译扩展能加载到 hardened Debug；但其旧内联 guard 仍执行 bailout 与 shutdown，
 实测退出码 255。见 [old-extension-compatibility.json](results/old-extension-compatibility.json)。
 因此“可以加载”不能代表安全保护已生效，部署必须用匹配的 hardened 头文件重编译扩展。
-未修改公开结构布局，不承诺任意扩展、ZTS 或不同平台的 ABI 已通过动态验证。
+验证方向是旧扩展加载到新运行时；使用新头文件重编译的扩展可能依赖新增符号，
+不保证可装回原始运行时，legacy/hardened 头文件也不应混用。未修改公开结构布局，
+不承诺任意扩展、ZTS 或不同平台的 ABI 已通过动态验证。
 
 单 bucket 对齐：适配前 probe 实测 `nTableSize=1`、mask=-1、地址模 pointer alignment=4；
 适配后 string/sparse/packed 三类均为 0，hardened 容量仍为 1，legacy 容量仍为 8。
@@ -109,7 +114,8 @@ arm64 Debug 实测 zval=16、zend_string=32、HashTable=56、php_core_globals=65
 ## 未执行与剩余风险
 
 * Apache mod_php：容器未配 Apache 开发/模块运行环境，未执行；不能将 FPM 结果泛化至 Apache。
-* Windows、ZTS、32 位、自定义 Zend allocator、任意第三方扩展 callback：未执行。
+* Linux x86_64、Windows、ZTS、32 位、自定义 Zend allocator、任意第三方扩展 callback：未执行。
+* 本次构建禁用 PCRE JIT；OPcache/mbstring 等未启用模块没有定向验证，模块清单见原始日志。
 * dtoa Balloc 的定向分配失败注入、真实物理内存压力/内核 OOM-kill、timeout 中断：未执行。
   原生系统分配失败使用立即被拒绝的尺寸哨兵，没有耗尽主机内存。
 * ASan 未报告已执行路径的内存错误；这不是所有跨请求 UAF 不存在的证明，也没有运行真实 RCE PoC。

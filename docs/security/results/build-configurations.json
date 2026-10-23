@@ -1,47 +1,72 @@
 {
-  "baseline-debug": {
+  "baseline-final": {
     "CC": "gcc",
     "CFLAGS": "$(CFLAGS_CLEAN) -prefer-non-pic -static",
+    "CFLAGS_CLEAN": "-I/usr/include -g3 -fcommon -fvisibility=hidden -O0 -Wall $(PROF_FLAGS)",
     "LDFLAGS": null,
     "CONFIGURE_COMMAND": "'./configure' '--prefix=/work/install' '--enable-debug' '--enable-cli' '--enable-cgi' '--enable-fpm' '--without-pear' '--without-pcre-jit' '--with-zlib' '--enable-pcntl' '--enable-posix' '--enable-sockets' 'LDFLAGS='",
     "hardened": "baseline",
-    "debug": true,
-    "CFLAGS_CLEAN": "-I/usr/include -g3 -fcommon -fvisibility=hidden -O0 -Wall $(PROF_FLAGS)"
+    "runtime": {
+      "debug": 1,
+      "zts": 0,
+      "version": "7.0.33",
+      "version_id": 70033
+    }
   },
-  "patched-debug": {
+  "hardened-final": {
     "CC": "gcc",
     "CFLAGS": "$(CFLAGS_CLEAN) -prefer-non-pic -static",
+    "CFLAGS_CLEAN": "-I/usr/include -g3 -fcommon -fvisibility=hidden -O0 -Wall $(PROF_FLAGS)",
     "LDFLAGS": null,
     "CONFIGURE_COMMAND": "'./configure' '--prefix=/work/install' '--enable-debug' '--enable-php70-security' '--enable-cli' '--enable-cgi' '--enable-fpm' '--without-pear' '--without-pcre-jit' '--with-zlib' '--enable-pcntl' '--enable-posix' '--enable-sockets' 'LDFLAGS='",
-    "hardened": "1",
-    "debug": true,
-    "CFLAGS_CLEAN": "-I/usr/include -g3 -fcommon -fvisibility=hidden -O0 -Wall $(PROF_FLAGS)"
+    "hardened": 1,
+    "runtime": {
+      "debug": 1,
+      "zts": 0,
+      "version": "7.0.33",
+      "version_id": 70033
+    }
   },
   "patched-asan": {
     "CC": "gcc",
     "CFLAGS": "$(CFLAGS_CLEAN) -prefer-non-pic -static",
+    "CFLAGS_CLEAN": "-I/usr/include -g3 -fcommon -fno-omit-frame-pointer -fsanitize=address -fvisibility=hidden -O0 -Wall $(PROF_FLAGS)",
     "LDFLAGS": null,
     "CONFIGURE_COMMAND": "'./configure' '--prefix=/work/install' '--enable-debug' '--enable-php70-security' '--enable-cli' '--enable-cgi' '--enable-fpm' '--without-pear' '--without-pcre-jit' '--with-zlib' '--enable-pcntl' '--enable-posix' '--enable-sockets'",
-    "hardened": "1",
-    "debug": true,
-    "CFLAGS_CLEAN": "-I/usr/include -g3 -fcommon -fno-omit-frame-pointer -fsanitize=address -fvisibility=hidden -O0 -Wall $(PROF_FLAGS)"
+    "hardened": 1,
+    "runtime": {
+      "debug": 1,
+      "zts": 0,
+      "version": "7.0.33",
+      "version_id": 70033
+    }
   },
   "patched-release": {
     "CC": "gcc",
     "CFLAGS": "$(CFLAGS_CLEAN) -prefer-non-pic -static",
+    "CFLAGS_CLEAN": "-I/usr/include -O2 -g -fcommon -fvisibility=hidden $(PROF_FLAGS)",
     "LDFLAGS": null,
     "CONFIGURE_COMMAND": "'./configure' '--prefix=/work/install' '--disable-debug' '--enable-php70-security' '--enable-cli' '--enable-cgi' '--enable-fpm' '--without-pear' '--without-pcre-jit' '--with-zlib' '--enable-pcntl' '--enable-posix' '--enable-sockets' 'LDFLAGS='",
-    "hardened": "1",
-    "debug": false,
-    "CFLAGS_CLEAN": "-I/usr/include -O2 -g -fcommon -fvisibility=hidden $(PROF_FLAGS)"
+    "hardened": 1,
+    "runtime": {
+      "debug": 0,
+      "zts": 0,
+      "version": "7.0.33",
+      "version_id": 70033
+    }
   },
   "mode-legacy": {
     "CC": "gcc",
     "CFLAGS": "$(CFLAGS_CLEAN) -prefer-non-pic -static",
+    "CFLAGS_CLEAN": "-I/usr/include -g3 -fcommon -fvisibility=hidden -O0 -Wall $(PROF_FLAGS)",
     "LDFLAGS": null,
     "CONFIGURE_COMMAND": "'./configure' '--prefix=/work/install' '--enable-debug' '--disable-php70-security' '--enable-cli' '--enable-cgi' '--enable-fpm' '--without-pear' '--without-pcre-jit' '--with-zlib' '--enable-pcntl' '--enable-posix' '--enable-sockets' 'LDFLAGS='",
-    "hardened": "0",
-    "debug": true,
-    "CFLAGS_CLEAN": "-I/usr/include -g3 -fcommon -fvisibility=hidden -O0 -Wall $(PROF_FLAGS)"
+    "hardened": 0,
+    "runtime": {
+      "debug": 1,
+      "zts": 0,
+      "version": "7.0.33",
+      "version_id": 70033
+    }
   }
 }

@@ -1,0 +1,39 @@
+	linux-vdso.so.1 (0x0000ffffb9ccc000)
+	libasan.so.8 => /lib/aarch64-linux-gnu/libasan.so.8 (0x0000ffffb78c0000)
+	libz.so.1 => /lib/aarch64-linux-gnu/libz.so.1 (0x0000ffffb7880000)
+	libm.so.6 => /lib/aarch64-linux-gnu/libm.so.6 (0x0000ffffb77d0000)
+	libnsl.so.2 => /lib/aarch64-linux-gnu/libnsl.so.2 (0x0000ffffb77a0000)
+	libxml2.so.2 => /lib/aarch64-linux-gnu/libxml2.so.2 (0x0000ffffb75e0000)
+	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffffb7430000)
+	libgcc_s.so.1 => /lib/aarch64-linux-gnu/libgcc_s.so.1 (0x0000ffffb73f0000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffffb9c90000)
+	libtirpc.so.3 => /lib/aarch64-linux-gnu/libtirpc.so.3 (0x0000ffffb73a0000)
+	libicuuc.so.72 => /lib/aarch64-linux-gnu/libicuuc.so.72 (0x0000ffffb7180000)
+	liblzma.so.5 => /lib/aarch64-linux-gnu/liblzma.so.5 (0x0000ffffb7130000)
+	libgssapi_krb5.so.2 => /lib/aarch64-linux-gnu/libgssapi_krb5.so.2 (0x0000ffffb70c0000)
+	libicudata.so.72 => /lib/aarch64-linux-gnu/libicudata.so.72 (0x0000ffffb52d0000)
+	libstdc++.so.6 => /lib/aarch64-linux-gnu/libstdc++.so.6 (0x0000ffffb50b0000)
+	libkrb5.so.3 => /lib/aarch64-linux-gnu/libkrb5.so.3 (0x0000ffffb4fc0000)
+	libk5crypto.so.3 => /lib/aarch64-linux-gnu/libk5crypto.so.3 (0x0000ffffb4f70000)
+	libcom_err.so.2 => /lib/aarch64-linux-gnu/libcom_err.so.2 (0x0000ffffb4f40000)
+	libkrb5support.so.0 => /lib/aarch64-linux-gnu/libkrb5support.so.0 (0x0000ffffb4f10000)
+	libkeyutils.so.1 => /lib/aarch64-linux-gnu/libkeyutils.so.1 (0x0000ffffb4ee0000)
+	libresolv.so.2 => /lib/aarch64-linux-gnu/libresolv.so.2 (0x0000ffffb4eb0000)
+PHP 7.0.33 (cli) (built: Oct 22 2026 16:07:39) ( NTS DEBUG )
+Copyright (c) 1997-2017 The PHP Group
+Zend Engine v3.0.0, Copyright (c) 1998-2017 Zend Technologies
+0000000000e04878 T OnUpdateBaseDir
+0000000000fca410 T OnUpdateBool
+0000000000fca6bc T OnUpdateLong
+0000000000fca76c T OnUpdateLongGEZero
+0000000000fca834 T OnUpdateReal
+0000000000fca8b0 T OnUpdateString
+0000000000fca938 T OnUpdateStringUnempty
+000000000098ed5c T PHP_3HAVAL128Init
+000000000098f00c T PHP_3HAVAL160Init
+000000000098f2bc T PHP_3HAVAL192Init
+000000000098f56c T PHP_3HAVAL224Init
+000000000098f81c T PHP_3HAVAL256Init
+000000000099ec10 T PHP_3TIGERInit
+000000000098facc T PHP_4HAVAL128Init
+000000000098fd7c T PHP_4HAVAL160Init

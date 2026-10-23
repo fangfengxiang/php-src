@@ -26,6 +26,39 @@ done
 每个模式使用独立输出目录。`build.sh` 明确清理对象文件；改变安全模式或 inline header 后必须
 clean，不能仅增量链接旧对象。首次无效的 AppleDouble 测试及旧对象链接失败没有纳入最终结果。
 
+## 干净的完整基线比较
+
+最终比较使用相同镜像和容器内部文件系统，避免 macOS bind mount 的权限语义造成假差异。
+`run-clean-comparison.sh` 在同一容器完成构建、probe、FPM、安全 PHPT 和完整 PHPT，
+将生成配置、失败 diff 和日志写回宿主机。源目录是临时 Docker 卷，退出后自动回收。
+沿用上面的镜像和两个源码归档：
+
+```sh
+for build_mode in baseline debug; do
+    source_archive="$validation_root/source.tar"
+    if test "$build_mode" = baseline; then source_archive="$validation_root/baseline.tar"; fi
+    mkdir -p "$validation_root/clean-$build_mode"
+    if docker run --rm --network none --mount type=volume,dst=/work/source \
+        -v "$source_archive:/input/source.tar:ro" \
+        -v "$PWD/docs/security/testing:/harness:ro" \
+        -v "$validation_root/clean-$build_mode:/work" \
+        --entrypoint sh php70-security-toolchain /harness/run-clean-comparison.sh "$build_mode"; then
+        result=0
+    else
+        result=$?
+    fi
+    echo "$build_mode actual exit code: $result"
+done
+
+python3 docs/security/testing/summarize-results.py --artifacts "$validation_root" \
+    --baseline-folder clean-baseline --hardened-folder clean-debug \
+    --output "$validation_root/comparison.json"
+```
+
+完整运行有已记录失败，退出 1 必须保留为失败，不能把构建成功当成测试通过。
+汇总工具拒绝未完成的主要 PHPT 日志；未运行的可选构建以 `not_executed` 标示。
+初次主机挂载结果仅作历史记录，不与不同文件系统的运行混作补丁收益。
+
 ## 硬化构建验证
 
 下面以 Debug 为例；将工作目录替换为 release/asan 后重复。ASan 使用 GCC/libasan，

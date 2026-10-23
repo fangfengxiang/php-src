@@ -544,9 +544,27 @@ static char *php_ap_getword(const zend_encoding *encoding, char **line, char sto
 	return res;
 }
 
-/* 712e60f9: private length width is a compile-time invariant; both modes
- * retain valid lengths without changing ownership or parser control flow. */
-static char *substring_conf(char *start, size_t len, char quote)
+static char *substring_conf(char *start, int len, char quote)
+{
+	char *result = emalloc(len + 1);
+	char *resp = result;
+	int i;
+
+	for (i = 0; i < len && start[i] != quote; ++i) {
+		if (start[i] == '\\' && (start[i + 1] == '\\' || (quote && start[i + 1] == quote))) {
+			*resp++ = start[++i];
+		} else {
+			*resp++ = start[i];
+		}
+	}
+
+	*resp = '\0';
+	return result;
+}
+
+/* 712e60f9: a separate width-safe helper keeps the legacy contract intact.
+ * Both helpers have identical ownership; only hardened lengths avoid int narrowing. */
+static char *substring_conf_hardened(char *start, size_t len, char quote)
 {
 	char *result = emalloc(len + 1);
 	char *resp = result;
@@ -578,14 +596,20 @@ static char *php_ap_getword_conf(const zend_encoding *encoding, char *str)
 		char quote = *str;
 
 		str++;
-		return substring_conf(str, strlen(str), quote);
+		if (php70_security_is_hardened()) {
+			return substring_conf_hardened(str, strlen(str), quote);
+		}
+		return substring_conf(str, (int)strlen(str), quote);
 	} else {
 		char *strend = str;
 
 		while (*strend && !isspace(*strend)) {
 			++strend;
 		}
-		return substring_conf(str, (size_t)(strend - str), 0);
+		if (php70_security_is_hardened()) {
+			return substring_conf_hardened(str, (size_t)(strend - str), 0);
+		}
+		return substring_conf(str, strend - str, 0);
 	}
 }
 

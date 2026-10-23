@@ -56,7 +56,7 @@ export PHP_AUTOHEADER=autoheader2.69
     --with-zlib --enable-pcntl --enable-posix --enable-sockets \
     > /work/logs/configure.log 2>&1
 make clean > /work/logs/clean.log 2>&1
-make -j"${BUILD_JOBS:-4}" > /work/logs/make.log 2>&1
+make -j"${BUILD_JOBS:-1}" > /work/logs/make.log 2>&1
 make install > /work/logs/install.log 2>&1
 /work/install/bin/php -n -v > /work/logs/version.txt 2>&1
 /work/install/bin/php -n -m > /work/logs/modules.txt 2>&1

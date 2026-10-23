@@ -34,5 +34,14 @@
   "generated_vm": {
     "guards": 27,
     "unchanged_after_removing_new_guards": true
+  },
+  "multipart_helper_organization": {
+    "legacy_function_byte_identical_to_baseline": true,
+    "hardened_function_only_name_and_length_index_width_differ": true
+  },
+  "direct_error_path_review": {
+    "reporter_has_no_ini_or_zend_allocator_calls": true,
+    "mode_selection_is_compile_time_constant": true,
+    "libc_formatting_not_claimed_async_signal_safe": true
   }
 }

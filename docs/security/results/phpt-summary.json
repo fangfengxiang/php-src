@@ -2,11 +2,11 @@
   "baseline_full": {
     "summary": {
       "total": 14949,
-      "skipped": 4701,
+      "skipped": 4699,
       "warned": 0,
-      "failed": 46,
+      "failed": 35,
       "expected_fail": 45,
-      "passed": 10157
+      "passed": 10170
     },
     "failures": [
       "ext/dom/tests/DOMDocument_loadXML_error1.phpt",
@@ -16,16 +16,10 @@
       "ext/libxml/tests/libxml_disable_entity_loader.phpt",
       "ext/posix/tests/posix_errno_variation2.phpt",
       "ext/posix/tests/posix_kill_basic.phpt",
-      "ext/session/tests/bug42596.phpt",
       "ext/sockets/tests/bug63000.phpt",
       "ext/sockets/tests/mcast_ipv4_recv.phpt",
       "ext/sockets/tests/socket_send.phpt",
       "ext/sockets/tests/socket_shutdown.phpt",
-      "ext/standard/tests/file/copy_variation5.phpt",
-      "ext/standard/tests/file/is_executable_variation1.phpt",
-      "ext/standard/tests/file/mkdir_variation2.phpt",
-      "ext/standard/tests/file/umask_variation1.phpt",
-      "ext/standard/tests/file/umask_variation2.phpt",
       "ext/standard/tests/general_functions/getservbyname_basic.phpt",
       "ext/standard/tests/general_functions/getservbyport_basic.phpt",
       "ext/standard/tests/general_functions/getservbyport_variation1.phpt",
@@ -33,10 +27,6 @@
       "ext/standard/tests/general_functions/proc_nice_basic.phpt",
       "ext/standard/tests/network/getprotobyname_basic.phpt",
       "ext/standard/tests/network/getprotobynumber_basic.phpt",
-      "ext/tokenizer/tests/bug67395.phpt",
-      "ext/tokenizer/tests/parse_errors.phpt",
-      "ext/tokenizer/tests/token_get_all_TOKEN_PARSE_001.phpt",
-      "ext/tokenizer/tests/token_get_all_TOKEN_PARSE_002.phpt",
       "sapi/cli/tests/006.phpt",
       "sapi/cli/tests/cli_process_title_unix.phpt",
       "sapi/fpm/tests/002.phpt",
@@ -53,18 +43,17 @@
       "sapi/fpm/tests/017.phpt",
       "sapi/fpm/tests/019.phpt",
       "sapi/fpm/tests/020.phpt",
-      "sapi/fpm/tests/022-cve-2016-5385.phpt",
-      "tests/security/open_basedir_is_executable.phpt"
+      "sapi/fpm/tests/022-cve-2016-5385.phpt"
     ]
   },
   "hardened_full": {
     "summary": {
       "total": 14960,
-      "skipped": 4700,
+      "skipped": 4699,
       "warned": 0,
-      "failed": 51,
+      "failed": 44,
       "expected_fail": 45,
-      "passed": 10164
+      "passed": 10172
     },
     "failures": [
       "ext/dom/tests/DOMDocument_loadXML_error1.phpt",
@@ -74,7 +63,6 @@
       "ext/libxml/tests/libxml_disable_entity_loader.phpt",
       "ext/posix/tests/posix_errno_variation2.phpt",
       "ext/posix/tests/posix_kill_basic.phpt",
-      "ext/session/tests/bug42596.phpt",
       "ext/session/tests/rfc1867.phpt",
       "ext/session/tests/rfc1867_inter.phpt",
       "ext/session/tests/rfc1867_sid_cookie.phpt",
@@ -87,11 +75,6 @@
       "ext/sockets/tests/mcast_ipv4_recv.phpt",
       "ext/sockets/tests/socket_send.phpt",
       "ext/sockets/tests/socket_shutdown.phpt",
-      "ext/standard/tests/file/copy_variation5.phpt",
-      "ext/standard/tests/file/is_executable_variation1.phpt",
-      "ext/standard/tests/file/mkdir_variation2.phpt",
-      "ext/standard/tests/file/umask_variation1.phpt",
-      "ext/standard/tests/file/umask_variation2.phpt",
       "ext/standard/tests/general_functions/getservbyname_basic.phpt",
       "ext/standard/tests/general_functions/getservbyport_basic.phpt",
       "ext/standard/tests/general_functions/getservbyport_variation1.phpt",
@@ -116,8 +99,7 @@
       "sapi/fpm/tests/019.phpt",
       "sapi/fpm/tests/020.phpt",
       "sapi/fpm/tests/022-cve-2016-5385.phpt",
-      "tests/lang/bug45392.phpt",
-      "tests/security/open_basedir_is_executable.phpt"
+      "tests/lang/bug45392.phpt"
     ]
   },
   "status_changes": [
@@ -155,11 +137,6 @@
       "path": "tests/lang/bug45392.phpt",
       "baseline": "PASS",
       "hardened": "FAIL"
-    },
-    {
-      "path": "Zend/tests/bug55509.phpt",
-      "baseline": "SKIP",
-      "hardened": "PASS"
     },
     {
       "path": "Zend/tests/cve_2026_109618_hard_oom.phpt",
@@ -225,26 +202,6 @@
       "path": "ext/session/tests/rfc1867_upload_progress_disabled.phpt",
       "baseline": "NEW",
       "hardened": "PASS"
-    },
-    {
-      "path": "ext/tokenizer/tests/bug67395.phpt",
-      "baseline": "FAIL",
-      "hardened": "PASS"
-    },
-    {
-      "path": "ext/tokenizer/tests/parse_errors.phpt",
-      "baseline": "FAIL",
-      "hardened": "PASS"
-    },
-    {
-      "path": "ext/tokenizer/tests/token_get_all_TOKEN_PARSE_001.phpt",
-      "baseline": "FAIL",
-      "hardened": "PASS"
-    },
-    {
-      "path": "ext/tokenizer/tests/token_get_all_TOKEN_PARSE_002.phpt",
-      "baseline": "FAIL",
-      "hardened": "PASS"
     }
   ],
   "new_failure_analysis": {
@@ -270,7 +227,7 @@
     },
     "ext/session/tests/rfc1867_sid_invalid.phpt": {
       "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
-      "diff": "001+ string(1) \"_\"\n002+ bool(true)\n003+ array(2) {\n004+   [\"file1\"]=>\n005+   array(5) {\n006+     [\"name\"]=>\n007+     string(9) \"file1.txt\"\n008+     [\"type\"]=>\n009+     string(0) \"\"\n010+     [\"tmp_name\"]=>\n011+     string(14) \"/tmp/phpTOMFBE\"\n012+     [\"error\"]=>\n013+     int(0)\n014+     [\"size\"]=>\n015+     int(1)\n016+   }\n017+   [\"file2\"]=>\n001- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n002- \n003- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n004- \n005- Warning: Unknown: Failed to write session data (files). Please verify that the current setting of session.save_path is correct () in Unknown on line 0\n006- \n007- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n008- \n009- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n010- \n011- Warning: Unknown: Failed to write session data (files). Please verify that the current setting of session.save_path is correct () in Unknown on line 0\n012- string(%d) \"%s\"\n013- bool(true)\n014- array(2) {\n015-   [%u|b%\"file1\"]=>\n018-     %string|unicode%(9) \"file1.txt\"\n020+     string(9) \"file2.txt\"\n028-   [%u|b%\"file2\"]=>\n029-   array(5) {\n030+ }\n031+ NULL\n030-     [%u|b%\"name\"]=>\n031-     %string|unicode%(9) \"file2.txt\"\n032-     [%u|b%\"type\"]=>\n033-     %string|unicode%(0) \"\"\n034-     [%u|b%\"tmp_name\"]=>\n035-     %string|unicode%(%d) \"%s\"\n036-     [%u|b%\"error\"]=>\n037-     int(0)\n038-     [%u|b%\"size\"]=>\n039-     int(1)\n040-   }\n041- }\n042- NULL"
+      "diff": "001+ string(1) \"_\"\n002+ bool(true)\n003+ array(2) {\n004+   [\"file1\"]=>\n005+   array(5) {\n006+     [\"name\"]=>\n007+     string(9) \"file1.txt\"\n008+     [\"type\"]=>\n009+     string(0) \"\"\n010+     [\"tmp_name\"]=>\n011+     string(14) \"/tmp/phpGqSHy7\"\n012+     [\"error\"]=>\n013+     int(0)\n014+     [\"size\"]=>\n015+     int(1)\n016+   }\n017+   [\"file2\"]=>\n001- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n002- \n003- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n004- \n005- Warning: Unknown: Failed to write session data (files). Please verify that the current setting of session.save_path is correct () in Unknown on line 0\n006- \n007- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n008- \n009- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n010- \n011- Warning: Unknown: Failed to write session data (files). Please verify that the current setting of session.save_path is correct () in Unknown on line 0\n012- string(%d) \"%s\"\n013- bool(true)\n014- array(2) {\n015-   [%u|b%\"file1\"]=>\n018-     %string|unicode%(9) \"file1.txt\"\n020+     string(9) \"file2.txt\"\n028-   [%u|b%\"file2\"]=>\n029-   array(5) {\n030+ }\n031+ NULL\n030-     [%u|b%\"name\"]=>\n031-     %string|unicode%(9) \"file2.txt\"\n032-     [%u|b%\"type\"]=>\n033-     %string|unicode%(0) \"\"\n034-     [%u|b%\"tmp_name\"]=>\n035-     %string|unicode%(%d) \"%s\"\n036-     [%u|b%\"error\"]=>\n037-     int(0)\n038-     [%u|b%\"size\"]=>\n039-     int(1)\n040-   }\n041- }\n042- NULL"
     },
     "ext/session/tests/rfc1867_sid_only_cookie.phpt": {
       "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
@@ -291,12 +248,11 @@
       "total": 317,
       "skipped": 4,
       "warned": 0,
-      "failed": 5,
+      "failed": 4,
       "expected_fail": 2,
-      "passed": 306
+      "passed": 307
     },
     "failures": [
-      "ext/session/tests/bug42596.phpt",
       "ext/session/tests/rfc1867_upload_progress_disabled.phpt",
       "tests/basic/rfc1867_max_multipart_body_parts.phpt",
       "tests/basic/rfc1867_max_multipart_body_parts_default.phpt",
@@ -348,5 +304,27 @@
       "passed": 10
     },
     "failures": []
+  },
+  "comparison_folders": {
+    "baseline": "baseline-final",
+    "hardened": "hardened-final"
+  },
+  "initial_bind_mount_run": {
+    "baseline": {
+      "total": 14949,
+      "skipped": 4701,
+      "warned": 0,
+      "failed": 46,
+      "expected_fail": 45,
+      "passed": 10157
+    },
+    "hardened": {
+      "total": 14960,
+      "skipped": 4700,
+      "warned": 0,
+      "failed": 51,
+      "expected_fail": 45,
+      "passed": 10164
+    }
   }
 }

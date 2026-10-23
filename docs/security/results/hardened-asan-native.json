@@ -75,7 +75,7 @@
       "pass": true,
       "returncode": 1,
       "stdout": "",
-      "stderr": "==23470==WARNING: AddressSanitizer failed to allocate 0xfffffffffffff000 bytes\nOut of memory\n"
+      "stderr": "==21718==WARNING: AddressSanitizer failed to allocate 0xfffffffffffff000 bytes\nOut of memory\n"
     },
     {
       "check": "inline_guard",

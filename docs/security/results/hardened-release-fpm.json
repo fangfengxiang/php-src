@@ -4,7 +4,7 @@
   "checks": [
     {
       "check": "five consecutive normal requests use same worker",
-      "pid": 8,
+      "pid": 21849,
       "pass": true
     },
     {
@@ -17,8 +17,8 @@
     },
     {
       "check": "unknown multipart headers do not accumulate retained memory",
-      "before_pid": 8,
-      "after_pid": 8,
+      "before_pid": 21849,
+      "after_pid": 21849,
       "pass": true
     },
     {
@@ -28,25 +28,25 @@
     },
     {
       "check": "ordinary fatal cleanup and safe worker reuse",
-      "pid": 8,
+      "pid": 21849,
       "pass": true
     },
     {
       "check": "early PHP_VALUE diagnostic after fatal and handlers",
-      "pid": 8,
+      "pid": 21849,
       "pass": true
     },
     {
       "check": "script memory_limit OOM matches expected lifecycle",
-      "before_pid": 8,
-      "after_pid": 9,
+      "before_pid": 21849,
+      "after_pid": 21850,
       "shutdown_called": false,
       "pass": true
     },
     {
       "check": "startup multipart OOM cannot reuse worker",
-      "before_pid": 9,
-      "after_pid": 10,
+      "before_pid": 21850,
+      "after_pid": 21851,
       "pass": true
     }
   ]
