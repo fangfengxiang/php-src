@@ -3,11 +3,10 @@
 ## 能否在当前分支运行
 
 可以。[工作流](../../.github/workflows/php70-security.yml) 对
-`security/php70-cve-2026-109618-109619` 的 push 和仓库 PR 自动运行。
-PR 的默认 checkout 是 GitHub 生成的合并提交；push 测试分支提交本身。
+`security/php70-cve-2026-109618-109619` 的 push 自动运行，提交对应的检查结果也会显示在 PR 中。
+CI 测试该分支提交本身；固定 PHP 7.0.33 基线不变。
 不需要先把 workflow 合并进默认分支。手动 `workflow_dispatch` 的可用性则要求
-workflow 已存在于默认分支；本分支首次验证应使用 push。Fork 需要启用 Actions，
-外部贡献者的 PR 可能需要仓库维护者批准运行。
+workflow 已存在于默认分支；本分支首次验证应使用 push。Fork 需要启用 Actions。此工作流仅监听当前安全分支的 push，避免与 PR 事件重复跑完整矩阵。
 本 workflow 随安全分支提交；推送该分支即触发漏洞回归 CI，不自动部署或发布二进制。
 
 参考 [PHP 官方 test.yml](https://github.com/php/php-src/blob/master/.github/workflows/test.yml)
@@ -117,3 +116,24 @@ head 为 `security/php70-cve-2026-109618-109619`，base 为固定 PHP 7.0.33 的
 
 GitHub 官方参考：[工作流事件](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)、
 [runner 架构与标签](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)。
+
+## 首轮远程结果与耗时修正
+
+提交 `e4f3878e5e5` 的首轮 GitHub 原生矩阵已经完成：
+
+* [PR run](https://github.com/fangfengxiang/php-src/actions/runs/39906784650)：10/10 成功，
+  北京时间 2026-10-23 13:37:28 至 13:42:24，4 分 56 秒。
+* [Push run](https://github.com/fangfengxiang/php-src/actions/runs/39906783005)：9/10 成功，
+  13:37:27 至 13:42:43，5 分 16 秒。唯一失败为 legacy job 下载 GNU Bison
+  时连接 ftp.gnu.org 超时 135 秒，尚未构建 PHP；同一提交的 PR legacy job 已通过。
+
+没有仍在执行的首轮任务。旧版同时监听 push 和 pull_request，使同一次推送重复跑20个job；
+新配置仅监听安全分支 push，完整10组覆盖保留。每个job从60分钟收紧到20分钟；
+工具链、编译验证、cgroup、上传步骤分别限制5/10/3/2分钟。job限时不包含排队等待，
+因此这些是执行预算，不是整个workflow完成时间承诺。
+
+Bison 下载有10秒连接、45秒单次总时限、一次重试，以及kernel.org/GNU两个源，
+仍使用相同SHA256验证；apt增加重试与连接超时。移除未使用的clang/LLVM及发行版bison，
+由校验后的Bison3.5.1提供生成器。PHP使用4个编译任务，并输出构建阶段。
+这次修改不减少安全测试，不改变运行时代码。以上远程结果是e4f3878的结果，
+后续配置的验证以新的提交和Actions运行记录为准。

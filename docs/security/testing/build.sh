@@ -50,13 +50,17 @@ export PHP_AUTOHEADER=autoheader2.69
     dpkg-query -W
 } > /work/logs/toolchain.txt 2>&1
 
+echo "Generating PHP 7.0 build configuration ($mode)"
 ./buildconf --force > /work/logs/buildconf.log 2>&1
+echo "Configuring PHP 7.0.33 ($mode)"
 ./configure --prefix=/work/install "$debug_option" $security_option \
     --enable-cli --enable-cgi --enable-fpm --without-pear --without-pcre-jit \
     --with-zlib --enable-pcntl --enable-posix --enable-sockets \
     > /work/logs/configure.log 2>&1
 make clean > /work/logs/clean.log 2>&1
+echo "Compiling PHP 7.0.33 ($mode, ${BUILD_JOBS:-1} jobs)"
 make -j"${BUILD_JOBS:-1}" > /work/logs/make.log 2>&1
+echo "Installing PHP 7.0.33 ($mode)"
 make install > /work/logs/install.log 2>&1
 # Refuse to test with a host/system PHP or a different PHP branch.
 /work/install/bin/php -n -r 'if (PHP_VERSION_ID !== 70033) { fwrite(STDERR, "Expected branch-built PHP 7.0.33\n"); exit(1); }'

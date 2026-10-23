@@ -2,7 +2,6 @@ name: PHP 7.0 security regression
 on:
   push:
     branches: ['security/php70-cve-2026-109618-109619']
-  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,7 +12,7 @@ jobs:
   security:
     name: ${{ matrix.os }} / ${{ matrix.arch }} / ${{ matrix.mode }}
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 60
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -34,6 +33,7 @@ jobs:
           git archive HEAD > "$RUNNER_TEMP/php70/input/source.tar"
           git rev-parse HEAD > "$RUNNER_TEMP/php70/output/source-commit.txt"
       - name: Build Linux toolchain
+        timeout-minutes: 5
         env:
           BASE_IMAGE: ${{ matrix.os }}
         run: |
@@ -41,6 +41,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/php70/output/logs"
           docker image inspect php70-ci > "$RUNNER_TEMP/php70/output/logs/toolchain-image.json"
       - name: Build and run security checks without network
+        timeout-minutes: 10
         env:
           BUILD_MODE: ${{ matrix.mode }}
         run: |
@@ -48,14 +49,16 @@ jobs:
             -v "$RUNNER_TEMP/php70/input:/input:ro" \
             -v "$GITHUB_WORKSPACE/docs/security/testing:/harness:ro" \
             -v "$RUNNER_TEMP/php70/output:/work" \
-            -e BUILD_JOBS=2 --entrypoint sh php70-ci /harness/ci.sh "$BUILD_MODE"
+            -e BUILD_JOBS=4 --entrypoint sh php70-ci /harness/ci.sh "$BUILD_MODE"
       - name: Verify cgroup OOM and replacement workers
+        timeout-minutes: 3
         if: matrix.os == 'debian:12' && matrix.arch == 'amd64' && matrix.mode == 'debug'
         run: |
           python3 docs/security/testing/docker-memory-invariants.py \
             --image php70-ci --install "$RUNNER_TEMP/php70/output/install" \
             --output "$RUNNER_TEMP/php70/memory"
       - name: Preserve logs even on failure
+        timeout-minutes: 2
         if: always()
         uses: actions/upload-artifact@v4
         with:
