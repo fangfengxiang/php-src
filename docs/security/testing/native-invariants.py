@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 
 p = argparse.ArgumentParser()
 p.add_argument('--php', required=True)
@@ -23,6 +24,16 @@ def run(code, limit='8M'):
             'stderr': r.stderr.decode(errors='replace')}
 
 checks = []
+
+def save_failure(kind, error, traceback):
+    # Keep earlier checks and the failing assertion when a disposable CI job exits.
+    Path(a.output).write_text(json.dumps({
+        'legacy': a.legacy, 'completed': False, 'pass': False,
+        'checks': checks, 'failure': kind.__name__ + ': ' + str(error),
+    }, indent=2) + '\n')
+    sys.__excepthook__(kind, error, traceback)
+
+sys.excepthook = save_failure
 abi = run('echo json_encode(security_probe()), "\\n";')
 assert abi['returncode'] == 0, abi
 abi = json.loads(abi['stdout'])
@@ -34,6 +45,7 @@ for query in ('x[a]=v', 'x[999]=v', 'x[0]=v'):
     assert r['returncode'] == 0, r
     result = json.loads(r['stdout'])
     assert result['arData_mod_pointer_alignment'] == 0, result
+    assert result['arData_mod_bucket_alignment'] == 0, result
     assert result['nTableSize'] == (8 if a.legacy else 1), result
     checks.append({'check': 'singleton alignment ' + query, 'pass': True, 'data': result})
 for mode in ('emalloc', 'safe_emalloc', 'estrndup', 'zend_strndup', 'system_malloc',
@@ -52,5 +64,5 @@ for mode in ('emalloc', 'safe_emalloc', 'estrndup', 'zend_strndup', 'system_mall
         assert 'C EXIT CALLBACK' not in r['stderr'], (mode, r)
     assert 'ERROR: AddressSanitizer' not in r['stderr'], (mode, r)
     checks.append({'check': mode, 'pass': True, **r})
-Path(a.output).write_text(json.dumps({'legacy': a.legacy, 'checks': checks}, indent=2) + '\n')
+Path(a.output).write_text(json.dumps({'legacy': a.legacy, 'completed': True, 'pass': True, 'checks': checks}, indent=2) + '\n')
 print(json.dumps({'output': a.output, 'passed': len(checks)}))

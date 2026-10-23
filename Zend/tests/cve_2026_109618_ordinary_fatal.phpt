@@ -1,7 +1,13 @@
 --TEST--
-Ordinary fatal errors still run registered request shutdown functions
+Ordinary fatal errors preserve PHP 7 shutdown and destructor behavior
 --FILE--
 <?php
+class FatalCleanup {
+    public function __destruct() {
+        echo "UNEXPECTED DESTRUCTOR\n";
+    }
+}
+$cleanup = new FatalCleanup;
 register_shutdown_function(function () {
     echo "NORMAL SHUTDOWN\n";
 });

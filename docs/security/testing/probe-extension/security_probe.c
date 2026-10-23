@@ -3,6 +3,7 @@
 # include "config.h"
 #endif
 #include "php.h"
+#include <stddef.h>
 #include "Zend/zend_multiply.h"
 
 static void security_probe_exit_callback(void)
@@ -17,6 +18,7 @@ PHP_FUNCTION(security_probe)
 	add_assoc_long(return_value, "hardened", php70_security_is_hardened());
 #endif
 	add_assoc_long(return_value, "module_api", ZEND_MODULE_API_NO);
+	add_assoc_long(return_value, "sizeof_pointer", sizeof(void *));
 	add_assoc_long(return_value, "sizeof_zval", sizeof(zval));
 	add_assoc_long(return_value, "sizeof_zend_string", sizeof(zend_string));
 	add_assoc_long(return_value, "sizeof_HashTable", sizeof(HashTable));
@@ -52,7 +54,10 @@ PHP_FUNCTION(security_probe_allocation)
 		/* Deliberately demonstrates code embedded in old binary extensions. */
 		zend_safe_address_guarded((size_t) -1, 2, 0);
 	} else if (strcmp(mode, "huge_rounding") == 0) {
-		ptr = emalloc((size_t) -4096);
+		/* Stay within the final 4 KiB page, allowing room for debug
+		 * metadata. -4096 is already page-aligned on x86_64 and tests
+		 * mmap failure there instead of the intended rounding guard. */
+		ptr = emalloc((size_t) -1024);
 	} else if (strcmp(mode, "metadata_overflow") == 0) {
 		ptr = emalloc((size_t) -1);
 	} else if (strcmp(mode, "hash_capacity") == 0) {
@@ -75,6 +80,8 @@ PHP_FUNCTION(security_probe_array)
 {
 	zval *value;
 	HashTable *table;
+	struct security_bucket_alignment { char prefix; Bucket bucket; };
+	size_t bucket_alignment = offsetof(struct security_bucket_alignment, bucket);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "a", &value) == FAILURE) {
 		return;
@@ -84,6 +91,8 @@ PHP_FUNCTION(security_probe_array)
 	add_assoc_long(return_value, "nTableSize", table->nTableSize);
 	add_assoc_long(return_value, "nTableMask", table->nTableMask);
 	add_assoc_long(return_value, "arData_mod_pointer_alignment", (uintptr_t) table->arData % sizeof(void *));
+	add_assoc_long(return_value, "Bucket_alignment", bucket_alignment);
+	add_assoc_long(return_value, "arData_mod_bucket_alignment", (uintptr_t) table->arData % bucket_alignment);
 }
 
 static const zend_function_entry security_probe_functions[] = {

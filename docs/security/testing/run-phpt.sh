@@ -29,6 +29,16 @@ set +e
     -w /work/logs/phpt-failures.txt "$@" > /work/logs/phpt.log 2>&1
 status=$?
 set -e
+# The source volume is disposable in CI; preserve diagnostics before it vanishes.
+python3 - <<'COPY_DIFFS'
+from pathlib import Path
+import shutil
+root = Path('/work/source')
+for source in root.rglob('*.diff'):
+    target = Path('/work/logs/test-diffs') / source.relative_to(root)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, target)
+COPY_DIFFS
 echo "$status" > /work/logs/phpt-exit-status.txt
 tail -70 /work/logs/phpt.log
 exit "$status"

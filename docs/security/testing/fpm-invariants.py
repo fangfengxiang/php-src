@@ -209,6 +209,15 @@ php_admin_value[log_errors] = 1
                 response = result_json(call("action=upload", body=body, content_type=kind))
                 assert response["post"] == {"field": "value"} and response["files"]["upload"] == {"error": 0, "name": "probe.txt", "data": "benign upload\n"}, response
                 results.append({"check": "ordinary multipart field and file", "pass": True})
+                # FPM bounds reads by CONTENT_LENGTH; absent/zero length must
+                # not consume the supplied bounded body or poison the next request.
+                for length_params in ({}, {"CONTENT_LENGTH": "0"}):
+                    no_length = result_json(call("action=upload", body=body, content_type=kind,
+                        length=False, extra_params=length_params))
+                    assert no_length["pid"] == pid and not no_length["post"] and not no_length["files"], no_length
+                    following = result_json(call("action=upload", body=body, content_type=kind))
+                    assert following["pid"] == pid and following["post"] == {"field": "value"}, following
+                results.append({"check": "missing or zero Content-Length keeps FPM worker reusable", "pid": pid, "pass": True})
                 # Bounded parser-memory pressure with unknown headers only.
                 # There are no objects, addresses, shell commands or gadgets.
                 header_boundary = "benign-header-pressure"
@@ -227,7 +236,13 @@ php_admin_value[log_errors] = 1
                 body, kind = multipart([("PHPSESSID", b"progressprobe", None), ("PHP_SESSION_UPLOAD_PROGRESS", b"benign", None), ("upload", b"x", "probe.txt")])
                 response = result_json(call("action=progress", body=body, content_type=kind))
                 assert response["has_progress"] == args.expect_baseline, response
-                results.append({"check": "upload progress honors mitigation even when configured on", "has_progress": response["has_progress"], "pass": True})
+                assert response["pid"] == pid, response
+                if not args.expect_baseline:
+                    # A per-request FPM INI value must not bypass the hard disable.
+                    response = result_json(call("action=progress", body=body, content_type=kind,
+                        extra_params={"PHP_VALUE": "session.upload_progress.enabled=1"}))
+                    assert not response["has_progress"] and response["pid"] == pid, response
+                results.append({"check": "upload progress honors mitigation including PHP_VALUE", "has_progress": response["has_progress"], "pass": True})
                 fatal = call("action=fatal")
                 assert "benign lifecycle probe" in fatal["body"] and marker.exists(), fatal
                 marker.unlink()
@@ -255,6 +270,11 @@ php_admin_value[log_errors] = 1
                     if marker.exists():
                         marker.unlink()
                     pid = after["pid"]
+                    progress_body, progress_type = multipart([("PHPSESSID", b"progressprobe", None),
+                        ("PHP_SESSION_UPLOAD_PROGRESS", b"benign", None), ("upload", b"x", "probe.txt")])
+                    progress = result_json(call("action=progress", body=progress_body, content_type=progress_type))
+                    assert progress["pid"] == pid and progress["has_progress"] == args.expect_baseline, progress
+                    results.append({"check": "upload progress after script OOM has expected PID and state", "pid": pid, "pass": True})
                     # A large plain field triggers OOM during request startup,
                     # without manipulating layouts, dangling pointers or objects.
                     body, kind = multipart([("large", b"x" * (32 * 1024 * 1024), None)])

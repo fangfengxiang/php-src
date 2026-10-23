@@ -1,10 +1,12 @@
-FROM php:8.2-cli-bookworm@sha256:ac125c2d3ce1e8e33b503bcf85bdea9b43ed108515134629163a5971b3c9ac85
+ARG BASE_IMAGE=debian:12
+FROM ${BASE_IMAGE}
 
-# This image supplies build tools only. PHP 7.0 is built from the reviewed
-# checkout, never from the PHP 8 binary supplied by the base image.
+# This image supplies build tools only and contains no preinstalled PHP.
+# Build and test PHP 7.0 from the reviewed branch, using /work/install/bin/php.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        autoconf2.69 bison clang libxml2-dev libsqlite3-dev python3 zlib1g-dev \
+        autoconf2.69 bison clang build-essential ca-certificates curl re2c xz-utils \
+        libxml2-dev libsqlite3-dev python3 zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # PHP 7.0's custom parser diagnostics use yystrlen/yystpcpy, which the Bison

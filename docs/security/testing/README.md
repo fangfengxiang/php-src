@@ -139,3 +139,8 @@ JSON、FPM 原始日志和容器日志；退出/超时清理只针对工具自�
 probe 是测试扩展，**不得安装到生产实例**。`build-probe.sh` 将它放在容器输出目录，
 不会修改宿主机 PHP 安装。旧扩展可加载与旧内联 guard 仍 bailout 的实证保存在
 `../results/old-extension-compatibility.json`。
+
+## 分支自动 CI
+
+新增矩阵、触发条件和 Grok 边界建议评估见 [CI 与边界测试评估](../ci-and-boundary-review.md)。
+本地安全 PHPT 命令另加 `tests/basic/rfc1867_empty_file_nested_name.phpt`，现共 12 项。

@@ -1,0 +1,715 @@
+{
+  "scope": "Local pure Ubuntu 22.04 arm64 PHP 7.0.33 Debug; focused security tests only",
+  "source_commit": "0d2be532f76f9c021f46dde8214664c51707c92a",
+  "includes_uncommitted_test_and_harness_changes": true,
+  "php_version": "PHP 7.0.33 (cli) (built: Oct 23 2026 04:59:33) ( NTS DEBUG )\nCopyright (c) 1997-2017 The PHP Group\nZend Engine v3.0.0, Copyright (c) 1998-2017 Zend Technologies\n",
+  "native": {
+    "legacy": false,
+    "completed": true,
+    "pass": true,
+    "checks": [
+      {
+        "check": "build mode and ABI sizes",
+        "pass": true,
+        "data": {
+          "hardened": 1,
+          "module_api": 20151012,
+          "sizeof_pointer": 8,
+          "sizeof_zval": 16,
+          "sizeof_zend_string": 32,
+          "sizeof_HashTable": 56,
+          "sizeof_php_core_globals": 656,
+          "max_input_vars": 1000,
+          "memory_limit": 8388608
+        }
+      },
+      {
+        "check": "singleton alignment x[a]=v",
+        "pass": true,
+        "data": {
+          "nTableSize": 1,
+          "nTableMask": 4294967294,
+          "arData_mod_pointer_alignment": 0,
+          "Bucket_alignment": 8,
+          "arData_mod_bucket_alignment": 0
+        }
+      },
+      {
+        "check": "singleton alignment x[999]=v",
+        "pass": true,
+        "data": {
+          "nTableSize": 1,
+          "nTableMask": 4294967294,
+          "arData_mod_pointer_alignment": 0,
+          "Bucket_alignment": 8,
+          "arData_mod_bucket_alignment": 0
+        }
+      },
+      {
+        "check": "singleton alignment x[0]=v",
+        "pass": true,
+        "data": {
+          "nTableSize": 1,
+          "nTableMask": 4294967294,
+          "arData_mod_pointer_alignment": 0,
+          "Bucket_alignment": 8,
+          "arData_mod_bucket_alignment": 0
+        }
+      },
+      {
+        "check": "emalloc",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "\nFatal error: Allowed memory size of 8388608 bytes exhausted at /work/probe/security_probe.c:44 (tried to allocate 67108864 bytes) in Command line code on line 1\n"
+      },
+      {
+        "check": "safe_emalloc",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\n"
+      },
+      {
+        "check": "estrndup",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\n"
+      },
+      {
+        "check": "zend_strndup",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\n"
+      },
+      {
+        "check": "system_malloc",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "Out of memory\n"
+      },
+      {
+        "check": "inline_guard",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\n"
+      },
+      {
+        "check": "huge_rounding",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709550592 bytes) in Command line code on line 1\n"
+      },
+      {
+        "check": "metadata_overflow",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "\nFatal error: Possible integer overflow in memory allocation (0 + 32) in Command line code on line 1\n"
+      },
+      {
+        "check": "hash_capacity",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "\nFatal error: Possible integer overflow in memory allocation (4294967295 * 32 + 32) in Command line code on line 1\n"
+      }
+    ]
+  },
+  "fpm": {
+    "baseline": false,
+    "system_allocator": false,
+    "checks": [
+      {
+        "check": "five consecutive normal requests use same worker",
+        "pid": 8,
+        "pass": true
+      },
+      {
+        "check": "normal session write and read",
+        "pass": true
+      },
+      {
+        "check": "ordinary multipart field and file",
+        "pass": true
+      },
+      {
+        "check": "missing or zero Content-Length keeps FPM worker reusable",
+        "pid": 8,
+        "pass": true
+      },
+      {
+        "check": "unknown multipart headers do not accumulate retained memory",
+        "before_pid": 8,
+        "after_pid": 8,
+        "pass": true
+      },
+      {
+        "check": "upload progress honors mitigation including PHP_VALUE",
+        "has_progress": false,
+        "pass": true
+      },
+      {
+        "check": "ordinary fatal cleanup and safe worker reuse",
+        "pid": 8,
+        "pass": true
+      },
+      {
+        "check": "early PHP_VALUE diagnostic after fatal and handlers",
+        "pid": 8,
+        "pass": true
+      },
+      {
+        "check": "script memory_limit OOM matches expected lifecycle",
+        "before_pid": 8,
+        "after_pid": 9,
+        "shutdown_called": false,
+        "pass": true
+      },
+      {
+        "check": "upload progress after script OOM has expected PID and state",
+        "pid": 9,
+        "pass": true
+      },
+      {
+        "check": "startup multipart OOM cannot reuse worker",
+        "before_pid": 9,
+        "after_pid": 10,
+        "pass": true
+      }
+    ]
+  },
+  "ordinary_fatal_baseline_comparison": {
+    "baseline": {
+      "returncode": 255,
+      "stdout": "\nFatal error: fatal probe in Command line code on line 4\nSHUTDOWN\n",
+      "stderr": ""
+    },
+    "hardened": {
+      "returncode": 255,
+      "stdout": "\nFatal error: fatal probe in Command line code on line 4\nSHUTDOWN\n",
+      "stderr": ""
+    }
+  },
+  "phpt_summary": {
+    "total": 12,
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0
+  },
+  "github_at_review": {
+    "pull_request": "https://github.com/fangfengxiang/php-src/pull/1",
+    "head_sha": "0d2be532f76f9c021f46dde8214664c51707c92a",
+    "base_ref": "codex/php70-7.0.33-base",
+    "workflow_runs_for_branch": 0,
+    "head_check_runs": 0
+  },
+  "source_sha256": {
+    ".github/workflows/php70-security.yml": "445ce6c66ca804d690e06b972fa1f47e21be0ab479314865fcadc03bcbf86451",
+    "docs/security/testing/Dockerfile": "be8610a0c2c68d1c99350d3b126370362b7964db8ff7f702809503e4bfbebcc3",
+    "docs/security/testing/build.sh": "1912602deffc52512cfbc28cb112ddbdfde14aca413eab4471943e254715ba31",
+    "docs/security/testing/ci.sh": "f296a7184e53d649937931c29934ad1f5ea089f9195f166ad17baafb08beab6b",
+    "docs/security/testing/run-phpt.sh": "0f84b5af07fa06228fd9e289fad2f8f5b2a8d690bef4bc24bbc5140cad6a3238",
+    "docs/security/testing/fpm-invariants.py": "5547f1534033182986ed919ab4fc7e69a969c8d261d3312877b41fd190f640d9",
+    "docs/security/testing/native-invariants.py": "f630038df588604a286d1089a6c6d8bc80c372cbe7d143385fa1a24a28b62a7c",
+    "docs/security/testing/probe-extension/security_probe.c": "b1c53d5bd4dc9ae887d3e1acb1bde4fab1007cc37bbd1fa688df18139aaee368",
+    "Zend/tests/cve_2026_109618_ordinary_fatal.phpt": "21d257cb92a97e5ae0a433207fec8b8328c6c3fe939799b68698d0c74895313c",
+    "tests/basic/rfc1867_empty_file_nested_name.phpt": "d6a94314e663a7f8c96f2768f5468e39e487d667abacd329069309792d2cf234"
+  },
+  "local_log_sha256": {
+    "phpt.log": "3165b744916ded821e160878d03a2f1283d167eaebba97863382c4504991f428",
+    "phpt.xml": "24accb334395af994175144ede82157b02da5d8f09795ea81014c755e6a35ece",
+    "native-bucket-alignment-review.json": "f181f5f12ba8b12c784b75ce7fa7c2aa7054880c9de5f5680d148daea9362f8d",
+    "fpm-content-length-review.json": "41178a16b94fd4b41a47c1d5c14a8f945b9a9253873f4ff67b4e7ed8e94c00df",
+    "version.txt": "78d7c9326dd0e50df171ef02e99daf6e67bbdd8a83b066f58f83c28927620a2b",
+    "vm-generation.log": "73298a01df7fa1b0036112eb10729b78bf671f63b3bd9c7f34bf9d4d40a76891",
+    "fpm-system-allocator-review.json": "9c65d913830ef4fe756b5bc2bc4e0879f15f16a70518bd84e34f745e3f2550c5"
+  },
+  "unverified": [
+    "GitHub native 10-job matrix",
+    "Ubuntu 24.04 build",
+    "32-bit",
+    "ZTS",
+    "mod_php",
+    "Windows",
+    "dtoa allocation failure injection",
+    "full PHPT rerun in this review"
+  ],
+  "fpm_system_allocator_non_asan": {
+    "baseline": false,
+    "system_allocator": true,
+    "checks": [
+      {
+        "check": "five consecutive normal requests use same worker",
+        "pid": 8,
+        "pass": true
+      },
+      {
+        "check": "normal session write and read",
+        "pass": true
+      },
+      {
+        "check": "ordinary multipart field and file",
+        "pass": true
+      },
+      {
+        "check": "missing or zero Content-Length keeps FPM worker reusable",
+        "pid": 8,
+        "pass": true
+      },
+      {
+        "check": "unknown multipart headers do not accumulate retained memory",
+        "before_pid": 8,
+        "after_pid": 8,
+        "pass": true
+      },
+      {
+        "check": "upload progress honors mitigation including PHP_VALUE",
+        "has_progress": false,
+        "pass": true
+      },
+      {
+        "check": "ordinary fatal cleanup and safe worker reuse",
+        "pid": 8,
+        "pass": true
+      },
+      {
+        "check": "early PHP_VALUE diagnostic after fatal and handlers",
+        "pid": 8,
+        "pass": true
+      },
+      {
+        "check": "memory_limit OOM",
+        "skip": "USE_ZEND_ALLOC=0 intentionally disables Zend memory_limit"
+      }
+    ]
+  },
+  "workflow_lint": {
+    "tool": "actionlint",
+    "version": "1.7.12",
+    "exit_code": 0
+  },
+  "amd64_emulated_debug": {
+    "scope": "Pure Debian 12 amd64 image running through Docker Desktop Rosetta, not native amd64 hardware",
+    "php_version": "PHP 7.0.33 (cli) (built: Oct 23 2026 05:14:39) ( NTS DEBUG )\nCopyright (c) 1997-2017 The PHP Group\nZend Engine v3.0.0, Copyright (c) 1998-2017 Zend Technologies\n",
+    "native": {
+      "legacy": false,
+      "completed": true,
+      "pass": true,
+      "checks": [
+        {
+          "check": "build mode and ABI sizes",
+          "pass": true,
+          "data": {
+            "hardened": 1,
+            "module_api": 20151012,
+            "sizeof_pointer": 8,
+            "sizeof_zval": 16,
+            "sizeof_zend_string": 32,
+            "sizeof_HashTable": 56,
+            "sizeof_php_core_globals": 656,
+            "max_input_vars": 1000,
+            "memory_limit": 8388608
+          }
+        },
+        {
+          "check": "singleton alignment x[a]=v",
+          "pass": true,
+          "data": {
+            "nTableSize": 1,
+            "nTableMask": 4294967294,
+            "arData_mod_pointer_alignment": 0,
+            "Bucket_alignment": 8,
+            "arData_mod_bucket_alignment": 0
+          }
+        },
+        {
+          "check": "singleton alignment x[999]=v",
+          "pass": true,
+          "data": {
+            "nTableSize": 1,
+            "nTableMask": 4294967294,
+            "arData_mod_pointer_alignment": 0,
+            "Bucket_alignment": 8,
+            "arData_mod_bucket_alignment": 0
+          }
+        },
+        {
+          "check": "singleton alignment x[0]=v",
+          "pass": true,
+          "data": {
+            "nTableSize": 1,
+            "nTableMask": 4294967294,
+            "arData_mod_pointer_alignment": 0,
+            "Bucket_alignment": 8,
+            "arData_mod_bucket_alignment": 0
+          }
+        },
+        {
+          "check": "emalloc",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Allowed memory size of 8388608 bytes exhausted at /work/probe/security_probe.c:44 (tried to allocate 67108864 bytes) in Command line code on line 1\n"
+        },
+        {
+          "check": "safe_emalloc",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\n"
+        },
+        {
+          "check": "estrndup",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\n"
+        },
+        {
+          "check": "zend_strndup",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\n"
+        },
+        {
+          "check": "system_malloc",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Out of memory\n"
+        },
+        {
+          "check": "inline_guard",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\n"
+        },
+        {
+          "check": "huge_rounding",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709550592 bytes) in Command line code on line 1\n"
+        },
+        {
+          "check": "metadata_overflow",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (0 + 32) in Command line code on line 1\n"
+        },
+        {
+          "check": "hash_capacity",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (4294967295 * 32 + 32) in Command line code on line 1\n"
+        }
+      ]
+    },
+    "fpm": {
+      "baseline": false,
+      "system_allocator": false,
+      "checks": [
+        {
+          "check": "five consecutive normal requests use same worker",
+          "pid": 8,
+          "pass": true
+        },
+        {
+          "check": "normal session write and read",
+          "pass": true
+        },
+        {
+          "check": "ordinary multipart field and file",
+          "pass": true
+        },
+        {
+          "check": "missing or zero Content-Length keeps FPM worker reusable",
+          "pid": 8,
+          "pass": true
+        },
+        {
+          "check": "unknown multipart headers do not accumulate retained memory",
+          "before_pid": 8,
+          "after_pid": 8,
+          "pass": true
+        },
+        {
+          "check": "upload progress honors mitigation including PHP_VALUE",
+          "has_progress": false,
+          "pass": true
+        },
+        {
+          "check": "ordinary fatal cleanup and safe worker reuse",
+          "pid": 8,
+          "pass": true
+        },
+        {
+          "check": "early PHP_VALUE diagnostic after fatal and handlers",
+          "pid": 8,
+          "pass": true
+        },
+        {
+          "check": "script memory_limit OOM matches expected lifecycle",
+          "before_pid": 8,
+          "after_pid": 9,
+          "shutdown_called": false,
+          "pass": true
+        },
+        {
+          "check": "upload progress after script OOM has expected PID and state",
+          "pid": 9,
+          "pass": true
+        },
+        {
+          "check": "startup multipart OOM cannot reuse worker",
+          "before_pid": 9,
+          "after_pid": 10,
+          "pass": true
+        }
+      ]
+    },
+    "phpt_summary": {
+      "total": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    "vm_headers_byte_comparison_passed": true,
+    "initial_probe_failure": {
+      "legacy": false,
+      "completed": false,
+      "pass": false,
+      "checks": [
+        {
+          "check": "build mode and ABI sizes",
+          "pass": true,
+          "data": {
+            "hardened": 1,
+            "module_api": 20151012,
+            "sizeof_pointer": 8,
+            "sizeof_zval": 16,
+            "sizeof_zend_string": 32,
+            "sizeof_HashTable": 56,
+            "sizeof_php_core_globals": 656,
+            "max_input_vars": 1000,
+            "memory_limit": 8388608
+          }
+        },
+        {
+          "check": "singleton alignment x[a]=v",
+          "pass": true,
+          "data": {
+            "nTableSize": 1,
+            "nTableMask": 4294967294,
+            "arData_mod_pointer_alignment": 0,
+            "Bucket_alignment": 8,
+            "arData_mod_bucket_alignment": 0
+          }
+        },
+        {
+          "check": "singleton alignment x[999]=v",
+          "pass": true,
+          "data": {
+            "nTableSize": 1,
+            "nTableMask": 4294967294,
+            "arData_mod_pointer_alignment": 0,
+            "Bucket_alignment": 8,
+            "arData_mod_bucket_alignment": 0
+          }
+        },
+        {
+          "check": "singleton alignment x[0]=v",
+          "pass": true,
+          "data": {
+            "nTableSize": 1,
+            "nTableMask": 4294967294,
+            "arData_mod_pointer_alignment": 0,
+            "Bucket_alignment": 8,
+            "arData_mod_bucket_alignment": 0
+          }
+        },
+        {
+          "check": "emalloc",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Allowed memory size of 8388608 bytes exhausted at /work/probe/security_probe.c:44 (tried to allocate 67108864 bytes) in Command line code on line 1\n"
+        },
+        {
+          "check": "safe_emalloc",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\n"
+        },
+        {
+          "check": "estrndup",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\n"
+        },
+        {
+          "check": "zend_strndup",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\n"
+        },
+        {
+          "check": "system_malloc",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Out of memory\n"
+        },
+        {
+          "check": "inline_guard",
+          "pass": true,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\n"
+        }
+      ],
+      "failure": "AssertionError: ('huge_rounding', {'returncode': -5, 'stdout': '', 'stderr': 'rosetta error: could not find free space for allocation size fffffffffffff000\\n '})"
+    },
+    "initial_probe_failure_explanation": "-4096 is already page-aligned on 4 KiB pages and reaches an impossible mmap under Rosetta. Corrected huge_rounding to -1024 to exercise the intended rounding-overflow guard with room for debug metadata.",
+    "local_log_sha256": {
+      "version.txt": "e0b9dd12c96741b682fbe1d28af64db1f66ef078848a1b2cc55fb6e3fc298329",
+      "native-corrected-rounding-review.json": "f181f5f12ba8b12c784b75ce7fa7c2aa7054880c9de5f5680d148daea9362f8d",
+      "native-emulated-review.json": "59c54d55a40ca68731a70ddf08cc016b014cde243f9f0244a5f49d0cff5922b7",
+      "fpm-emulated-review.json": "41178a16b94fd4b41a47c1d5c14a8f945b9a9253873f4ff67b4e7ed8e94c00df",
+      "phpt.log": "7d8449c25a525a97ba47639d2da2ab6d4a3e3f4337e1f780979cc5283154d3e1",
+      "phpt.xml": "bba87bd4a4647687e97d0db0ee7792320f284ae40d715b6cf839fa95a139cd7e",
+      "vm-generation.log": "73298a01df7fa1b0036112eb10729b78bf671f63b3bd9c7f34bf9d4d40a76891"
+    }
+  },
+  "legacy_arm64_corrected_probe": {
+    "legacy": true,
+    "completed": true,
+    "pass": true,
+    "checks": [
+      {
+        "check": "build mode and ABI sizes",
+        "pass": true,
+        "data": {
+          "hardened": 0,
+          "module_api": 20151012,
+          "sizeof_pointer": 8,
+          "sizeof_zval": 16,
+          "sizeof_zend_string": 32,
+          "sizeof_HashTable": 56,
+          "sizeof_php_core_globals": 656,
+          "max_input_vars": 1000,
+          "memory_limit": 8388608
+        }
+      },
+      {
+        "check": "singleton alignment x[a]=v",
+        "pass": true,
+        "data": {
+          "nTableSize": 8,
+          "nTableMask": 4294967288,
+          "arData_mod_pointer_alignment": 0,
+          "Bucket_alignment": 8,
+          "arData_mod_bucket_alignment": 0
+        }
+      },
+      {
+        "check": "singleton alignment x[999]=v",
+        "pass": true,
+        "data": {
+          "nTableSize": 8,
+          "nTableMask": 4294967288,
+          "arData_mod_pointer_alignment": 0,
+          "Bucket_alignment": 8,
+          "arData_mod_bucket_alignment": 0
+        }
+      },
+      {
+        "check": "singleton alignment x[0]=v",
+        "pass": true,
+        "data": {
+          "nTableSize": 8,
+          "nTableMask": 4294967294,
+          "arData_mod_pointer_alignment": 0,
+          "Bucket_alignment": 8,
+          "arData_mod_bucket_alignment": 0
+        }
+      },
+      {
+        "check": "emalloc",
+        "pass": true,
+        "returncode": 255,
+        "stdout": "\nFatal error: Allowed memory size of 8388608 bytes exhausted at /work/probe/security_probe.c:44 (tried to allocate 67108864 bytes) in Command line code on line 1\nPHP SHUTDOWN\n",
+        "stderr": ""
+      },
+      {
+        "check": "safe_emalloc",
+        "pass": true,
+        "returncode": 255,
+        "stdout": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\nPHP SHUTDOWN\n",
+        "stderr": ""
+      },
+      {
+        "check": "estrndup",
+        "pass": true,
+        "returncode": 255,
+        "stdout": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\nPHP SHUTDOWN\n",
+        "stderr": ""
+      },
+      {
+        "check": "zend_strndup",
+        "pass": true,
+        "returncode": 255,
+        "stdout": "\nFatal error: Possible integer overflow in memory allocation (1 * 18446744073709551615 + 1) in Command line code on line 1\nPHP SHUTDOWN\n",
+        "stderr": ""
+      },
+      {
+        "check": "system_malloc",
+        "pass": true,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "Out of memory\nC EXIT CALLBACK\n"
+      },
+      {
+        "check": "inline_guard",
+        "pass": true,
+        "returncode": 255,
+        "stdout": "\nFatal error: Possible integer overflow in memory allocation (18446744073709551615 * 2 + 0) in Command line code on line 1\nPHP SHUTDOWN\n",
+        "stderr": ""
+      },
+      {
+        "check": "huge_rounding",
+        "pass": true,
+        "returncode": 255,
+        "stdout": "\nFatal error: Out of memory (allocated 2097152) at /work/probe/security_probe.c:60 (tried to allocate 18446744073709550592 bytes) in Command line code on line 1\nPHP SHUTDOWN\n",
+        "stderr": "\nmmap() failed: [22] Invalid argument\n"
+      },
+      {
+        "check": "metadata_overflow",
+        "pass": true,
+        "returncode": 255,
+        "stdout": "\nFatal error: Possible integer overflow in memory allocation (0 + 32) in Command line code on line 1\nPHP SHUTDOWN\n",
+        "stderr": ""
+      },
+      {
+        "check": "hash_capacity",
+        "pass": true,
+        "returncode": 255,
+        "stdout": "\nFatal error: Possible integer overflow in memory allocation (4294967295 * 32 + 32) in Command line code on line 1\nPHP SHUTDOWN\n",
+        "stderr": ""
+      }
+    ]
+  }
+}

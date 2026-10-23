@@ -58,6 +58,8 @@ export PHP_AUTOHEADER=autoheader2.69
 make clean > /work/logs/clean.log 2>&1
 make -j"${BUILD_JOBS:-1}" > /work/logs/make.log 2>&1
 make install > /work/logs/install.log 2>&1
+# Refuse to test with a host/system PHP or a different PHP branch.
+/work/install/bin/php -n -r 'if (PHP_VERSION_ID !== 70033) { fwrite(STDERR, "Expected branch-built PHP 7.0.33\n"); exit(1); }'
 /work/install/bin/php -n -v > /work/logs/version.txt 2>&1
 /work/install/bin/php -n -m > /work/logs/modules.txt 2>&1
 echo "$mode build complete"
