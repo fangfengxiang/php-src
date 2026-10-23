@@ -70,6 +70,37 @@ Debug、Release、ASan、legacy 各完成 9 项检查；未修改的干净基线
 ASan 系统 allocator 另通过 7 项功能/早期诊断检查；memory_limit 检查明确跳过。
 记录见各 `*-fpm.json`。没有使用命令执行、堆布局控制或内存泄露负载。
 
+## 小内存 Docker 与真实 cgroup OOM
+
+2026-10-23 补做 hardened Debug、Release 两种运行构建，各完成 7 组、合计 **14/14 通过**。
+每个新建容器使用 `--network none`、`--pids-limit 32`，显式设置
+`--memory 64m/96m/128m` 与相同的 `--memory-swap`。Docker 的 swap 参数表示内存加 swap 总额，
+两者相等时 swap 被禁用；每轮 FPM 测试还读取实际 cgroup v2 限额核实，不能仅凭启动参数认定生效。
+
+| 路径（两种构建均执行） | Docker 内存限额 | 真实结果 |
+| --- | --- | --- |
+| FPM，PHP `memory_limit=16M` | 64、96、128 MiB | 旧 worker 退出码 1；`oom_kill` 无增加；不执行 PHP shutdown；master 存活，新 worker 连续服务，Session 计数保留 |
+| FPM，PHP `memory_limit=-1` | 64、96、128 MiB | 实际写入并保留字符串使 cgroup 触顶；每轮 `oom_kill` 增加 1；日志记录旧 worker 被 signal 9 杀死；master 存活并重建 worker，Session 继续可用 |
+| CLI，PHP `memory_limit=-1` | 64 MiB | PID 1 的 PHP 被内核杀死，容器退出码 137，Docker `OOMKilled=true`；不执行 PHP shutdown |
+
+容器内核路径的 `memory.peak` 分别达到 67,108,864、100,663,296、134,217,728 字节，
+`memory.swap.max=0`。分配负载是每次 1 MiB 的普通 `str_repeat()`，最多保留 512 MiB，
+没有无限循环或命令执行负载。测试在压力前确认正常请求复用同一 worker，压力后检查
+master 未退出、worker PID 更换、Session 从计数 3 继续为 4/5，以及替换 worker 能继续复用。
+
+FPM 的容器也会出现 `OOMKilled=true`，但测试器 PID 1 正常退出，容器退出码为 0。
+因此使用 cgroup 计数、具体 child 退出日志及 master/worker 连续性联合判定，
+不会把 Docker 单一字段或 PID 改变当作 PHP fail-stop 的证明。
+内核 SIGKILL 不运行 PHP OOM 处理代码，证明的是受测资源约束下的隔离及 FPM 可恢复行为，
+不能据此声称覆盖了新的 UAF 根因。
+
+完整结果（含实际限额、cgroup 计数前后值、PID、FPM 原始日志、二进制 SHA256）在
+[docker-memory-debug.json](results/docker-memory-debug.json) 与
+[docker-memory-release.json](results/docker-memory-release.json)。两种二进制对应的七个关键源码
+SHA256 均与本分支一致。本轮没有修改 C 源码，沿用前面已完成的 PHPT/ASan 结果，
+没有将小内存测试记作重新完成全量回归或 ASan。复现工具见
+[docker-memory-invariants.py](testing/docker-memory-invariants.py)。
+
 ## PHP 7.0 原有完整测试集
 
 保留原有测试文件和期望，没有为隐藏失败而跳过测试。
@@ -116,8 +147,9 @@ arm64 Debug 实测 zval=16、zend_string=32、HashTable=56、php_core_globals=65
 * Apache mod_php：容器未配 Apache 开发/模块运行环境，未执行；不能将 FPM 结果泛化至 Apache。
 * Linux x86_64、Windows、ZTS、32 位、自定义 Zend allocator、任意第三方扩展 callback：未执行。
 * 本次构建禁用 PCRE JIT；OPcache/mbstring 等未启用模块没有定向验证，模块清单见原始日志。
-* dtoa Balloc 的定向分配失败注入、真实物理内存压力/内核 OOM-kill、timeout 中断：未执行。
-  原生系统分配失败使用立即被拒绝的尺寸哨兵，没有耗尽主机内存。
+* dtoa Balloc 的定向分配失败注入、timeout 中断：未执行。真实 cgroup OOM 已在上述
+  Debug/Release 小内存 Linux arm64 容器验证；主机整体内存耗尽及所有 OOM 受害者选择策略未验证。
+  先前的原生分配失败检查使用立即被拒绝的尺寸哨兵，单独保留为不同覆盖项。
 * ASan 未报告已执行路径的内存错误；这不是所有跨请求 UAF 不存在的证明，也没有运行真实 RCE PoC。
 * 未新增无可信 Content-Length 时 decoded body 的实际总字节上限；大 body 仍可造成 worker 退出与 DoS。
 * 仅覆盖官方 EOL 缓解涉及的状态，不涵盖受支持 PHP 全量重置中的其他扩展，也不修复 PHP 7.0 EOL 后的其他 CVE。
