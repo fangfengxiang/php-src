@@ -1,0 +1,69 @@
+name: PHP 7.0 security regression
+on:
+  push:
+    branches: ['security/php70-cve-2026-109618-109619']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: php70-security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  security:
+    name: ${{ matrix.os }} / ${{ matrix.arch }} / ${{ matrix.mode }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['debian:12', 'ubuntu:22.04', 'ubuntu:24.04']
+        mode: [debug, release]
+        arch: [amd64]
+        runner: [ubuntu-24.04]
+        include:
+          - {os: 'debian:12', mode: debug, arch: arm64, runner: ubuntu-24.04-arm}
+          - {os: 'debian:12', mode: release, arch: arm64, runner: ubuntu-24.04-arm}
+          - {os: 'debian:12', mode: asan, arch: amd64, runner: ubuntu-24.04}
+          - {os: 'debian:12', mode: legacy, arch: amd64, runner: ubuntu-24.04}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare exact checkout archive
+        run: |
+          mkdir -p "$RUNNER_TEMP/php70/input" "$RUNNER_TEMP/php70/output"
+          git archive HEAD > "$RUNNER_TEMP/php70/input/source.tar"
+          git rev-parse HEAD > "$RUNNER_TEMP/php70/output/source-commit.txt"
+      - name: Build Linux toolchain
+        timeout-minutes: 5
+        env:
+          BASE_IMAGE: ${{ matrix.os }}
+        run: |
+          docker build --build-arg BASE_IMAGE="$BASE_IMAGE" -t php70-ci docs/security/testing
+          mkdir -p "$RUNNER_TEMP/php70/output/logs"
+          docker image inspect php70-ci > "$RUNNER_TEMP/php70/output/logs/toolchain-image.json"
+      - name: Build and run security checks without network
+        timeout-minutes: 10
+        env:
+          BUILD_MODE: ${{ matrix.mode }}
+        run: |
+          docker run --rm --network none --mount type=volume,dst=/work/source \
+            -v "$RUNNER_TEMP/php70/input:/input:ro" \
+            -v "$GITHUB_WORKSPACE/docs/security/testing:/harness:ro" \
+            -v "$RUNNER_TEMP/php70/output:/work" \
+            -e BUILD_JOBS=4 --entrypoint sh php70-ci /harness/ci.sh "$BUILD_MODE"
+      - name: Verify cgroup OOM and replacement workers
+        timeout-minutes: 3
+        if: matrix.os == 'debian:12' && matrix.arch == 'amd64' && matrix.mode == 'debug'
+        run: |
+          python3 docs/security/testing/docker-memory-invariants.py \
+            --image php70-ci --install "$RUNNER_TEMP/php70/output/install" \
+            --output "$RUNNER_TEMP/php70/memory"
+      - name: Preserve logs even on failure
+        timeout-minutes: 2
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php70-${{ strategy.job-index }}-${{ matrix.arch }}-${{ matrix.mode }}
+          path: |
+            ${{ runner.temp }}/php70/output/logs/
+            ${{ runner.temp }}/php70/output/source-commit.txt
+            ${{ runner.temp }}/php70/memory/

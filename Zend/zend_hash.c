@@ -103,6 +103,10 @@ static uint32_t zend_always_inline zend_hash_check_size(uint32_t nSize)
 	if (nSize < HT_MIN_SIZE) {
 		nSize = HT_MIN_SIZE;
 	} else if (UNEXPECTED(nSize >= HT_MAX_SIZE)) {
+		/* CVE-2026-109618 / 712e60f9: fail-stop; keep legacy bailout below. */
+		if (php70_security_is_hardened()) {
+			zend_mm_safe_error_hardened("Possible integer overflow in memory allocation (%u * %zu + %zu)", nSize, sizeof(Bucket), sizeof(Bucket));
+		}
 		zend_error_noreturn(E_ERROR, "Possible integer overflow in memory allocation (%zu * %zu + %zu)", nSize, sizeof(Bucket), sizeof(Bucket));
 	}
 
@@ -136,7 +140,9 @@ static void zend_always_inline zend_hash_real_init_ex(HashTable *ht, int packed)
 		(ht)->u.flags |= HASH_FLAG_INITIALIZED | HASH_FLAG_PACKED;
 		HT_HASH_RESET_PACKED(ht);
 	} else {
-		(ht)->nTableMask = -(ht)->nTableSize;
+		/* 712e60f9 adaptation: alignment is invariant in both modes. Unlike
+		 * 7.4, 7.0 has one hash index per bucket; reserve two for size one. */
+		(ht)->nTableMask = (ht)->nTableSize == 1 ? HT_MIN_MASK : -(ht)->nTableSize;
 		HT_SET_DATA_ADDR(ht, pemalloc(HT_SIZE(ht), (ht)->u.flags & HASH_FLAG_PERSISTENT));
 		(ht)->u.flags |= HASH_FLAG_INITIALIZED;
 		if (EXPECTED(ht->nTableMask == -8)) {
@@ -189,6 +195,10 @@ static void ZEND_FASTCALL zend_hash_packed_grow(HashTable *ht)
 {
 	HT_ASSERT(GC_REFCOUNT(ht) == 1);
 	if (ht->nTableSize >= HT_MAX_SIZE) {
+		/* CVE-2026-109618 / 712e60f9: fail-stop; keep legacy bailout below. */
+		if (php70_security_is_hardened()) {
+			zend_mm_safe_error_hardened("Possible integer overflow in memory allocation (%u * %zu + %zu)", ht->nTableSize * 2, sizeof(Bucket), sizeof(Bucket));
+		}
 		zend_error_noreturn(E_ERROR, "Possible integer overflow in memory allocation (%zu * %zu + %zu)", ht->nTableSize * 2, sizeof(Bucket), sizeof(Bucket));
 	}
 	HANDLE_BLOCK_INTERRUPTIONS();
@@ -209,12 +219,14 @@ ZEND_API void ZEND_FASTCALL zend_hash_packed_to_hash(HashTable *ht)
 {
 	void *new_data, *old_data = HT_GET_DATA_ADDR(ht);
 	Bucket *old_buckets = ht->arData;
+	/* Same alignment invariant as mixed initialization; never switch layout. */
+	uint32_t nTableMask = ht->nTableSize == 1 ? HT_MIN_MASK : -ht->nTableSize;
 
 	HT_ASSERT(GC_REFCOUNT(ht) == 1);
 	HANDLE_BLOCK_INTERRUPTIONS();
 	ht->u.flags &= ~HASH_FLAG_PACKED;
-	new_data = pemalloc(HT_SIZE_EX(ht->nTableSize, -ht->nTableSize), (ht)->u.flags & HASH_FLAG_PERSISTENT);
-	ht->nTableMask = -ht->nTableSize;
+	new_data = pemalloc(HT_SIZE_EX(ht->nTableSize, nTableMask), (ht)->u.flags & HASH_FLAG_PERSISTENT);
+	ht->nTableMask = nTableMask;
 	HT_SET_DATA_ADDR(ht, new_data);
 	memcpy(ht->arData, old_buckets, sizeof(Bucket) * ht->nNumUsed);
 	pefree(old_data, (ht)->u.flags & HASH_FLAG_PERSISTENT);
@@ -893,6 +905,10 @@ static void ZEND_FASTCALL zend_hash_do_resize(HashTable *ht)
 		zend_hash_rehash(ht);
 		HANDLE_UNBLOCK_INTERRUPTIONS();
 	} else {
+		/* CVE-2026-109618 / 712e60f9: fail-stop; keep legacy bailout below. */
+		if (php70_security_is_hardened()) {
+			zend_mm_safe_error_hardened("Possible integer overflow in memory allocation (%u * %zu + %zu)", ht->nTableSize * 2, sizeof(Bucket) + sizeof(uint32_t), sizeof(Bucket));
+		}
 		zend_error_noreturn(E_ERROR, "Possible integer overflow in memory allocation (%zu * %zu + %zu)", ht->nTableSize * 2, sizeof(Bucket) + sizeof(uint32_t), sizeof(Bucket));
 	}
 }

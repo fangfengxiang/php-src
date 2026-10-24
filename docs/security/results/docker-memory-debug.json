@@ -1,0 +1,813 @@
+{
+  "image_id": "sha256:cfa639d8095d6cb6a137e783df6b26d6af8a823ba68aaadcd9a6e2412b5ddfd3",
+  "image_tags": [
+    "php70-security-toolchain:latest"
+  ],
+  "started_utc": "2026-10-23T00:37:18Z",
+  "binaries_sha256": {
+    "bin/php": "d0417b7229781a0401528482d71ada88cc1ed7c70b8a490219ab5459d659b9b8",
+    "sbin/php-fpm": "e215384f6540f89d7da549b01d26e1250e1c3dc59904d62cfe2cecdbee62855c"
+  },
+  "cases": [
+    {
+      "name": "fpm-zend-64m",
+      "memory_mib": 64,
+      "pass": true,
+      "container_id": "4aa6e9ebc9884bbb7686d9286ba611e75fe23bddab4ea48153b17e4d63d3ef7c",
+      "wait_exit_code": 0,
+      "docker_state": {
+        "Status": "exited",
+        "ExitCode": 0,
+        "OOMKilled": false,
+        "Error": "",
+        "StartedAt": "2026-10-23T00:37:18.824501798Z",
+        "FinishedAt": "2026-10-23T00:37:18.983724131Z"
+      },
+      "docker_limits": {
+        "Memory": 67108864,
+        "MemorySwap": 67108864,
+        "NetworkMode": "none",
+        "PidsLimit": 32
+      },
+      "fpm": {
+        "php_memory_limit": "16M",
+        "allocation_bound_mib": 512,
+        "chunk_mib": 1,
+        "checks": [
+          {
+            "check": "cgroup memory cap matches requested bytes",
+            "pass": true
+          },
+          {
+            "check": "cgroup swap disabled",
+            "pass": true
+          },
+          {
+            "check": "PHP 7.0.33 uses the intended memory_limit",
+            "pass": true
+          },
+          {
+            "check": "normal requests reuse one worker and persist session",
+            "pass": true
+          },
+          {
+            "check": "allocation stopped before bounded loop completed",
+            "pass": true
+          },
+          {
+            "check": "master survives pressure",
+            "pass": true
+          },
+          {
+            "check": "replacement worker serves persisted session",
+            "pass": true
+          },
+          {
+            "check": "replacement worker remains usable",
+            "pass": true
+          },
+          {
+            "check": "no PHP shutdown callback after OOM",
+            "pass": true
+          },
+          {
+            "check": "Zend OOM has no kernel OOM kill",
+            "pass": true
+          },
+          {
+            "check": "Zend fail-stop logged exit code 1",
+            "pass": true
+          }
+        ],
+        "pass": true,
+        "cgroup_before": {
+          "memory.max": 67108864,
+          "memory.current": 9142272,
+          "memory.peak": 9142272,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "master_pid": 6,
+        "runtime": {
+          "pid": 7,
+          "count": 1,
+          "php_version": "7.0.33",
+          "memory_limit": "16M"
+        },
+        "worker_before": 7,
+        "pressure_response": {
+          "raw": "",
+          "body": "",
+          "stderr": "",
+          "ended": false
+        },
+        "replacement_response": {
+          "pid": 8,
+          "count": 4,
+          "php_version": "7.0.33",
+          "memory_limit": "16M"
+        },
+        "worker_after": 8,
+        "cgroup_after": {
+          "memory.max": 67108864,
+          "memory.current": 22450176,
+          "memory.peak": 38125568,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "oom_kill_delta": 0,
+        "harness_forced_master_kill": false,
+        "master_final_exit_code": 0,
+        "elapsed_seconds": 0.091
+      },
+      "fpm_log": "[23-Oct-2026 00:37:18] NOTICE: fpm is running, pid 6\n[23-Oct-2026 00:37:18] NOTICE: ready to handle connections\n[23-Oct-2026 00:37:18] WARNING: [pool probe] child 7 said into stderr: \"\"\n[23-Oct-2026 00:37:18] WARNING: [pool probe] child 7 said into stderr: \"Fatal error: Allowed memory size of 16777216 bytes exhausted at /work/source/Zend/zend_string.h:141 (tried to allocate 1048640 bytes) in /tmp/php70-pressure-shddxiu4/probe.php on line 9\"\n[23-Oct-2026 00:37:18] WARNING: [pool probe] child 7 exited with code 1 after 0.082173 seconds from start\n[23-Oct-2026 00:37:18] NOTICE: [pool probe] child 8 started\n[23-Oct-2026 00:37:18] NOTICE: Terminating ...\n[23-Oct-2026 00:37:18] NOTICE: exiting, bye-bye!\n"
+    },
+    {
+      "name": "fpm-kernel-64m",
+      "memory_mib": 64,
+      "pass": true,
+      "container_id": "859a4afc004eb05b37b64ed68998969d98acacea7d293a6b71da580467d6b42d",
+      "wait_exit_code": 0,
+      "docker_state": {
+        "Status": "exited",
+        "ExitCode": 0,
+        "OOMKilled": true,
+        "Error": "",
+        "StartedAt": "2026-10-23T00:37:19.133010298Z",
+        "FinishedAt": "2026-10-23T00:37:19.367868298Z"
+      },
+      "docker_limits": {
+        "Memory": 67108864,
+        "MemorySwap": 67108864,
+        "NetworkMode": "none",
+        "PidsLimit": 32
+      },
+      "fpm": {
+        "php_memory_limit": "-1",
+        "allocation_bound_mib": 512,
+        "chunk_mib": 1,
+        "checks": [
+          {
+            "check": "cgroup memory cap matches requested bytes",
+            "pass": true
+          },
+          {
+            "check": "cgroup swap disabled",
+            "pass": true
+          },
+          {
+            "check": "PHP 7.0.33 uses the intended memory_limit",
+            "pass": true
+          },
+          {
+            "check": "normal requests reuse one worker and persist session",
+            "pass": true
+          },
+          {
+            "check": "allocation stopped before bounded loop completed",
+            "pass": true
+          },
+          {
+            "check": "master survives pressure",
+            "pass": true
+          },
+          {
+            "check": "replacement worker serves persisted session",
+            "pass": true
+          },
+          {
+            "check": "replacement worker remains usable",
+            "pass": true
+          },
+          {
+            "check": "no PHP shutdown callback after OOM",
+            "pass": true
+          },
+          {
+            "check": "kernel cgroup OOM kill counted",
+            "pass": true
+          },
+          {
+            "check": "kernel victim is the old FPM worker",
+            "pass": true
+          }
+        ],
+        "pass": true,
+        "cgroup_before": {
+          "memory.max": 67108864,
+          "memory.current": 9293824,
+          "memory.peak": 9457664,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "master_pid": 7,
+        "runtime": {
+          "pid": 8,
+          "count": 1,
+          "php_version": "7.0.33",
+          "memory_limit": "-1"
+        },
+        "worker_before": 8,
+        "pressure_response": {
+          "raw": "",
+          "body": "",
+          "stderr": "",
+          "ended": false
+        },
+        "replacement_response": {
+          "pid": 9,
+          "count": 4,
+          "php_version": "7.0.33",
+          "memory_limit": "-1"
+        },
+        "worker_after": 9,
+        "cgroup_after": {
+          "memory.max": 67108864,
+          "memory.current": 19091456,
+          "memory.peak": 67108864,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 98,
+            "oom": 1,
+            "oom_kill": 1,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "oom_kill_delta": 1,
+        "harness_forced_master_kill": false,
+        "master_final_exit_code": 0,
+        "elapsed_seconds": 0.17
+      },
+      "fpm_log": "[23-Oct-2026 00:37:19] NOTICE: fpm is running, pid 7\n[23-Oct-2026 00:37:19] NOTICE: ready to handle connections\n[23-Oct-2026 00:37:19] WARNING: [pool probe] child 8 exited on signal 9 (SIGKILL) after 0.154190 seconds from start\n[23-Oct-2026 00:37:19] NOTICE: [pool probe] child 9 started\n[23-Oct-2026 00:37:19] NOTICE: Terminating ...\n[23-Oct-2026 00:37:19] NOTICE: exiting, bye-bye!\n"
+    },
+    {
+      "name": "fpm-zend-96m",
+      "memory_mib": 96,
+      "pass": true,
+      "container_id": "ca5301ac405e02c60b917ff412c28b17757641ad3aed32e8b08f9a4718a77a27",
+      "wait_exit_code": 0,
+      "docker_state": {
+        "Status": "exited",
+        "ExitCode": 0,
+        "OOMKilled": false,
+        "Error": "",
+        "StartedAt": "2026-10-23T00:37:19.52155784Z",
+        "FinishedAt": "2026-10-23T00:37:19.662528881Z"
+      },
+      "docker_limits": {
+        "Memory": 100663296,
+        "MemorySwap": 100663296,
+        "NetworkMode": "none",
+        "PidsLimit": 32
+      },
+      "fpm": {
+        "php_memory_limit": "16M",
+        "allocation_bound_mib": 512,
+        "chunk_mib": 1,
+        "checks": [
+          {
+            "check": "cgroup memory cap matches requested bytes",
+            "pass": true
+          },
+          {
+            "check": "cgroup swap disabled",
+            "pass": true
+          },
+          {
+            "check": "PHP 7.0.33 uses the intended memory_limit",
+            "pass": true
+          },
+          {
+            "check": "normal requests reuse one worker and persist session",
+            "pass": true
+          },
+          {
+            "check": "allocation stopped before bounded loop completed",
+            "pass": true
+          },
+          {
+            "check": "master survives pressure",
+            "pass": true
+          },
+          {
+            "check": "replacement worker serves persisted session",
+            "pass": true
+          },
+          {
+            "check": "replacement worker remains usable",
+            "pass": true
+          },
+          {
+            "check": "no PHP shutdown callback after OOM",
+            "pass": true
+          },
+          {
+            "check": "Zend OOM has no kernel OOM kill",
+            "pass": true
+          },
+          {
+            "check": "Zend fail-stop logged exit code 1",
+            "pass": true
+          }
+        ],
+        "pass": true,
+        "cgroup_before": {
+          "memory.max": 100663296,
+          "memory.current": 9203712,
+          "memory.peak": 9203712,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "master_pid": 7,
+        "runtime": {
+          "pid": 8,
+          "count": 1,
+          "php_version": "7.0.33",
+          "memory_limit": "16M"
+        },
+        "worker_before": 8,
+        "pressure_response": {
+          "raw": "",
+          "body": "",
+          "stderr": "",
+          "ended": false
+        },
+        "replacement_response": {
+          "pid": 9,
+          "count": 4,
+          "php_version": "7.0.33",
+          "memory_limit": "16M"
+        },
+        "worker_after": 9,
+        "cgroup_after": {
+          "memory.max": 100663296,
+          "memory.current": 22491136,
+          "memory.peak": 38170624,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "oom_kill_delta": 0,
+        "harness_forced_master_kill": false,
+        "master_final_exit_code": 0,
+        "elapsed_seconds": 0.084
+      },
+      "fpm_log": "[23-Oct-2026 00:37:19] NOTICE: fpm is running, pid 7\n[23-Oct-2026 00:37:19] NOTICE: ready to handle connections\n[23-Oct-2026 00:37:19] WARNING: [pool probe] child 8 said into stderr: \"\"\n[23-Oct-2026 00:37:19] WARNING: [pool probe] child 8 said into stderr: \"Fatal error: Allowed memory size of 16777216 bytes exhausted at /work/source/Zend/zend_string.h:141 (tried to allocate 1048640 bytes) in /tmp/php70-pressure-hs_0auzw/probe.php on line 9\", pipe is closed\n[23-Oct-2026 00:37:19] WARNING: [pool probe] child 8 exited with code 1 after 0.074550 seconds from start\n[23-Oct-2026 00:37:19] NOTICE: [pool probe] child 9 started\n[23-Oct-2026 00:37:19] NOTICE: Terminating ...\n[23-Oct-2026 00:37:19] NOTICE: exiting, bye-bye!\n"
+    },
+    {
+      "name": "fpm-kernel-96m",
+      "memory_mib": 96,
+      "pass": true,
+      "container_id": "05f1f676ffe2a2c389d4655a1002bc1bea2c8c721b9602ecca419e4fe8ff9a4c",
+      "wait_exit_code": 0,
+      "docker_state": {
+        "Status": "exited",
+        "ExitCode": 0,
+        "OOMKilled": true,
+        "Error": "",
+        "StartedAt": "2026-10-23T00:37:19.805767756Z",
+        "FinishedAt": "2026-10-23T00:37:20.103513465Z"
+      },
+      "docker_limits": {
+        "Memory": 100663296,
+        "MemorySwap": 100663296,
+        "NetworkMode": "none",
+        "PidsLimit": 32
+      },
+      "fpm": {
+        "php_memory_limit": "-1",
+        "allocation_bound_mib": 512,
+        "chunk_mib": 1,
+        "checks": [
+          {
+            "check": "cgroup memory cap matches requested bytes",
+            "pass": true
+          },
+          {
+            "check": "cgroup swap disabled",
+            "pass": true
+          },
+          {
+            "check": "PHP 7.0.33 uses the intended memory_limit",
+            "pass": true
+          },
+          {
+            "check": "normal requests reuse one worker and persist session",
+            "pass": true
+          },
+          {
+            "check": "allocation stopped before bounded loop completed",
+            "pass": true
+          },
+          {
+            "check": "master survives pressure",
+            "pass": true
+          },
+          {
+            "check": "replacement worker serves persisted session",
+            "pass": true
+          },
+          {
+            "check": "replacement worker remains usable",
+            "pass": true
+          },
+          {
+            "check": "no PHP shutdown callback after OOM",
+            "pass": true
+          },
+          {
+            "check": "kernel cgroup OOM kill counted",
+            "pass": true
+          },
+          {
+            "check": "kernel victim is the old FPM worker",
+            "pass": true
+          }
+        ],
+        "pass": true,
+        "cgroup_before": {
+          "memory.max": 100663296,
+          "memory.current": 9101312,
+          "memory.peak": 9297920,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "master_pid": 7,
+        "runtime": {
+          "pid": 8,
+          "count": 1,
+          "php_version": "7.0.33",
+          "memory_limit": "-1"
+        },
+        "worker_before": 8,
+        "pressure_response": {
+          "raw": "",
+          "body": "",
+          "stderr": "",
+          "ended": false
+        },
+        "replacement_response": {
+          "pid": 9,
+          "count": 4,
+          "php_version": "7.0.33",
+          "memory_limit": "-1"
+        },
+        "worker_after": 9,
+        "cgroup_after": {
+          "memory.max": 100663296,
+          "memory.current": 19243008,
+          "memory.peak": 100663296,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 104,
+            "oom": 1,
+            "oom_kill": 1,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "oom_kill_delta": 1,
+        "harness_forced_master_kill": false,
+        "master_final_exit_code": 0,
+        "elapsed_seconds": 0.235
+      },
+      "fpm_log": "[23-Oct-2026 00:37:19] NOTICE: fpm is running, pid 7\n[23-Oct-2026 00:37:19] NOTICE: ready to handle connections\n[23-Oct-2026 00:37:20] WARNING: [pool probe] child 8 exited on signal 9 (SIGKILL) after 0.215469 seconds from start\n[23-Oct-2026 00:37:20] NOTICE: [pool probe] child 9 started\n[23-Oct-2026 00:37:20] NOTICE: Terminating ...\n[23-Oct-2026 00:37:20] NOTICE: exiting, bye-bye!\n"
+    },
+    {
+      "name": "fpm-zend-128m",
+      "memory_mib": 128,
+      "pass": true,
+      "container_id": "b670203292a091763765fb1450789cbbfa628df02199194f4d0291fee7ab305b",
+      "wait_exit_code": 0,
+      "docker_state": {
+        "Status": "exited",
+        "ExitCode": 0,
+        "OOMKilled": false,
+        "Error": "",
+        "StartedAt": "2026-10-23T00:37:20.25633134Z",
+        "FinishedAt": "2026-10-23T00:37:20.41327584Z"
+      },
+      "docker_limits": {
+        "Memory": 134217728,
+        "MemorySwap": 134217728,
+        "NetworkMode": "none",
+        "PidsLimit": 32
+      },
+      "fpm": {
+        "php_memory_limit": "16M",
+        "allocation_bound_mib": 512,
+        "chunk_mib": 1,
+        "checks": [
+          {
+            "check": "cgroup memory cap matches requested bytes",
+            "pass": true
+          },
+          {
+            "check": "cgroup swap disabled",
+            "pass": true
+          },
+          {
+            "check": "PHP 7.0.33 uses the intended memory_limit",
+            "pass": true
+          },
+          {
+            "check": "normal requests reuse one worker and persist session",
+            "pass": true
+          },
+          {
+            "check": "allocation stopped before bounded loop completed",
+            "pass": true
+          },
+          {
+            "check": "master survives pressure",
+            "pass": true
+          },
+          {
+            "check": "replacement worker serves persisted session",
+            "pass": true
+          },
+          {
+            "check": "replacement worker remains usable",
+            "pass": true
+          },
+          {
+            "check": "no PHP shutdown callback after OOM",
+            "pass": true
+          },
+          {
+            "check": "Zend OOM has no kernel OOM kill",
+            "pass": true
+          },
+          {
+            "check": "Zend fail-stop logged exit code 1",
+            "pass": true
+          }
+        ],
+        "pass": true,
+        "cgroup_before": {
+          "memory.max": 134217728,
+          "memory.current": 9207808,
+          "memory.peak": 9207808,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "master_pid": 7,
+        "runtime": {
+          "pid": 8,
+          "count": 1,
+          "php_version": "7.0.33",
+          "memory_limit": "16M"
+        },
+        "worker_before": 8,
+        "pressure_response": {
+          "raw": "",
+          "body": "",
+          "stderr": "",
+          "ended": false
+        },
+        "replacement_response": {
+          "pid": 9,
+          "count": 4,
+          "php_version": "7.0.33",
+          "memory_limit": "16M"
+        },
+        "worker_after": 9,
+        "cgroup_after": {
+          "memory.max": 134217728,
+          "memory.current": 22605824,
+          "memory.peak": 38285312,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "oom_kill_delta": 0,
+        "harness_forced_master_kill": false,
+        "master_final_exit_code": 0,
+        "elapsed_seconds": 0.091
+      },
+      "fpm_log": "[23-Oct-2026 00:37:20] NOTICE: fpm is running, pid 7\n[23-Oct-2026 00:37:20] NOTICE: ready to handle connections\n[23-Oct-2026 00:37:20] WARNING: [pool probe] child 8 said into stderr: \"\"\n[23-Oct-2026 00:37:20] WARNING: [pool probe] child 8 said into stderr: \"Fatal error: Allowed memory size of 16777216 bytes exhausted at /work/source/Zend/zend_string.h:141 (tried to allocate 1048640 bytes) in /tmp/php70-pressure-523e0v7l/probe.php on line 9\"\n[23-Oct-2026 00:37:20] WARNING: [pool probe] child 8 exited with code 1 after 0.079374 seconds from start\n[23-Oct-2026 00:37:20] NOTICE: [pool probe] child 9 started\n[23-Oct-2026 00:37:20] NOTICE: Terminating ...\n[23-Oct-2026 00:37:20] NOTICE: exiting, bye-bye!\n"
+    },
+    {
+      "name": "fpm-kernel-128m",
+      "memory_mib": 128,
+      "pass": true,
+      "container_id": "4831038fba8bb9da7651a9283c6a9d7284b79355772ab9e2a68bc3f24cb0fe94",
+      "wait_exit_code": 0,
+      "docker_state": {
+        "Status": "exited",
+        "ExitCode": 0,
+        "OOMKilled": true,
+        "Error": "",
+        "StartedAt": "2026-10-23T00:37:20.557801632Z",
+        "FinishedAt": "2026-10-23T00:37:20.984201424Z"
+      },
+      "docker_limits": {
+        "Memory": 134217728,
+        "MemorySwap": 134217728,
+        "NetworkMode": "none",
+        "PidsLimit": 32
+      },
+      "fpm": {
+        "php_memory_limit": "-1",
+        "allocation_bound_mib": 512,
+        "chunk_mib": 1,
+        "checks": [
+          {
+            "check": "cgroup memory cap matches requested bytes",
+            "pass": true
+          },
+          {
+            "check": "cgroup swap disabled",
+            "pass": true
+          },
+          {
+            "check": "PHP 7.0.33 uses the intended memory_limit",
+            "pass": true
+          },
+          {
+            "check": "normal requests reuse one worker and persist session",
+            "pass": true
+          },
+          {
+            "check": "allocation stopped before bounded loop completed",
+            "pass": true
+          },
+          {
+            "check": "master survives pressure",
+            "pass": true
+          },
+          {
+            "check": "replacement worker serves persisted session",
+            "pass": true
+          },
+          {
+            "check": "replacement worker remains usable",
+            "pass": true
+          },
+          {
+            "check": "no PHP shutdown callback after OOM",
+            "pass": true
+          },
+          {
+            "check": "kernel cgroup OOM kill counted",
+            "pass": true
+          },
+          {
+            "check": "kernel victim is the old FPM worker",
+            "pass": true
+          }
+        ],
+        "pass": true,
+        "cgroup_before": {
+          "memory.max": 134217728,
+          "memory.current": 9236480,
+          "memory.peak": 9236480,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "master_pid": 7,
+        "runtime": {
+          "pid": 8,
+          "count": 1,
+          "php_version": "7.0.33",
+          "memory_limit": "-1"
+        },
+        "worker_before": 8,
+        "pressure_response": {
+          "raw": "",
+          "body": "",
+          "stderr": "",
+          "ended": false
+        },
+        "replacement_response": {
+          "pid": 9,
+          "count": 4,
+          "php_version": "7.0.33",
+          "memory_limit": "-1"
+        },
+        "worker_after": 9,
+        "cgroup_after": {
+          "memory.max": 134217728,
+          "memory.current": 19238912,
+          "memory.peak": 134217728,
+          "memory.swap.max": 0,
+          "memory.events": {
+            "low": 0,
+            "high": 0,
+            "max": 1989,
+            "oom": 1,
+            "oom_kill": 1,
+            "oom_group_kill": 0
+          },
+          "memory.oom.group": 0
+        },
+        "oom_kill_delta": 1,
+        "harness_forced_master_kill": false,
+        "master_final_exit_code": 0,
+        "elapsed_seconds": 0.363
+      },
+      "fpm_log": "[23-Oct-2026 00:37:20] NOTICE: fpm is running, pid 7\n[23-Oct-2026 00:37:20] NOTICE: ready to handle connections\n[23-Oct-2026 00:37:20] WARNING: [pool probe] child 8 exited on signal 9 (SIGKILL) after 0.352201 seconds from start\n[23-Oct-2026 00:37:20] NOTICE: [pool probe] child 9 started\n[23-Oct-2026 00:37:20] NOTICE: Terminating ...\n[23-Oct-2026 00:37:20] NOTICE: exiting, bye-bye!\n"
+    },
+    {
+      "name": "cli-kernel-64m",
+      "memory_mib": 64,
+      "pass": true,
+      "container_id": "3575ed270842aec6851a92e7f238c9051e292823199ebe2fa9cfd3dcb2219406",
+      "wait_exit_code": 137,
+      "docker_state": {
+        "Status": "exited",
+        "ExitCode": 137,
+        "OOMKilled": true,
+        "Error": "",
+        "StartedAt": "2026-10-23T00:37:21.130972465Z",
+        "FinishedAt": "2026-10-23T00:37:21.287041007Z"
+      },
+      "docker_limits": {
+        "Memory": 67108864,
+        "MemorySwap": 67108864,
+        "NetworkMode": "none",
+        "PidsLimit": 32
+      }
+    }
+  ],
+  "planned_case_count": 7,
+  "completed_case_count": 7,
+  "completed": true,
+  "pass": true,
+  "finished_utc": "2026-10-23T00:37:21Z"
+}

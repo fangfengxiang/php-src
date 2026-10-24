@@ -405,6 +405,14 @@ static int find_boundary(multipart_buffer *self, char *boundary)
 	return 0;
 }
 
+static zend_bool php_mime_should_save_hdr_hardened(const char *name)
+{
+	return !strcasecmp(name, "Content-Disposition")
+		|| !strcasecmp(name, "Content-Type");
+}
+
+static char *php_mime_get_hdr_value(zend_llist header, char *key);
+
 /* parse headers */
 static int multipart_buffer_headers(multipart_buffer *self, zend_llist *header)
 {
@@ -445,10 +453,24 @@ static int multipart_buffer_headers(multipart_buffer *self, zend_llist *header)
 			}
 
 			*value = '\0';
-			do { value++; } while (isspace(*value));
 
-			key = estrdup(line);
-			smart_string_appends(&buf_value, value);
+			/* 712e60f9: bound retained headers; keep buffer ownership local. */
+			if (php70_security_is_hardened()) {
+				/* Keep only headers we use, and ignore duplicates */
+				if (!php_mime_should_save_hdr_hardened(line)
+						|| php_mime_get_hdr_value(*header, line)) {
+					key = NULL;
+				} else {
+					key = estrdup(line);
+					do { value++; } while (isspace((unsigned char)*value));
+					smart_string_appends(&buf_value, value);
+				}
+			} else {
+				do { value++; } while (isspace(*value));
+
+				key = estrdup(line);
+				smart_string_appends(&buf_value, value);
+			}
 		} else if (buf_value.c) { /* If no ':' on the line, add to previous line */
 			smart_string_appends(&buf_value, line);
 		} else {
@@ -540,6 +562,26 @@ static char *substring_conf(char *start, int len, char quote)
 	return result;
 }
 
+/* 712e60f9: a separate width-safe helper keeps the legacy contract intact.
+ * Both helpers have identical ownership; only hardened lengths avoid int narrowing. */
+static char *substring_conf_hardened(char *start, size_t len, char quote)
+{
+	char *result = emalloc(len + 1);
+	char *resp = result;
+	size_t i;
+
+	for (i = 0; i < len && start[i] != quote; ++i) {
+		if (start[i] == '\\' && (start[i + 1] == '\\' || (quote && start[i + 1] == quote))) {
+			*resp++ = start[++i];
+		} else {
+			*resp++ = start[i];
+		}
+	}
+
+	*resp = '\0';
+	return result;
+}
+
 static char *php_ap_getword_conf(const zend_encoding *encoding, char *str)
 {
 	while (*str && isspace(*str)) {
@@ -554,12 +596,18 @@ static char *php_ap_getword_conf(const zend_encoding *encoding, char *str)
 		char quote = *str;
 
 		str++;
+		if (php70_security_is_hardened()) {
+			return substring_conf_hardened(str, strlen(str), quote);
+		}
 		return substring_conf(str, (int)strlen(str), quote);
 	} else {
 		char *strend = str;
 
 		while (*strend && !isspace(*strend)) {
 			++strend;
+		}
+		if (php70_security_is_hardened()) {
+			return substring_conf_hardened(str, (size_t)(strend - str), 0);
 		}
 		return substring_conf(str, strend - str, 0);
 	}
@@ -685,6 +733,29 @@ static char *multipart_buffer_read_body(multipart_buffer *self, size_t *len)
  *
  */
 
+/* CVE-2026-109618 / 712e60f9: bounded part accounting without moving
+ * parser cleanup or ownership. Saturate the sum instead of wrapping it. */
+static zend_long php_multipart_parts_limit_hardened(zend_long configured,
+	zend_long input_limit, int upload_limit)
+{
+	zend_long files = MAX(upload_limit, 0);
+	if (configured >= 0) {
+		return configured;
+	}
+	return input_limit > ZEND_LONG_MAX - files
+		? ZEND_LONG_MAX : input_limit + files;
+}
+
+static zend_bool php_multipart_validate_hardened(zend_long *remaining, zend_long limit)
+{
+	if (*remaining == 0) {
+		php_error_docref(NULL, E_WARNING, "Multipart body parts limit exceeded " ZEND_LONG_FMT ". To increase the limit change max_multipart_body_parts in php.ini.", limit);
+		return 0;
+	}
+	(*remaining)--;
+	return 1;
+}
+
 SAPI_API SAPI_POST_HANDLER_FUNC(rfc1867_post_handler) /* {{{ */
 {
 	char *boundary, *s = NULL, *boundary_end = NULL, *start_arr = NULL, *array_index = NULL;
@@ -701,6 +772,8 @@ SAPI_API SAPI_POST_HANDLER_FUNC(rfc1867_post_handler) /* {{{ */
 	void *event_extra_data = NULL;
 	unsigned int llen = 0;
 	int upload_cnt = INI_INT("max_file_uploads");
+	zend_long body_parts_cnt = 0;
+	zend_long body_parts_limit;
 	const zend_encoding *internal_encoding = zend_multibyte_get_internal_encoding();
 	php_rfc1867_getword_t getword;
 	php_rfc1867_getword_conf_t getword_conf;
@@ -721,6 +794,12 @@ SAPI_API SAPI_POST_HANDLER_FUNC(rfc1867_post_handler) /* {{{ */
 		sapi_module.sapi_error(E_WARNING, "POST Content-Length of " ZEND_LONG_FMT " bytes exceeds the limit of " ZEND_LONG_FMT " bytes", SG(request_info).content_length, SG(post_max_size));
 		return;
 	}
+
+	if (php70_security_is_hardened()) {
+		body_parts_cnt = php_multipart_parts_limit_hardened(
+			INI_INT("max_multipart_body_parts"), PG(max_input_vars), upload_cnt);
+	}
+	body_parts_limit = body_parts_cnt;
 
 	/* Get the boundary */
 	boundary = strstr(content_type_dup, "boundary");
@@ -805,6 +884,12 @@ SAPI_API SAPI_POST_HANDLER_FUNC(rfc1867_post_handler) /* {{{ */
 		if ((cd = php_mime_get_hdr_value(header, "Content-Disposition"))) {
 			char *pair = NULL;
 			int end = 0;
+
+			/* 712e60f9: existing cleanup label retains ownership on rejection. */
+			if (php70_security_is_hardened() &&
+				!php_multipart_validate_hardened(&body_parts_cnt, body_parts_limit)) {
+				goto fileupload_done;
+			}
 
 			while (isspace(*cd)) {
 				++cd;

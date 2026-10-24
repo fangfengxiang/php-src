@@ -1,0 +1,330 @@
+{
+  "baseline_full": {
+    "summary": {
+      "total": 14949,
+      "skipped": 4699,
+      "warned": 0,
+      "failed": 35,
+      "expected_fail": 45,
+      "passed": 10170
+    },
+    "failures": [
+      "ext/dom/tests/DOMDocument_loadXML_error1.phpt",
+      "ext/dom/tests/DOMDocument_load_error1.phpt",
+      "ext/dom/tests/bug43364.phpt",
+      "ext/libxml/tests/bug61367-read.phpt",
+      "ext/libxml/tests/libxml_disable_entity_loader.phpt",
+      "ext/posix/tests/posix_errno_variation2.phpt",
+      "ext/posix/tests/posix_kill_basic.phpt",
+      "ext/sockets/tests/bug63000.phpt",
+      "ext/sockets/tests/mcast_ipv4_recv.phpt",
+      "ext/sockets/tests/socket_send.phpt",
+      "ext/sockets/tests/socket_shutdown.phpt",
+      "ext/standard/tests/general_functions/getservbyname_basic.phpt",
+      "ext/standard/tests/general_functions/getservbyport_basic.phpt",
+      "ext/standard/tests/general_functions/getservbyport_variation1.phpt",
+      "ext/standard/tests/general_functions/ini_get_all.phpt",
+      "ext/standard/tests/general_functions/proc_nice_basic.phpt",
+      "ext/standard/tests/network/getprotobyname_basic.phpt",
+      "ext/standard/tests/network/getprotobynumber_basic.phpt",
+      "sapi/cli/tests/006.phpt",
+      "sapi/cli/tests/cli_process_title_unix.phpt",
+      "sapi/fpm/tests/002.phpt",
+      "sapi/fpm/tests/003.phpt",
+      "sapi/fpm/tests/004.phpt",
+      "sapi/fpm/tests/005.phpt",
+      "sapi/fpm/tests/006.phpt",
+      "sapi/fpm/tests/007.phpt",
+      "sapi/fpm/tests/009.phpt",
+      "sapi/fpm/tests/011.phpt",
+      "sapi/fpm/tests/012.phpt",
+      "sapi/fpm/tests/013.phpt",
+      "sapi/fpm/tests/014.phpt",
+      "sapi/fpm/tests/017.phpt",
+      "sapi/fpm/tests/019.phpt",
+      "sapi/fpm/tests/020.phpt",
+      "sapi/fpm/tests/022-cve-2016-5385.phpt"
+    ]
+  },
+  "hardened_full": {
+    "summary": {
+      "total": 14960,
+      "skipped": 4699,
+      "warned": 0,
+      "failed": 44,
+      "expected_fail": 45,
+      "passed": 10172
+    },
+    "failures": [
+      "ext/dom/tests/DOMDocument_loadXML_error1.phpt",
+      "ext/dom/tests/DOMDocument_load_error1.phpt",
+      "ext/dom/tests/bug43364.phpt",
+      "ext/libxml/tests/bug61367-read.phpt",
+      "ext/libxml/tests/libxml_disable_entity_loader.phpt",
+      "ext/posix/tests/posix_errno_variation2.phpt",
+      "ext/posix/tests/posix_kill_basic.phpt",
+      "ext/session/tests/rfc1867.phpt",
+      "ext/session/tests/rfc1867_inter.phpt",
+      "ext/session/tests/rfc1867_sid_cookie.phpt",
+      "ext/session/tests/rfc1867_sid_get.phpt",
+      "ext/session/tests/rfc1867_sid_get_2.phpt",
+      "ext/session/tests/rfc1867_sid_invalid.phpt",
+      "ext/session/tests/rfc1867_sid_only_cookie.phpt",
+      "ext/session/tests/rfc1867_sid_post.phpt",
+      "ext/sockets/tests/bug63000.phpt",
+      "ext/sockets/tests/mcast_ipv4_recv.phpt",
+      "ext/sockets/tests/socket_send.phpt",
+      "ext/sockets/tests/socket_shutdown.phpt",
+      "ext/standard/tests/general_functions/getservbyname_basic.phpt",
+      "ext/standard/tests/general_functions/getservbyport_basic.phpt",
+      "ext/standard/tests/general_functions/getservbyport_variation1.phpt",
+      "ext/standard/tests/general_functions/ini_get_all.phpt",
+      "ext/standard/tests/general_functions/proc_nice_basic.phpt",
+      "ext/standard/tests/network/getprotobyname_basic.phpt",
+      "ext/standard/tests/network/getprotobynumber_basic.phpt",
+      "sapi/cli/tests/006.phpt",
+      "sapi/cli/tests/cli_process_title_unix.phpt",
+      "sapi/fpm/tests/002.phpt",
+      "sapi/fpm/tests/003.phpt",
+      "sapi/fpm/tests/004.phpt",
+      "sapi/fpm/tests/005.phpt",
+      "sapi/fpm/tests/006.phpt",
+      "sapi/fpm/tests/007.phpt",
+      "sapi/fpm/tests/009.phpt",
+      "sapi/fpm/tests/011.phpt",
+      "sapi/fpm/tests/012.phpt",
+      "sapi/fpm/tests/013.phpt",
+      "sapi/fpm/tests/014.phpt",
+      "sapi/fpm/tests/017.phpt",
+      "sapi/fpm/tests/019.phpt",
+      "sapi/fpm/tests/020.phpt",
+      "sapi/fpm/tests/022-cve-2016-5385.phpt",
+      "tests/lang/bug45392.phpt"
+    ]
+  },
+  "status_changes": [
+    {
+      "path": "tests/basic/rfc1867_duplicate_headers.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "tests/basic/rfc1867_max_multipart_body_parts.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "tests/basic/rfc1867_max_multipart_body_parts_default.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "tests/basic/rfc1867_max_multipart_body_parts_large.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "tests/basic/rfc1867_max_multipart_body_parts_saturate.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "tests/basic/rfc1867_max_multipart_body_parts_zero.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "tests/lang/bug45392.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "Zend/tests/cve_2026_109618_hard_oom.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "Zend/tests/cve_2026_109618_ordinary_fatal.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "Zend/tests/cve_2026_109618_singleton_input_arrays.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "Zend/tests/cve_2026_109618_size_overflow.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    },
+    {
+      "path": "ext/session/tests/rfc1867.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "ext/session/tests/rfc1867_inter.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "ext/session/tests/rfc1867_sid_cookie.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "ext/session/tests/rfc1867_sid_get.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "ext/session/tests/rfc1867_sid_get_2.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "ext/session/tests/rfc1867_sid_invalid.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "ext/session/tests/rfc1867_sid_only_cookie.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "ext/session/tests/rfc1867_sid_post.phpt",
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    {
+      "path": "ext/session/tests/rfc1867_upload_progress_disabled.phpt",
+      "baseline": "NEW",
+      "hardened": "PASS"
+    }
+  ],
+  "new_failure_analysis": {
+    "ext/session/tests/rfc1867.phpt": {
+      "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
+      "diff": "031+ NULL\n031- array(5) {\n032-   [%u|b%\"start_time\"]=>\n033-   int(%d)\n034-   [%u|b%\"content_length\"]=>\n035-   int(%d)\n036-   [%u|b%\"bytes_processed\"]=>\n037-   int(%d)\n038-   [%u|b%\"done\"]=>\n039-   bool(true)\n040-   [%u|b%\"files\"]=>\n041-   array(2) {\n042-     [0]=>\n043-     array(7) {\n044-       [%u|b%\"field_name\"]=>\n045-       %unicode|string%(5) \"file1\"\n046-       [%u|b%\"name\"]=>\n047-       %unicode|string%(9) \"file1.txt\"\n048-       [%u|b%\"tmp_name\"]=>\n049-       %unicode|string%(%d) \"%s\"\n050-       [%u|b%\"error\"]=>\n051-       int(0)\n052-       [%u|b%\"done\"]=>\n053-       bool(true)\n054-       [%u|b%\"start_time\"]=>\n055-       int(%d)\n056-       [%u|b%\"bytes_processed\"]=>\n057-       int(1)\n058-     }\n059-     [1]=>\n060-     array(7) {\n061-       [%u|b%\"field_name\"]=>\n062-       %unicode|string%(5) \"file2\"\n063-       [%u|b%\"name\"]=>\n064-       %unicode|string%(9) \"file2.txt\"\n065-       [%u|b%\"tmp_name\"]=>\n066-       %unicode|string%(%d) \"%s\"\n067-       [%u|b%\"error\"]=>\n068-       int(0)\n069-       [%u|b%\"done\"]=>\n070-       bool(true)\n071-       [%u|b%\"start_time\"]=>\n072-       int(%d)\n073-       [%u|b%\"bytes_processed\"]=>\n074-       int(1)\n075-     }\n076-   }\n077- }"
+    },
+    "ext/session/tests/rfc1867_inter.phpt": {
+      "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
+      "diff": "030+ NULL\n031+ NULL\n030- array(5) {\n031-   [%u|b%\"start_time\"]=>\n032-   int(%d)\n033-   [%u|b%\"content_length\"]=>\n034-   int(%d)\n035-   [%u|b%\"bytes_processed\"]=>\n036-   int(%d)\n037-   [%u|b%\"done\"]=>\n038-   bool(true)\n039-   [%u|b%\"files\"]=>\n040-   array(2) {\n041-     [0]=>\n042-     array(7) {\n043-       [%u|b%\"field_name\"]=>\n044-       %unicode|string%(5) \"file1\"\n045-       [%u|b%\"name\"]=>\n046-       %unicode|string%(9) \"file1.txt\"\n047-       [%u|b%\"tmp_name\"]=>\n048-       %unicode|string%(%d) \"%s\"\n049-       [%u|b%\"error\"]=>\n050-       int(0)\n051-       [%u|b%\"done\"]=>\n052-       bool(true)\n053-       [%u|b%\"start_time\"]=>\n054-       int(%d)\n055-       [%u|b%\"bytes_processed\"]=>\n056-       int(1)\n057-     }\n058-     [1]=>\n059-     array(7) {\n060-       [%u|b%\"field_name\"]=>\n061-       %unicode|string%(5) \"file2\"\n062-       [%u|b%\"name\"]=>\n063-       %unicode|string%(9) \"file2.txt\"\n064-       [%u|b%\"tmp_name\"]=>\n065-       %unicode|string%(%d) \"%s\"\n066-       [%u|b%\"error\"]=>\n067-       int(0)\n068-       [%u|b%\"done\"]=>\n069-       bool(true)\n070-       [%u|b%\"start_time\"]=>\n071-       int(%d)\n072-       [%u|b%\"bytes_processed\"]=>\n073-       int(1)\n074-     }\n075-   }\n076- }\n077- NULL"
+    },
+    "ext/session/tests/rfc1867_sid_cookie.phpt": {
+      "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
+      "diff": "031+ NULL\n031- array(5) {\n032-   [%u|b%\"start_time\"]=>\n033-   int(%d)\n034-   [%u|b%\"content_length\"]=>\n035-   int(%d)\n036-   [%u|b%\"bytes_processed\"]=>\n037-   int(%d)\n038-   [%u|b%\"done\"]=>\n039-   bool(true)\n040-   [%u|b%\"files\"]=>\n041-   array(2) {\n042-     [0]=>\n043-     array(7) {\n044-       [%u|b%\"field_name\"]=>\n045-       %unicode|string%(5) \"file1\"\n046-       [%u|b%\"name\"]=>\n047-       %unicode|string%(9) \"file1.txt\"\n048-       [%u|b%\"tmp_name\"]=>\n049-       %unicode|string%(%d) \"%s\"\n050-       [%u|b%\"error\"]=>\n051-       int(0)\n052-       [%u|b%\"done\"]=>\n053-       bool(true)\n054-       [%u|b%\"start_time\"]=>\n055-       int(%d)\n056-       [%u|b%\"bytes_processed\"]=>\n057-       int(1)\n058-     }\n059-     [1]=>\n060-     array(7) {\n061-       [%u|b%\"field_name\"]=>\n062-       %unicode|string%(5) \"file2\"\n063-       [%u|b%\"name\"]=>\n064-       %unicode|string%(9) \"file2.txt\"\n065-       [%u|b%\"tmp_name\"]=>\n066-       %unicode|string%(%d) \"%s\"\n067-       [%u|b%\"error\"]=>\n068-       int(0)\n069-       [%u|b%\"done\"]=>\n070-       bool(true)\n071-       [%u|b%\"start_time\"]=>\n072-       int(%d)\n073-       [%u|b%\"bytes_processed\"]=>\n074-       int(1)\n075-     }\n076-   }\n077- }"
+    },
+    "ext/session/tests/rfc1867_sid_get.phpt": {
+      "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
+      "diff": "031+ NULL\n031- array(5) {\n032-   [%u|b%\"start_time\"]=>\n033-   int(%d)\n034-   [%u|b%\"content_length\"]=>\n035-   int(%d)\n036-   [%u|b%\"bytes_processed\"]=>\n037-   int(%d)\n038-   [%u|b%\"done\"]=>\n039-   bool(true)\n040-   [%u|b%\"files\"]=>\n041-   array(2) {\n042-     [0]=>\n043-     array(7) {\n044-       [%u|b%\"field_name\"]=>\n045-       %unicode|string%(5) \"file1\"\n046-       [%u|b%\"name\"]=>\n047-       %unicode|string%(9) \"file1.txt\"\n048-       [%u|b%\"tmp_name\"]=>\n049-       %unicode|string%(%d) \"%s\"\n050-       [%u|b%\"error\"]=>\n051-       int(0)\n052-       [%u|b%\"done\"]=>\n053-       bool(true)\n054-       [%u|b%\"start_time\"]=>\n055-       int(%d)\n056-       [%u|b%\"bytes_processed\"]=>\n057-       int(1)\n058-     }\n059-     [1]=>\n060-     array(7) {\n061-       [%u|b%\"field_name\"]=>\n062-       %unicode|string%(5) \"file2\"\n063-       [%u|b%\"name\"]=>\n064-       %unicode|string%(9) \"file2.txt\"\n065-       [%u|b%\"tmp_name\"]=>\n066-       %unicode|string%(%d) \"%s\"\n067-       [%u|b%\"error\"]=>\n068-       int(0)\n069-       [%u|b%\"done\"]=>\n070-       bool(true)\n071-       [%u|b%\"start_time\"]=>\n072-       int(%d)\n073-       [%u|b%\"bytes_processed\"]=>\n074-       int(1)\n075-     }\n076-   }\n077- }"
+    },
+    "ext/session/tests/rfc1867_sid_get_2.phpt": {
+      "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
+      "diff": "031+ NULL\n031- array(5) {\n032-   [%u|b%\"start_time\"]=>\n033-   int(%d)\n034-   [%u|b%\"content_length\"]=>\n035-   int(%d)\n036-   [%u|b%\"bytes_processed\"]=>\n037-   int(%d)\n038-   [%u|b%\"done\"]=>\n039-   bool(true)\n040-   [%u|b%\"files\"]=>\n041-   array(2) {\n042-     [0]=>\n043-     array(7) {\n044-       [%u|b%\"field_name\"]=>\n045-       %unicode|string%(5) \"file1\"\n046-       [%u|b%\"name\"]=>\n047-       %unicode|string%(9) \"file1.txt\"\n048-       [%u|b%\"tmp_name\"]=>\n049-       %unicode|string%(%d) \"%s\"\n050-       [%u|b%\"error\"]=>\n051-       int(0)\n052-       [%u|b%\"done\"]=>\n053-       bool(true)\n054-       [%u|b%\"start_time\"]=>\n055-       int(%d)\n056-       [%u|b%\"bytes_processed\"]=>\n057-       int(1)\n058-     }\n059-     [1]=>\n060-     array(7) {\n061-       [%u|b%\"field_name\"]=>\n062-       %unicode|string%(5) \"file2\"\n063-       [%u|b%\"name\"]=>\n064-       %unicode|string%(9) \"file2.txt\"\n065-       [%u|b%\"tmp_name\"]=>\n066-       %unicode|string%(%d) \"%s\"\n067-       [%u|b%\"error\"]=>\n068-       int(0)\n069-       [%u|b%\"done\"]=>\n070-       bool(true)\n071-       [%u|b%\"start_time\"]=>\n072-       int(%d)\n073-       [%u|b%\"bytes_processed\"]=>\n074-       int(1)\n075-     }\n076-   }\n077- }"
+    },
+    "ext/session/tests/rfc1867_sid_invalid.phpt": {
+      "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
+      "diff": "001+ string(1) \"_\"\n002+ bool(true)\n003+ array(2) {\n004+   [\"file1\"]=>\n005+   array(5) {\n006+     [\"name\"]=>\n007+     string(9) \"file1.txt\"\n008+     [\"type\"]=>\n009+     string(0) \"\"\n010+     [\"tmp_name\"]=>\n011+     string(14) \"/tmp/phpGqSHy7\"\n012+     [\"error\"]=>\n013+     int(0)\n014+     [\"size\"]=>\n015+     int(1)\n016+   }\n017+   [\"file2\"]=>\n001- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n002- \n003- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n004- \n005- Warning: Unknown: Failed to write session data (files). Please verify that the current setting of session.save_path is correct () in Unknown on line 0\n006- \n007- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n008- \n009- Warning: Unknown: The session id is too long or contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in Unknown on line 0\n010- \n011- Warning: Unknown: Failed to write session data (files). Please verify that the current setting of session.save_path is correct () in Unknown on line 0\n012- string(%d) \"%s\"\n013- bool(true)\n014- array(2) {\n015-   [%u|b%\"file1\"]=>\n018-     %string|unicode%(9) \"file1.txt\"\n020+     string(9) \"file2.txt\"\n028-   [%u|b%\"file2\"]=>\n029-   array(5) {\n030+ }\n031+ NULL\n030-     [%u|b%\"name\"]=>\n031-     %string|unicode%(9) \"file2.txt\"\n032-     [%u|b%\"type\"]=>\n033-     %string|unicode%(0) \"\"\n034-     [%u|b%\"tmp_name\"]=>\n035-     %string|unicode%(%d) \"%s\"\n036-     [%u|b%\"error\"]=>\n037-     int(0)\n038-     [%u|b%\"size\"]=>\n039-     int(1)\n040-   }\n041- }\n042- NULL"
+    },
+    "ext/session/tests/rfc1867_sid_only_cookie.phpt": {
+      "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
+      "diff": "031+ NULL\n031- array(5) {\n032-   [%u|b%\"start_time\"]=>\n033-   int(%d)\n034-   [%u|b%\"content_length\"]=>\n035-   int(%d)\n036-   [%u|b%\"bytes_processed\"]=>\n037-   int(%d)\n038-   [%u|b%\"done\"]=>\n039-   bool(true)\n040-   [%u|b%\"files\"]=>\n041-   array(2) {\n042-     [0]=>\n043-     array(7) {\n044-       [%u|b%\"field_name\"]=>\n045-       %unicode|string%(5) \"file1\"\n046-       [%u|b%\"name\"]=>\n047-       %unicode|string%(9) \"file1.txt\"\n048-       [%u|b%\"tmp_name\"]=>\n049-       %unicode|string%(%d) \"%s\"\n050-       [%u|b%\"error\"]=>\n051-       int(0)\n052-       [%u|b%\"done\"]=>\n053-       bool(true)\n054-       [%u|b%\"start_time\"]=>\n055-       int(%d)\n056-       [%u|b%\"bytes_processed\"]=>\n057-       int(1)\n058-     }\n059-     [1]=>\n060-     array(7) {\n061-       [%u|b%\"field_name\"]=>\n062-       %unicode|string%(5) \"file2\"\n063-       [%u|b%\"name\"]=>\n064-       %unicode|string%(9) \"file2.txt\"\n065-       [%u|b%\"tmp_name\"]=>\n066-       %unicode|string%(%d) \"%s\"\n067-       [%u|b%\"error\"]=>\n068-       int(0)\n069-       [%u|b%\"done\"]=>\n070-       bool(true)\n071-       [%u|b%\"start_time\"]=>\n072-       int(%d)\n073-       [%u|b%\"bytes_processed\"]=>\n074-       int(1)\n075-     }\n076-   }\n077- }"
+    },
+    "ext/session/tests/rfc1867_sid_post.phpt": {
+      "reason": "Intended compatibility change: hardened mode disables Session Upload Progress; original positive expectations are kept unchanged.",
+      "diff": "031+ NULL\n031- array(5) {\n032-   [%u|b%\"start_time\"]=>\n033-   int(%d)\n034-   [%u|b%\"content_length\"]=>\n035-   int(%d)\n036-   [%u|b%\"bytes_processed\"]=>\n037-   int(%d)\n038-   [%u|b%\"done\"]=>\n039-   bool(true)\n040-   [%u|b%\"files\"]=>\n041-   array(2) {\n042-     [0]=>\n043-     array(7) {\n044-       [%u|b%\"field_name\"]=>\n045-       %unicode|string%(5) \"file1\"\n046-       [%u|b%\"name\"]=>\n047-       %unicode|string%(9) \"file1.txt\"\n048-       [%u|b%\"tmp_name\"]=>\n049-       %unicode|string%(%d) \"%s\"\n050-       [%u|b%\"error\"]=>\n051-       int(0)\n052-       [%u|b%\"done\"]=>\n053-       bool(true)\n054-       [%u|b%\"start_time\"]=>\n055-       int(%d)\n056-       [%u|b%\"bytes_processed\"]=>\n057-       int(1)\n058-     }\n059-     [1]=>\n060-     array(7) {\n061-       [%u|b%\"field_name\"]=>\n062-       %unicode|string%(5) \"file2\"\n063-       [%u|b%\"name\"]=>\n064-       %unicode|string%(9) \"file2.txt\"\n065-       [%u|b%\"tmp_name\"]=>\n066-       %unicode|string%(%d) \"%s\"\n067-       [%u|b%\"error\"]=>\n068-       int(0)\n069-       [%u|b%\"done\"]=>\n070-       bool(true)\n071-       [%u|b%\"start_time\"]=>\n072-       int(%d)\n073-       [%u|b%\"bytes_processed\"]=>\n074-       int(1)\n075-     }\n076-   }\n077- }"
+    },
+    "tests/lang/bug45392.phpt": {
+      "reason": "Intended stderr diagnostic formatting: upstream fail-stop reporter adds an initial newline; output assertion differs by one blank line.",
+      "diff": "002+ "
+    }
+  },
+  "new_unexplained_failures": [],
+  "legacy_targeted": {
+    "summary": {
+      "total": 317,
+      "skipped": 4,
+      "warned": 0,
+      "failed": 4,
+      "expected_fail": 2,
+      "passed": 307
+    },
+    "failures": [
+      "ext/session/tests/rfc1867_upload_progress_disabled.phpt",
+      "tests/basic/rfc1867_max_multipart_body_parts.phpt",
+      "tests/basic/rfc1867_max_multipart_body_parts_default.phpt",
+      "tests/basic/rfc1867_max_multipart_body_parts_zero.phpt"
+    ]
+  },
+  "hardened_security": {
+    "debug": {
+      "summary": {
+        "total": 11,
+        "skipped": 0,
+        "warned": 0,
+        "failed": 0,
+        "expected_fail": 0,
+        "passed": 11
+      },
+      "failures": []
+    },
+    "asan": {
+      "summary": {
+        "total": 11,
+        "skipped": 0,
+        "warned": 0,
+        "failed": 0,
+        "expected_fail": 0,
+        "passed": 11
+      },
+      "failures": []
+    },
+    "release": {
+      "summary": {
+        "total": 11,
+        "skipped": 0,
+        "warned": 0,
+        "failed": 0,
+        "expected_fail": 0,
+        "passed": 11
+      },
+      "failures": []
+    }
+  },
+  "asan_system_allocator_security": {
+    "summary": {
+      "total": 11,
+      "skipped": 1,
+      "warned": 0,
+      "failed": 0,
+      "expected_fail": 0,
+      "passed": 10
+    },
+    "failures": []
+  },
+  "comparison_folders": {
+    "baseline": "baseline-final",
+    "hardened": "hardened-final"
+  },
+  "initial_bind_mount_run": {
+    "baseline": {
+      "total": 14949,
+      "skipped": 4701,
+      "warned": 0,
+      "failed": 46,
+      "expected_fail": 45,
+      "passed": 10157
+    },
+    "hardened": {
+      "total": 14960,
+      "skipped": 4700,
+      "warned": 0,
+      "failed": 51,
+      "expected_fail": 45,
+      "passed": 10164
+    }
+  }
+}

@@ -58,6 +58,8 @@ END_EXTERN_C()
 #define ZSTR_EMPTY_ALLOC()				CG(empty_string)
 
 #define _ZSTR_HEADER_SIZE XtOffsetOf(zend_string, val)
+/* 712e60f9: header/NUL/alignment space is a representation invariant. */
+#define ZSTR_MAX_LEN (SIZE_MAX - ZEND_MM_ALIGNED_SIZE(_ZSTR_HEADER_SIZE + 1))
 
 #define _ZSTR_STRUCT_SIZE(len) (_ZSTR_HEADER_SIZE + len + 1)
 

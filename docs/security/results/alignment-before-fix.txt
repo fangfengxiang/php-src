@@ -1,0 +1,2 @@
+{"module_api":20151012,"sizeof_zval":16,"sizeof_zend_string":32,"sizeof_HashTable":56,"sizeof_php_core_globals":656,"max_input_vars":1000,"memory_limit":134217728}
+{"nTableSize":1,"nTableMask":4294967295,"arData_mod_pointer_alignment":4}

@@ -272,6 +272,10 @@ static zend_always_inline size_t zend_safe_address_guarded(size_t nmemb, size_t 
 	size_t ret = zend_safe_address(nmemb, size, offset, &overflow);
 
 	if (UNEXPECTED(overflow)) {
+		/* CVE-2026-109618 / 712e60f9: fail-stop; keep legacy bailout below. */
+		if (php70_security_is_hardened()) {
+			zend_mm_safe_error_hardened("Possible integer overflow in memory allocation (%zu * %zu + %zu)", nmemb, size, offset);
+		}
 		zend_error_noreturn(E_ERROR, "Possible integer overflow in memory allocation (%zu * %zu + %zu)", nmemb, size, offset);
 		return 0;
 	}
@@ -285,6 +289,10 @@ static zend_always_inline size_t zend_safe_addmult(size_t nmemb, size_t size, si
 	size_t ret = zend_safe_address(nmemb, size, offset, &overflow);
 
 	if (UNEXPECTED(overflow)) {
+		/* CVE-2026-109618 / 712e60f9: fail-stop; keep legacy bailout below. */
+		if (php70_security_is_hardened()) {
+			zend_mm_safe_error_hardened("Possible integer overflow in %s (%zu * %zu + %zu)", message, nmemb, size, offset);
+		}
 		zend_error_noreturn(E_ERROR, "Possible integer overflow in %s (%zu * %zu + %zu)", message, nmemb, size, offset);
 		return 0;
 	}
