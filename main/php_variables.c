@@ -56,6 +56,14 @@ PHPAPI void php_register_variable_safe(char *var, char *strval, int str_len, zva
 	php_register_variable_ex(var, &new_entry, track_vars_array TSRMLS_CC);
 }
 
+/* ZE2 uses mask == 0 as its unallocated sentinel. Capacity two is the
+ * smallest input index table that preserves that invariant after insertion. */
+static void php_array_init_input(zval *arg)
+{
+	array_init(arg);
+	Z_ARRVAL_P(arg)->nTableSize = 2;
+}
+
 PHPAPI void php_register_variable_ex(char *var_name, zval *val, zval *track_vars_array TSRMLS_DC)
 {
 	char *p = NULL;
@@ -176,7 +184,7 @@ PHPAPI void php_register_variable_ex(char *var_name, zval *val, zval *track_vars
 
 			if (!index) {
 				MAKE_STD_ZVAL(gpc_element);
-				array_init(gpc_element);
+				php_array_init_input(gpc_element);
 				if (zend_hash_next_index_insert(symtable1, &gpc_element, sizeof(zval *), (void **) &gpc_element_p) == FAILURE) {
 					zval_ptr_dtor(&gpc_element);
 					zval_dtor(val);
@@ -187,7 +195,7 @@ PHPAPI void php_register_variable_ex(char *var_name, zval *val, zval *track_vars
 				if (zend_symtable_find(symtable1, index, index_len + 1, (void **) &gpc_element_p) == FAILURE
 					|| Z_TYPE_PP(gpc_element_p) != IS_ARRAY) {
 					MAKE_STD_ZVAL(gpc_element);
-					array_init(gpc_element);
+					php_array_init_input(gpc_element);
 					zend_symtable_update(symtable1, index, index_len + 1, &gpc_element, sizeof(zval *), (void **) &gpc_element_p);
 				}
 			}
@@ -379,7 +387,7 @@ SAPI_API SAPI_TREAT_DATA_FUNC(php_default_treat_data)
 		case PARSE_GET:
 		case PARSE_COOKIE:
 			ALLOC_ZVAL(array_ptr);
-			array_init(array_ptr);
+			php_array_init_input(array_ptr);
 			INIT_PZVAL(array_ptr);
 			switch (arg) {
 				case PARSE_POST:

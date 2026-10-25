@@ -1,0 +1,47 @@
+name: PHP 5.6 security regression
+# One Linux amd64 runner, two optimization modes. No speculative OS matrix.
+on:
+  push:
+    branches: ['codex/php56-cve-2026-109618-109619']
+    paths:
+      - 'Zend/**'
+      - 'main/**'
+      - 'ext/session/**'
+      - 'tests/**'
+      - '.github/php56/**'
+      - '.github/workflows/php56-security.yml'
+      - 'docs/security/testing/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: php56-security-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  security:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare reviewed source and toolchain
+        timeout-minutes: 8
+        run: |
+          mkdir -p "$RUNNER_TEMP/php56/input" "$RUNNER_TEMP/php56/output"
+          git archive HEAD > "$RUNNER_TEMP/php56/input/source.tar"
+          git rev-parse HEAD > "$RUNNER_TEMP/php56/output/source-commit.txt"
+          docker build -t php56-toolchain .github/php56
+          docker image inspect php56-toolchain > "$RUNNER_TEMP/php56/output/toolchain-image.json"
+      - name: Build and verify Debug and Release without network
+        timeout-minutes: 20
+        run: |
+          docker run --rm --network none --mount type=volume,dst=/work/source \
+            -v "$RUNNER_TEMP/php56/input:/input:ro" \
+            -v "$RUNNER_TEMP/php56/output:/work/results" \
+            -v "$GITHUB_WORKSPACE/.github/php56:/harness:ro" \
+            php56-toolchain bash /harness/ci.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: php56-security-linux-amd64
+          path: ${{ runner.temp }}/php56/output/
+          if-no-files-found: error

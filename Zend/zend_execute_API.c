@@ -328,6 +328,18 @@ void shutdown_executor(TSRMLS_D) /* {{{ */
 		}
 	} zend_end_try();
 
+	/* Early per-request INI diagnostics can run before init_executor().
+	 * Keep the original cleanup order; abandon only the remaining references. */
+	EG(user_error_handler) = NULL;
+	EG(user_exception_handler) = NULL;
+	memset(&EG(user_error_handlers_error_reporting), 0, sizeof(EG(user_error_handlers_error_reporting)));
+	memset(&EG(user_error_handlers), 0, sizeof(EG(user_error_handlers)));
+	memset(&EG(user_exception_handlers), 0, sizeof(EG(user_exception_handlers)));
+	EG(error_handling) = EH_NORMAL;
+	EG(exception) = NULL;
+	EG(objects_store).object_buckets = NULL;
+	EG(objects_store).top = 1;
+
 	zend_shutdown_fpu(TSRMLS_C);
 
 	EG(active) = 0;

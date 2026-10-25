@@ -1,0 +1,677 @@
+{
+  "archives": {
+    "changed-expectations.tar.gz": {
+      "bytes": 2892,
+      "sha256": "ba7f7e54a15f5af86508faf51f18d068f1c6f70693431e05d4847543fd0e215f"
+    },
+    "clang-baseline-build-logs.tar.gz": {
+      "bytes": 69064,
+      "sha256": "219b69bf4b54e2723a364173e24f50293d0642420a0ade313f42323deaec8ce4"
+    },
+    "clang-hardened-build-logs.tar.gz": {
+      "bytes": 68994,
+      "sha256": "6b740049f9b920cec7e1b946444c9d56ffcdc5fcbc1f503c1e6b80315066f217"
+    },
+    "clang-release-build-logs.tar.gz": {
+      "bytes": 62654,
+      "sha256": "b832f0baeb1c11cac5ac6cfb4daf4eaff0184f5578155a4ca9ff7c6a9c2c9ea6"
+    },
+    "fpm-baseline-early.tar.gz": {
+      "bytes": 4257,
+      "sha256": "15ad52caff52a75afd04007f9e5316fa87f070ab10d2dcad4bae342cf1f690ff"
+    },
+    "fpm-clang-debug.tar.gz": {
+      "bytes": 7729,
+      "sha256": "c890529d49a36116a0479b480136f180e5487cca5b894c87d4c50412ea5e0432"
+    },
+    "fpm-clang-release.tar.gz": {
+      "bytes": 7467,
+      "sha256": "13361824ce50b64017632a3efd68809919a7cda548259b6546c45fd19aae2213"
+    },
+    "full-clang-baseline.tar.gz": {
+      "bytes": 990878,
+      "sha256": "2351eb5e264c4becc217b02a0473e6ac114e2893bb6c244f7326da05cd2bd1a0"
+    },
+    "full-clang-hardened.tar.gz": {
+      "bytes": 993899,
+      "sha256": "4b933336d70fc7c8dbbf3ce41a7bb5ff79d8107360c3e7ef47eef1700672f0bc"
+    },
+    "native-clang-debug-final.tar.gz": {
+      "bytes": 9072,
+      "sha256": "92611c09980b9b7901559ae0a28f6919d21cd79034404a6866b32c767505e6b6"
+    },
+    "native-clang-release.tar.gz": {
+      "bytes": 9025,
+      "sha256": "12f40fa3f2178bee4d96077c10146645a5f5b45a1db710b60160da33a53f596c"
+    },
+    "native-x64-debug.tar.gz": {
+      "bytes": 9163,
+      "sha256": "4c0ea97c3d01acd95c294eabdb0bc2c84b7ce78a50f01adc06806fdae1c069c7"
+    },
+    "target-clang-debug.tar.gz": {
+      "bytes": 3114,
+      "sha256": "36347612bda85714cb442a3b7d4bb1425baef30f5f2142520785537012026795"
+    },
+    "target-clang-release.tar.gz": {
+      "bytes": 3093,
+      "sha256": "3c6f511d68e510f4c1d9881fc65390d09a4eaac80976d40b99ea6dfe68f1bb33"
+    },
+    "target-x64-debug.tar.gz": {
+      "bytes": 3120,
+      "sha256": "72268294c872f9ed2ccacd381202df11b80429d0b24c8039f8e7109d63757aa6"
+    },
+    "x64-baseline-build-logs.tar.gz": {
+      "bytes": 61864,
+      "sha256": "b138b0f00d1fddcf755ecccb4323287cb527a83b98127608f058a54ab7886ee1"
+    },
+    "x64-hardened-build-logs.tar.gz": {
+      "bytes": 62299,
+      "sha256": "4b03cf538fce237126fb3e0614648781015c638dca05f0e01ef19d61dc0711f8"
+    }
+  },
+  "baseline": "4b8f72da5dfb201af4e82dee960261d8657e414f",
+  "builds": {
+    "clang-baseline": {
+      "binary_sha256": {
+        "sapi/cgi/php-cgi": "9b8b6d1969959f1cd817b3d4aa233e9be548b2078ec96771a9ccd8e285fd22a3",
+        "sapi/cli/php": "15e2c1a7095123702b28106c3833c2bf50602dc8368d236f42a4f03a2ec6aba1",
+        "sapi/fpm/php-fpm": "6f3559fbc3da3119b08669223293b06e17b8aa33d023d3fb29cac1ab98648877"
+      },
+      "config_nice": "#! /bin/sh\n#\n# Created by configure\n\nCC='clang' \\\n'./configure' \\\n'--disable-all' \\\n'--enable-cli' \\\n'--enable-cgi' \\\n'--enable-fpm' \\\n'--enable-session' \\\n'--enable-filter' \\\n'--enable-json' \\\n'--with-iconv' \\\n'--enable-debug' \\\n'--without-pear' \\\n'CC=clang' \\\n\"$@\"\n"
+    },
+    "clang-hardened": {
+      "binary_sha256": {
+        "sapi/cgi/php-cgi": "9a01028ad377f40f5e78114cc312cd48b9e1b96294f73610de85c9cd1e7538b4",
+        "sapi/cli/php": "262d562dfce4773ff328031ee4eaedec2b417f06c4384ab933e6ee8ae4e39e8b",
+        "sapi/fpm/php-fpm": "b1bd801fa0d4a54114fd834d6c1a05a2c230caa4053377098216ccd99dba9615"
+      },
+      "config_nice": "#! /bin/sh\n#\n# Created by configure\n\nCC='clang' \\\n'./configure' \\\n'--disable-all' \\\n'--enable-cli' \\\n'--enable-cgi' \\\n'--enable-fpm' \\\n'--enable-session' \\\n'--enable-filter' \\\n'--enable-json' \\\n'--with-iconv' \\\n'--enable-debug' \\\n'--without-pear' \\\n'CC=clang' \\\n\"$@\"\n"
+    },
+    "clang-release": {
+      "binary_sha256": {
+        "sapi/cgi/php-cgi": "0ad3c318e1bf41ced930a93492d1180d0324a30f0e6e96d6be7a636f8d16b83e",
+        "sapi/cli/php": "f76e42895c12249a6e17fbe1cf9e5c67df2bd5416debbd81e4c4038a99f39359",
+        "sapi/fpm/php-fpm": "2ba9b4eb005a6c89bd538540a9637ded17d0f91831ed52a07e071f1cee9285d6"
+      },
+      "config_nice": "#! /bin/sh\n#\n# Created by configure\n\nCC='clang' \\\n'./configure' \\\n'--disable-all' \\\n'--enable-cli' \\\n'--enable-cgi' \\\n'--enable-fpm' \\\n'--enable-session' \\\n'--enable-filter' \\\n'--enable-json' \\\n'--with-iconv' \\\n'--without-pear' \\\n'CC=clang' \\\n\"$@\"\n"
+    },
+    "x64-baseline": {
+      "binary_sha256": {
+        "sapi/cgi/php-cgi": "10f9d15c26fd52130f608555e7b2648b8c336cfc1debd5914055a7886f746201",
+        "sapi/cli/php": "a588286dabf70e5eb4cebc921e357d4ef932f5371fdee96e65f263e02432e163",
+        "sapi/fpm/php-fpm": "d2d8a08c6dcf3ab14c505e59f09aab9a97c2a05848b91fc62d954772402468fa"
+      },
+      "config_nice": "#! /bin/sh\n#\n# Created by configure\n\n'./configure' \\\n'--disable-all' \\\n'--enable-cli' \\\n'--enable-cgi' \\\n'--enable-fpm' \\\n'--enable-session' \\\n'--enable-filter' \\\n'--enable-json' \\\n'--enable-debug' \\\n'--without-pear' \\\n\"$@\"\n"
+    },
+    "x64-hardened": {
+      "binary_sha256": {
+        "sapi/cgi/php-cgi": "99dc402849862c0d417ce7083569d5ac5f7a9e180ecacd2e2ff9dd205b8f9f8b",
+        "sapi/cli/php": "4f20905a92f0c8c0c0adec762f2c9faa14a80189a72e35344a97572d76cbaa82",
+        "sapi/fpm/php-fpm": "d7eff49a44ccd19e880cffc233a244cdd42f72812a6f7e283786c9770d9240f1"
+      },
+      "config_nice": "#! /bin/sh\n#\n# Created by configure\n\n'./configure' \\\n'--disable-all' \\\n'--enable-cli' \\\n'--enable-cgi' \\\n'--enable-fpm' \\\n'--enable-session' \\\n'--enable-filter' \\\n'--enable-json' \\\n'--enable-debug' \\\n'--without-pear' \\\n\"$@\"\n"
+    }
+  },
+  "date": "2026-10-25",
+  "external_ci": {
+    "Debug": {
+      "fpm": 13,
+      "native": 12,
+      "targeted": 11
+    },
+    "Release": {
+      "fpm": 13,
+      "native": 12,
+      "targeted": 11
+    },
+    "artifact_upload": "failure: EACCES on root-owned mode 0700 tempfile evidence directory",
+    "commit": "64097a917749b06d70db4cbeda0b6394b931feea",
+    "first_run": 40177481468,
+    "overall": "failure",
+    "platform": "real GitHub-hosted Linux amd64 GCC",
+    "raw_log_sha256": "94a733e72c17446ce285328e026c406107d02d1f59dd21592c1f004e2f498f47",
+    "url": "https://github.com/fangfengxiang/php-src/actions/runs/40177481468",
+    "validation_step": "success"
+  },
+  "external_ci_success": {
+    "Debug": {
+      "fpm": 13,
+      "native": 12,
+      "targeted": 11
+    },
+    "Release": {
+      "fpm": 13,
+      "native": 12,
+      "targeted": 11
+    },
+    "artifact": {
+      "id": 12592698774,
+      "name": "php56-security-linux-amd64",
+      "size_bytes": 280194
+    },
+    "commit": "eca82a198d2913a5162048050e15e443f408dbe2",
+    "conclusion": "success",
+    "following_commits": "Documentation and raw evidence only; workflow paths intentionally avoid repeating builds for those changes.",
+    "platform": "real GitHub-hosted Linux amd64 GCC",
+    "raw_log_sha256": "0a35a2d0f3a166e0b316a849fa5f849e20397982986810e3a5469a34f2b55459",
+    "run": 40177826320,
+    "status": "completed",
+    "url": "https://github.com/fangfengxiang/php-src/actions/runs/40177826320"
+  },
+  "fpm": {
+    "fpm-baseline-early": {
+      "binary": "/work/.security-build/clang-baseline/src/sapi/fpm/php-fpm",
+      "binary_sha256": "6f3559fbc3da3119b08669223293b06e17b8aa33d023d3fb29cac1ab98648877",
+      "checks": [
+        {
+          "check": "iconv is present for the real early INI diagnostic",
+          "status": "passed"
+        },
+        {
+          "check": "early diagnostic actually executed on the same worker",
+          "pid": 9,
+          "status": "passed"
+        },
+        {
+          "check": "previous request handlers are not called by early diagnostics",
+          "status": "passed"
+        }
+      ],
+      "command": [
+        "/work/.security-build/clang-baseline/src/sapi/fpm/php-fpm",
+        "-n",
+        "-F",
+        "-y",
+        "/work/.security-build/results/fpm-baseline-early/fpm-gaul369v/fpm.conf",
+        "-R"
+      ],
+      "evidence_dir": "/work/.security-build/results/fpm-baseline-early/fpm-gaul369v",
+      "harness_sha256": "da31f8d0611fdf15e6f21a0df9dcc8c7c0e7160804698329a0d1b545891b447a",
+      "master_exit_status_after_cleanup": 0,
+      "master_pid": 8,
+      "pass": true,
+      "scope": "ordinary early INI diagnostic comparison; no OOM or upload-progress test executed",
+      "status": "passed"
+    },
+    "fpm-clang-debug": {
+      "binary": "/work/.security-build/clang-hardened/src/sapi/fpm/php-fpm",
+      "binary_sha256": "b1bd801fa0d4a54114fd834d6c1a05a2c230caa4053377098216ccd99dba9615",
+      "checks": [
+        {
+          "check": "five consecutive requests use the same worker",
+          "pid": 8,
+          "status": "passed"
+        },
+        {
+          "check": "required Session and JSON extensions are present",
+          "status": "passed"
+        },
+        {
+          "check": "normal Session roundtrip on the same worker",
+          "pid": 8,
+          "status": "passed"
+        },
+        {
+          "check": "normal multipart field and uploaded file",
+          "pid": 8,
+          "status": "passed"
+        },
+        {
+          "check": "built-in upload progress stays disabled with INI enabled",
+          "status": "passed"
+        },
+        {
+          "check": "ordinary fatal calls shutdown and keeps the same worker",
+          "pid": 8,
+          "status": "passed"
+        },
+        {
+          "check": "error and exception handlers can be installed before the next request",
+          "status": "passed"
+        },
+        {
+          "check": "iconv is present for the real early INI diagnostic",
+          "status": "passed"
+        },
+        {
+          "check": "early PHP_VALUE Zend diagnostic and subsequent requests keep the same worker",
+          "pid": 8,
+          "status": "passed"
+        },
+        {
+          "check": "OOM request actually entered the original worker at memory_limit 8M",
+          "pid": 8,
+          "status": "passed"
+        },
+        {
+          "check": "OOM exits child with code 1 and master supplies a stable replacement",
+          "fastcgi_termination": "ConnectionResetError",
+          "master_pid": 7,
+          "new_pid": 9,
+          "old_pid": 8,
+          "status": "passed"
+        },
+        {
+          "check": "OOM bypasses PHP shutdown callbacks and destructors",
+          "status": "passed"
+        },
+        {
+          "check": "normal Session data survives worker replacement",
+          "pid": 9,
+          "status": "passed"
+        }
+      ],
+      "command": [
+        "/work/.security-build/clang-hardened/src/sapi/fpm/php-fpm",
+        "-n",
+        "-F",
+        "-y",
+        "/work/.security-build/results/fpm-clang-debug/fpm-27cnsybd/fpm.conf",
+        "-R"
+      ],
+      "evidence_dir": "/work/.security-build/results/fpm-clang-debug/fpm-27cnsybd",
+      "harness_sha256": "67b2b3c4aa8fb044fbe2c24ac24d37665038dbb58edfd380d8cc5cd4049f60b7",
+      "master_exit_status_after_cleanup": 0,
+      "master_pid": 7,
+      "pass": true,
+      "scope": "Real PHP 5.6.40 FPM requests; one static worker; AF_UNIX only; no fault injection",
+      "status": "passed"
+    },
+    "fpm-clang-release": {
+      "binary": "/work/.security-build/clang-release/src/sapi/fpm/php-fpm",
+      "binary_sha256": "2ba9b4eb005a6c89bd538540a9637ded17d0f91831ed52a07e071f1cee9285d6",
+      "checks": [
+        {
+          "check": "five consecutive requests use the same worker",
+          "pid": 9,
+          "status": "passed"
+        },
+        {
+          "check": "required Session and JSON extensions are present",
+          "status": "passed"
+        },
+        {
+          "check": "normal Session roundtrip on the same worker",
+          "pid": 9,
+          "status": "passed"
+        },
+        {
+          "check": "normal multipart field and uploaded file",
+          "pid": 9,
+          "status": "passed"
+        },
+        {
+          "check": "built-in upload progress stays disabled with INI enabled",
+          "status": "passed"
+        },
+        {
+          "check": "ordinary fatal calls shutdown and keeps the same worker",
+          "pid": 9,
+          "status": "passed"
+        },
+        {
+          "check": "error and exception handlers can be installed before the next request",
+          "status": "passed"
+        },
+        {
+          "check": "iconv is present for the real early INI diagnostic",
+          "status": "passed"
+        },
+        {
+          "check": "early PHP_VALUE Zend diagnostic and subsequent requests keep the same worker",
+          "pid": 9,
+          "status": "passed"
+        },
+        {
+          "check": "OOM request actually entered the original worker at memory_limit 8M",
+          "pid": 9,
+          "status": "passed"
+        },
+        {
+          "check": "OOM exits child with code 1 and master supplies a stable replacement",
+          "fastcgi_termination": "ConnectionResetError",
+          "master_pid": 8,
+          "new_pid": 10,
+          "old_pid": 9,
+          "status": "passed"
+        },
+        {
+          "check": "OOM bypasses PHP shutdown callbacks and destructors",
+          "status": "passed"
+        },
+        {
+          "check": "normal Session data survives worker replacement",
+          "pid": 10,
+          "status": "passed"
+        }
+      ],
+      "command": [
+        "/work/.security-build/clang-release/src/sapi/fpm/php-fpm",
+        "-n",
+        "-F",
+        "-y",
+        "/work/.security-build/results/fpm-clang-release/fpm-6qzbja8k/fpm.conf",
+        "-R"
+      ],
+      "evidence_dir": "/work/.security-build/results/fpm-clang-release/fpm-6qzbja8k",
+      "harness_sha256": "da31f8d0611fdf15e6f21a0df9dcc8c7c0e7160804698329a0d1b545891b447a",
+      "master_exit_status_after_cleanup": 0,
+      "master_pid": 8,
+      "pass": true,
+      "scope": "Real PHP 5.6.40 FPM requests; one static worker; AF_UNIX only; no fault injection",
+      "status": "passed"
+    }
+  },
+  "native": {
+    "native-clang-debug-final": {
+      "checks": {
+        "input_tables": true,
+        "normal_exit_control": true,
+        "ordinary_fatal_control": true,
+        "safe_add_overflow": true,
+        "safe_mul_overflow": true,
+        "safe_string_int_max": true,
+        "synthetic_add_char": true,
+        "synthetic_add_string": true,
+        "synthetic_concat_in_place": true,
+        "synthetic_concat_negative": true,
+        "synthetic_concat_separate": true,
+        "system_malloc_size_max": true
+      },
+      "passed": true,
+      "scope": "PHP 5.6.40 native CLI boundary checks; not a remote exploit or RCE proof",
+      "sha256": {
+        "/work/.security-build/clang-hardened/src/Zend/zend_alloc.c": "d0e5bc4c4a8d05a65194eab0f6b3f6328d88ac12e117bfede70ff4b205db600f",
+        "/work/.security-build/clang-hardened/src/Zend/zend_alloc.h": "a67ccaef0c11ce040f5b4d1d235d858ea12c31ed723b026821756fa18fa42c25",
+        "/work/.security-build/clang-hardened/src/Zend/zend_modules.h": "d383d5d46701ebf29c49c1d5a73fb9e8aca2e163778e37a570c8f27ff2c18938",
+        "/work/.security-build/clang-hardened/src/Zend/zend_operators.c": "bfb31db88d4b398c234b04ff212f3ea10503dd05175a563f9bee73f5d10296f4",
+        "/work/.security-build/clang-hardened/src/main/php_config.h": "150a9d1071afc48574feb71c1312aecd55c4ca2c6184551eb4e11ae05b305b64",
+        "/work/.security-build/clang-hardened/src/main/php_variables.c": "7272431923d0c68132a2f9bcf92e796e7b6272cbcfa3ea65f564c4887fc034d2",
+        "/work/.security-build/clang-hardened/src/main/php_version.h": "fa89fff4d238fc9f71671336a887a5a85bcf2fe1956636ed9995fb8036f276f7",
+        "/work/.security-build/clang-hardened/src/sapi/cli/php": "262d562dfce4773ff328031ee4eaedec2b417f06c4384ab933e6ee8ae4e39e8b",
+        "/work/.security-build/results/native-clang-debug-final/php56_probe.so": "51a394ea5974f7948a27e5b5cf8f247660fd62b968a6e2edd8d1cb287a3073a3",
+        "/work/docs/security/testing/php56-native.py": "d5febb1eeefe13dd1a9e95584e23f511a44893dd6b43b0d6ed63a35062884ff1",
+        "/work/docs/security/testing/probe/php56_probe.c": "040471816524a9cc8929ec74fd29da2ee3582b965a337f9d8e7832a5782a9892"
+      }
+    },
+    "native-clang-release": {
+      "checks": {
+        "input_tables": true,
+        "normal_exit_control": true,
+        "ordinary_fatal_control": true,
+        "safe_add_overflow": true,
+        "safe_mul_overflow": true,
+        "safe_string_int_max": true,
+        "synthetic_add_char": true,
+        "synthetic_add_string": true,
+        "synthetic_concat_in_place": true,
+        "synthetic_concat_negative": true,
+        "synthetic_concat_separate": true,
+        "system_malloc_size_max": true
+      },
+      "passed": true,
+      "scope": "PHP 5.6.40 native CLI boundary checks; not a remote exploit or RCE proof",
+      "sha256": {
+        "/work/.security-build/clang-release/src/Zend/zend_alloc.c": "d0e5bc4c4a8d05a65194eab0f6b3f6328d88ac12e117bfede70ff4b205db600f",
+        "/work/.security-build/clang-release/src/Zend/zend_alloc.h": "a67ccaef0c11ce040f5b4d1d235d858ea12c31ed723b026821756fa18fa42c25",
+        "/work/.security-build/clang-release/src/Zend/zend_modules.h": "d383d5d46701ebf29c49c1d5a73fb9e8aca2e163778e37a570c8f27ff2c18938",
+        "/work/.security-build/clang-release/src/Zend/zend_operators.c": "bfb31db88d4b398c234b04ff212f3ea10503dd05175a563f9bee73f5d10296f4",
+        "/work/.security-build/clang-release/src/main/php_config.h": "59f52433671d1bc7248339a70deb8cfeb272280ee56b7d80128176f4a3d1731b",
+        "/work/.security-build/clang-release/src/main/php_variables.c": "7272431923d0c68132a2f9bcf92e796e7b6272cbcfa3ea65f564c4887fc034d2",
+        "/work/.security-build/clang-release/src/main/php_version.h": "fa89fff4d238fc9f71671336a887a5a85bcf2fe1956636ed9995fb8036f276f7",
+        "/work/.security-build/clang-release/src/sapi/cli/php": "f76e42895c12249a6e17fbe1cf9e5c67df2bd5416debbd81e4c4038a99f39359",
+        "/work/.security-build/results/native-clang-release/php56_probe.so": "9cb3e1e741640929d647dea0de9aac16908fa929f8c560996eef84a1ec0b4483",
+        "/work/docs/security/testing/php56-native.py": "d5febb1eeefe13dd1a9e95584e23f511a44893dd6b43b0d6ed63a35062884ff1",
+        "/work/docs/security/testing/probe/php56_probe.c": "040471816524a9cc8929ec74fd29da2ee3582b965a337f9d8e7832a5782a9892"
+      }
+    },
+    "native-x64-debug": {
+      "checks": {
+        "input_tables": true,
+        "normal_exit_control": true,
+        "ordinary_fatal_control": true,
+        "safe_add_overflow": true,
+        "safe_mul_overflow": true,
+        "safe_string_int_max": true,
+        "synthetic_add_char": true,
+        "synthetic_add_string": true,
+        "synthetic_concat_in_place": true,
+        "synthetic_concat_negative": true,
+        "synthetic_concat_separate": true,
+        "system_malloc_size_max": true
+      },
+      "passed": true,
+      "scope": "PHP 5.6.40 native CLI boundary checks; not a remote exploit or RCE proof",
+      "sha256": {
+        "/work/.security-build/results/native-x64-debug/php56_probe.so": "0b3ef6b4023a4f470bba270b8754b0a66c653ae7f23e828fb0a515624c2a875f",
+        "/work/.security-build/x64-hardened/src/Zend/zend_alloc.c": "d0e5bc4c4a8d05a65194eab0f6b3f6328d88ac12e117bfede70ff4b205db600f",
+        "/work/.security-build/x64-hardened/src/Zend/zend_alloc.h": "2a16f8884f5b7621d4945874604f566d0fa6ce60c1e23d075605d11e3c45f1ca",
+        "/work/.security-build/x64-hardened/src/Zend/zend_modules.h": "d383d5d46701ebf29c49c1d5a73fb9e8aca2e163778e37a570c8f27ff2c18938",
+        "/work/.security-build/x64-hardened/src/Zend/zend_operators.c": "bfb31db88d4b398c234b04ff212f3ea10503dd05175a563f9bee73f5d10296f4",
+        "/work/.security-build/x64-hardened/src/main/php_config.h": "126cf04a3ba9256a1f36e14c90e330e36400d35989568893761f5b700418a28b",
+        "/work/.security-build/x64-hardened/src/main/php_variables.c": "7272431923d0c68132a2f9bcf92e796e7b6272cbcfa3ea65f564c4887fc034d2",
+        "/work/.security-build/x64-hardened/src/main/php_version.h": "fa89fff4d238fc9f71671336a887a5a85bcf2fe1956636ed9995fb8036f276f7",
+        "/work/.security-build/x64-hardened/src/sapi/cli/php": "4f20905a92f0c8c0c0adec762f2c9faa14a80189a72e35344a97572d76cbaa82",
+        "/work/docs/security/testing/php56-native.py": "d5febb1eeefe13dd1a9e95584e23f511a44893dd6b43b0d6ed63a35062884ff1",
+        "/work/docs/security/testing/probe/php56_probe.c": "040471816524a9cc8929ec74fd29da2ee3582b965a337f9d8e7832a5782a9892"
+      }
+    }
+  },
+  "note": "x64 initial snapshot predates noreturn annotation only; local results do not imply CI success.",
+  "phpt": {
+    "full-clang-baseline": {
+      "binary_sha256": {
+        "cgi": "9b8b6d1969959f1cd817b3d4aa233e9be548b2078ec96771a9ccd8e285fd22a3",
+        "cli": "15e2c1a7095123702b28106c3833c2bf50602dc8368d236f42a4f03a2ec6aba1"
+      },
+      "command": [
+        "/work/.security-build/clang-baseline/src/sapi/cli/php",
+        "-n",
+        "/work/.security-build/clang-baseline/src/run-tests.php",
+        "--offline",
+        "-n",
+        "-r",
+        "/work/.security-build/results/full-clang-baseline/selected-tests.txt"
+      ],
+      "complete": true,
+      "exit_code": 1,
+      "machine": "aarch64",
+      "postprocessing": {
+        "collected_utc": "2026-10-25T08:38:35.904021+00:00",
+        "mode": "reparsed_existing_log",
+        "original_result_sha256": "fdbeebb7de5729c80eb423099cb712abacbfdeb643ed18c8a401522a1db44229",
+        "parser_sha256": "e6008db91d2c6692a2a31f4e154c49d81099236bb2b928736b58e802d9a9ed7c",
+        "reason": "Original parser misread PHPT titles containing brackets or embedded newlines; PHP tests were not rerun"
+      },
+      "selected_count": 13882,
+      "status_counts": {
+        "FAIL": 66,
+        "PASS": 7731,
+        "SKIP": 6041,
+        "XFAIL": 44
+      }
+    },
+    "full-clang-hardened": {
+      "binary_sha256": {
+        "cgi": "9a01028ad377f40f5e78114cc312cd48b9e1b96294f73610de85c9cd1e7538b4",
+        "cli": "262d562dfce4773ff328031ee4eaedec2b417f06c4384ab933e6ee8ae4e39e8b"
+      },
+      "command": [
+        "/work/.security-build/clang-hardened/src/sapi/cli/php",
+        "-n",
+        "/work/.security-build/clang-hardened/src/run-tests.php",
+        "--offline",
+        "-n",
+        "-r",
+        "/work/.security-build/results/full-clang-hardened/selected-tests.txt"
+      ],
+      "complete": true,
+      "exit_code": 1,
+      "machine": "aarch64",
+      "postprocessing": {
+        "collected_utc": "2026-10-25T08:38:36.006572+00:00",
+        "mode": "reparsed_existing_log",
+        "original_result_sha256": "1b7e6a44880a825be3b6579259c0d0c19371d2c7204c0ee85edac44baa73446c",
+        "parser_sha256": "e6008db91d2c6692a2a31f4e154c49d81099236bb2b928736b58e802d9a9ed7c",
+        "reason": "Original parser misread PHPT titles containing brackets or embedded newlines; PHP tests were not rerun"
+      },
+      "selected_count": 13893,
+      "status_counts": {
+        "FAIL": 75,
+        "PASS": 7733,
+        "SKIP": 6041,
+        "XFAIL": 44
+      }
+    },
+    "target-clang-debug": {
+      "binary_sha256": {
+        "cgi": "9a01028ad377f40f5e78114cc312cd48b9e1b96294f73610de85c9cd1e7538b4",
+        "cli": "262d562dfce4773ff328031ee4eaedec2b417f06c4384ab933e6ee8ae4e39e8b"
+      },
+      "command": [
+        "/work/.security-build/clang-hardened/src/sapi/cli/php",
+        "-n",
+        "/work/.security-build/clang-hardened/src/run-tests.php",
+        "--offline",
+        "-n",
+        "-r",
+        "/work/.security-build/results/target-clang-debug/selected-tests.txt"
+      ],
+      "complete": true,
+      "exit_code": 0,
+      "machine": "aarch64",
+      "postprocessing": null,
+      "selected_count": 11,
+      "status_counts": {
+        "PASS": 11
+      }
+    },
+    "target-clang-release": {
+      "binary_sha256": {
+        "cgi": "0ad3c318e1bf41ced930a93492d1180d0324a30f0e6e96d6be7a636f8d16b83e",
+        "cli": "f76e42895c12249a6e17fbe1cf9e5c67df2bd5416debbd81e4c4038a99f39359"
+      },
+      "command": [
+        "/work/.security-build/clang-release/src/sapi/cli/php",
+        "-n",
+        "/work/.security-build/clang-release/src/run-tests.php",
+        "--offline",
+        "-n",
+        "-r",
+        "/work/.security-build/results/target-clang-release/selected-tests.txt"
+      ],
+      "complete": true,
+      "exit_code": 0,
+      "machine": "aarch64",
+      "postprocessing": null,
+      "selected_count": 11,
+      "status_counts": {
+        "PASS": 11
+      }
+    },
+    "target-x64-debug": {
+      "binary_sha256": {
+        "cgi": "99dc402849862c0d417ce7083569d5ac5f7a9e180ecacd2e2ff9dd205b8f9f8b",
+        "cli": "4f20905a92f0c8c0c0adec762f2c9faa14a80189a72e35344a97572d76cbaa82"
+      },
+      "command": [
+        "/work/.security-build/x64-hardened/src/sapi/cli/php",
+        "-n",
+        "/work/.security-build/x64-hardened/src/run-tests.php",
+        "--offline",
+        "-n",
+        "-r",
+        "/work/.security-build/results/target-x64-debug/selected-tests.txt"
+      ],
+      "complete": true,
+      "exit_code": 0,
+      "machine": "x86_64",
+      "postprocessing": null,
+      "selected_count": 11,
+      "status_counts": {
+        "PASS": 11
+      }
+    }
+  },
+  "runtime_fix_commit": "1e7e42e6e1c",
+  "runtime_source_sha256": {
+    "Zend/zend_alloc.c": "d0e5bc4c4a8d05a65194eab0f6b3f6328d88ac12e117bfede70ff4b205db600f",
+    "Zend/zend_alloc.h": "a67ccaef0c11ce040f5b4d1d235d858ea12c31ed723b026821756fa18fa42c25",
+    "Zend/zend_execute_API.c": "574e429a46098a5eb59b51a89c0a0a3216469da6093b03ae3caad22c36a0ef4b",
+    "Zend/zend_llist.c": "fab1430c2ab09b01a8b05f28d20798180961bdffbb070844206b059bff5cdf93",
+    "Zend/zend_operators.c": "bfb31db88d4b398c234b04ff212f3ea10503dd05175a563f9bee73f5d10296f4",
+    "Zend/zend_strtod.c": "6b87adb3a72532dd6b36a6a33a3d5db3c2e6b8504314e6865c93b34088b9f030",
+    "ext/session/session.c": "04d02a40b65f66b3d0e14188383689437d13e6b4bf61b9b5fb600259684518e4",
+    "main/SAPI.c": "3cf78744e46b999daf92bdc8f1ff88389aeb7c02276eb924c7c9039696e78b90",
+    "main/main.c": "21f06611c5ccee441d54a565e273ab9e38f36dabd425f69f60ea85b57a49deaf",
+    "main/php_variables.c": "7272431923d0c68132a2f9bcf92e796e7b6272cbcfa3ea65f564c4887fc034d2",
+    "main/rfc1867.c": "3089a6fa7060d7e2a106a77954316cc1490c446aa1973d4beb8f424b5f528530"
+  },
+  "source_snapshot_matches": {
+    "clang-baseline": {
+      "Zend/zend_alloc.c": false,
+      "Zend/zend_alloc.h": false,
+      "Zend/zend_execute_API.c": false,
+      "Zend/zend_llist.c": false,
+      "Zend/zend_operators.c": false,
+      "Zend/zend_strtod.c": false,
+      "ext/session/session.c": false,
+      "main/SAPI.c": false,
+      "main/main.c": false,
+      "main/php_variables.c": false,
+      "main/rfc1867.c": false
+    },
+    "clang-hardened": {
+      "Zend/zend_alloc.c": true,
+      "Zend/zend_alloc.h": true,
+      "Zend/zend_execute_API.c": true,
+      "Zend/zend_llist.c": true,
+      "Zend/zend_operators.c": true,
+      "Zend/zend_strtod.c": true,
+      "ext/session/session.c": true,
+      "main/SAPI.c": true,
+      "main/main.c": true,
+      "main/php_variables.c": true,
+      "main/rfc1867.c": true
+    },
+    "clang-release": {
+      "Zend/zend_alloc.c": true,
+      "Zend/zend_alloc.h": true,
+      "Zend/zend_execute_API.c": true,
+      "Zend/zend_llist.c": true,
+      "Zend/zend_operators.c": true,
+      "Zend/zend_strtod.c": true,
+      "ext/session/session.c": true,
+      "main/SAPI.c": true,
+      "main/main.c": true,
+      "main/php_variables.c": true,
+      "main/rfc1867.c": true
+    },
+    "x64-baseline": {
+      "Zend/zend_alloc.c": false,
+      "Zend/zend_alloc.h": false,
+      "Zend/zend_execute_API.c": false,
+      "Zend/zend_llist.c": false,
+      "Zend/zend_operators.c": false,
+      "Zend/zend_strtod.c": false,
+      "ext/session/session.c": false,
+      "main/SAPI.c": false,
+      "main/main.c": false,
+      "main/php_variables.c": false,
+      "main/rfc1867.c": false
+    },
+    "x64-hardened": {
+      "Zend/zend_alloc.c": true,
+      "Zend/zend_alloc.h": false,
+      "Zend/zend_execute_API.c": true,
+      "Zend/zend_llist.c": true,
+      "Zend/zend_operators.c": true,
+      "Zend/zend_strtod.c": true,
+      "ext/session/session.c": true,
+      "main/SAPI.c": true,
+      "main/main.c": true,
+      "main/php_variables.c": true,
+      "main/rfc1867.c": true
+    }
+  }
+}
