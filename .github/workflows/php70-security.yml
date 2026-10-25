@@ -20,6 +20,8 @@ jobs:
           - debian:12
           - ubuntu:22.04
           - ubuntu:24.04
+          - quay.io/centos/centos:7
+          - quay.io/centos/centos:8
           - quay.io/centos/centos:stream9
           - registry.access.redhat.com/ubi9/ubi:latest
         mode: [debug, release]
@@ -59,7 +61,8 @@ jobs:
         timeout-minutes: 3
         if: >-
           matrix.arch == 'amd64' && (matrix.mode == 'debug' || matrix.mode == 'release') &&
-          (matrix.os == 'debian:12' || matrix.os == 'quay.io/centos/centos:stream9' ||
+          (matrix.os == 'debian:12' || matrix.os == 'quay.io/centos/centos:7' ||
+          matrix.os == 'quay.io/centos/centos:8' || matrix.os == 'quay.io/centos/centos:stream9' ||
           matrix.os == 'registry.access.redhat.com/ubi9/ubi:latest')
         run: |
           python3 docs/security/testing/docker-memory-invariants.py \

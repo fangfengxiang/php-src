@@ -4,6 +4,17 @@ FROM ${BASE_IMAGE}
 # This image supplies build tools only and contains no preinstalled PHP.
 # Build and test PHP 7.0 from the reviewed branch, using /work/install/bin/php.
 RUN set -eu; \
+    . /etc/os-release; \
+    case "$ID:$VERSION_ID" in \
+      centos:7) \
+        sed -i -e '/^mirrorlist=/d' \
+          -e 's|^#baseurl=http://mirror.centos.org/centos/$releasever/|baseurl=https://vault.centos.org/7.9.2009/|' \
+          /etc/yum.repos.d/CentOS-*.repo ;; \
+      centos:8) \
+        sed -i -e '/^mirrorlist=/d' \
+          -e 's|^#baseurl=http://mirror.centos.org/$contentdir/$releasever/|baseurl=https://vault.centos.org/8.5.2111/|' \
+          /etc/yum.repos.d/CentOS-Linux-*.repo ;; \
+    esac; \
     if command -v apt-get >/dev/null; then \
       apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 update; \
       apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends \
@@ -11,13 +22,19 @@ RUN set -eu; \
         libxml2-dev libsqlite3-dev python3 zlib1g-dev; \
       rm -rf /var/lib/apt/lists/*; \
     else \
-      dnf -y --setopt=install_weak_deps=False --setopt=timeout=20 --setopt=retries=2 install \
+      set -- \
         autoconf gcc gcc-c++ make ca-certificates perl tar xz gzip diffutils findutils \
         libxml2-devel sqlite-devel python3 zlib-devel which; \
+      if command -v dnf >/dev/null; then \
+        dnf -y --setopt=install_weak_deps=False --setopt=timeout=20 --setopt=retries=2 install "$@"; \
+        dnf clean all; \
+      else \
+        yum -y --setopt=timeout=20 --setopt=retries=2 install "$@"; \
+        yum clean all; \
+      fi; \
       autoconf --version | head -n 1 | grep '2\.69'; \
       ln -s /usr/bin/autoconf /usr/local/bin/autoconf2.69; \
       ln -s /usr/bin/autoheader /usr/local/bin/autoheader2.69; \
-      dnf clean all; \
     fi
 
 # RPM images build re2c at Debian 12's version without enabling EPEL or

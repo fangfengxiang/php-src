@@ -146,25 +146,31 @@ probe 是测试扩展，**不得安装到生产实例**。`build-probe.sh` 将�
 
 新增矩阵、触发条件和 Grok 边界建议评估见 [CI 与边界测试评估](../ci-and-boundary-review.md)。
 
-当前配置共 14 个 job；新增 9 系覆盖用于验证目标部署的 RPM/glibc/GCC 环境，不扩展漏洞修复范围：
+当前配置共 18 个 job；RPM 覆盖用于验证目标部署的 glibc/GCC 环境，不扩展漏洞修复范围：
 
 | Linux 用户态 | 架构与构建 | cgroup 7 组检查 |
 | --- | --- | --- |
 | Debian 12 | amd64 Debug/Release/ASan/legacy；arm64 Debug/Release | amd64 Debug 和 Release |
 | Ubuntu 22.04、24.04 | amd64 Debug/Release | 不重复执行 |
+| CentOS Linux 7 (`quay.io/centos/centos:7`) | amd64 Debug/Release | 两个构建均执行 |
+| CentOS Linux 8 (`quay.io/centos/centos:8`) | amd64 Debug/Release | 两个构建均执行 |
 | CentOS Stream 9 (`quay.io/centos/centos:stream9`) | amd64 Debug/Release | 两个构建均执行 |
 | Red Hat UBI 9 (`registry.access.redhat.com/ubi9/ubi:latest`) | amd64 Debug/Release | 两个构建均执行 |
 
 UBI 镜像名固定在 9 系，`latest` 仅在该系内更新；不需要 Red Hat 订阅凭据。
 每次运行保留实际镜像 ID、`/etc/os-release`、包版本和源码提交，结果须绑定具体运行。
 容器共享 GitHub runner 的 Linux 内核：此矩阵验证发行版用户态，不等于验证 CentOS/RHEL 宿主机内核。
-CentOS/RHEL 7、8，ZTS、Windows 和 mod_php 未因此获得覆盖。
+CentOS Linux 7/8 使用固定的 Vault 7.9.2009/8.5.2111 归档源，保留 GPG 校验与 TLS 验证。
+保留发行版原生 GCC 和 glibc；CentOS 7 用 yum，其余 RPM 镜像用 dnf，不用新发行版二进制替代旧环境。
+归档环境的验证不代表系统仍有安全维护，也不覆盖其原生旧内核。RHEL 7/8 本身、ZTS、Windows 和 mod_php 未因此获得覆盖。
 
-同一 Dockerfile 按 apt/dnf 安装编译依赖；RPM 使用 Autoconf 2.69、校验源码摘要的 re2c 3.0，
+同一 Dockerfile 按 apt/yum/dnf 安装编译依赖；RPM 使用 Autoconf 2.69、校验源码摘要的 re2c 3.0，
 所有镜像使用校验摘要的 Bison 3.5.1。镜像不安装发行版 PHP；解释器仍从本分支构建为 PHP 7.0.33。
 FPM 测试读取 `nobody` 的实际主组，兼容 Debian 的 `nogroup` 和 RPM 的 `nobody`。
 需要本地复现时，将上述 `docker build` 加上 `--build-arg BASE_IMAGE=quay.io/centos/centos:stream9`
 或 `--build-arg BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:latest`，并为各镜像使用独立输出目录。
+CentOS 7/8 分别使用 `--build-arg BASE_IMAGE=quay.io/centos/centos:7` 或 `:8`。
+当前 CentOS 7 镜像为 amd64；ARM 宿主复现时 build/run 均加 `--platform linux/amd64` 并标注模拟运行，CI 则使用原生 amd64 runner。
 
 2026-10-25 准备验证：本地原生 arm64 的 CentOS Stream 9、UBI 9 各自全新构建 PHP 7.0.33 Debug，
 各通过 14 项 native、11 项 FPM、14 条 PHPT 和 7 组 cgroup；Debian 的既有 Release 构建另通过 7 组 cgroup。
