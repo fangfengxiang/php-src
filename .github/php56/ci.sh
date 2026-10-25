@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# Only synthetic test evidence is exported; allow the host artifact uploader to read it.
+trap 'chmod -R a+rX /work/results' EXIT
 for mode in Debug Release; do
     source_dir="/work/source/$mode"
     mkdir -p "$source_dir"

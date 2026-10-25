@@ -1,0 +1,105 @@
+{
+  "added_tests": {
+    "Zend/tests/cve_2026_109618_hard_oom.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "CVE-2026-109618 OOM exits without request shutdown callbacks or destructors"
+    },
+    "Zend/tests/cve_2026_109618_ordinary_fatal.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "Ordinary fatal errors preserve PHP 5.6 shutdown and destructor behavior"
+    },
+    "Zend/tests/cve_2026_109618_small_input_arrays.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "Small ZE2 input arrays preserve numeric, sparse, mixed, copy-on-write and append behavior"
+    },
+    "ext/session/tests/rfc1867_upload_progress_disabled.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "CVE-2026-109619 upload progress cannot be enabled while normal sessions and uploads work"
+    },
+    "tests/basic/rfc1867_duplicate_headers.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "RFC1867 retains the first relevant header and ignores unused and duplicate headers"
+    },
+    "tests/basic/rfc1867_max_multipart_body_parts.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "RFC1867 multipart part limit counts empty file controls and stops at the limit"
+    },
+    "tests/basic/rfc1867_max_multipart_body_parts_default.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "RFC1867 derived multipart part limit uses input and upload limits"
+    },
+    "tests/basic/rfc1867_max_multipart_body_parts_derived_zero.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "RFC1867 derived zero multipart part limit rejects the first part"
+    },
+    "tests/basic/rfc1867_max_multipart_body_parts_large.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "RFC1867 multipart limits above INT_MAX do not truncate to a negative counter"
+    },
+    "tests/basic/rfc1867_max_multipart_body_parts_saturate.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "RFC1867 derived multipart limit saturates instead of overflowing"
+    },
+    "tests/basic/rfc1867_max_multipart_body_parts_zero.phpt": {
+      "detail": "",
+      "status": "PASS",
+      "title": "RFC1867 explicit zero multipart part limit rejects the first part"
+    }
+  },
+  "baseline": "/Users/frank/.codex/worktrees/php56-security-backport/php-src/.security-build/results/full-clang-baseline/result.json",
+  "baseline_complete": true,
+  "common_tests": 13882,
+  "hardened": "/Users/frank/.codex/worktrees/php56-security-backport/php-src/.security-build/results/full-clang-hardened/result.json",
+  "hardened_complete": true,
+  "interpretation": "Status differences require causal review; additions are separate from common-test changes.",
+  "removed_tests": {},
+  "status_changes": {
+    "ext/session/tests/rfc1867.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    "ext/session/tests/rfc1867_inter.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    "ext/session/tests/rfc1867_sid_cookie.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    "ext/session/tests/rfc1867_sid_get.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    "ext/session/tests/rfc1867_sid_get_2.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    "ext/session/tests/rfc1867_sid_invalid.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    "ext/session/tests/rfc1867_sid_only_cookie.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    "ext/session/tests/rfc1867_sid_post.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    },
+    "tests/lang/bug45392.phpt": {
+      "baseline": "PASS",
+      "hardened": "FAIL"
+    }
+  },
+  "unchanged_tests": 13873
+}

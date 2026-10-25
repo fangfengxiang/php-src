@@ -1,0 +1,57 @@
+{
+  "machine": "aarch64",
+  "platform": "Linux-6.12.54-linuxkit-aarch64-with-glibc2.36",
+  "toolchain_image": "sha256:cfa639d8095d6cb6a137e783df6b26d6af8a823ba68aaadcd9a6e2412b5ddfd3",
+  "x64_toolchain_image": "sha256:59d050848843bc385d9b14a7619523592f29dc22d0d6d44a87c678fba2fb9b86",
+  "commands": [
+    {
+      "command": [
+        "clang",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "Debian clang version 14.0.6\nTarget: aarch64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /usr/bin\n"
+    },
+    {
+      "command": [
+        "cc",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "cc (Debian 12.2.0-14+deb12u1) 12.2.0\nCopyright (C) 2022 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+    },
+    {
+      "command": [
+        "autoconf",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "autoconf (GNU Autoconf) 2.71\nCopyright (C) 2021 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by David J. MacKenzie and Akim Demaille.\n"
+    },
+    {
+      "command": [
+        "bison",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "bison (GNU Bison) 3.5.1\nWritten by Robert Corbett and Richard Stallman.\n\nCopyright (C) 2020 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+    },
+    {
+      "command": [
+        "re2c",
+        "--version"
+      ],
+      "exit": 0,
+      "output": "re2c 3.0\n"
+    },
+    {
+      "command": [
+        "dpkg-query",
+        "-W",
+        "-f=${Package}\t${Version}\n"
+      ],
+      "exit": 0,
+      "output": "adduser\t3.134\napt\t2.6.1\nautoconf\t2.71-3\nautoconf2.69\t2.69-3.1\nbase-files\t12.4+deb12u15\nbase-passwd\t3.6.1\nbash\t5.2.15-2+b13\nbinutils\t2.40-2\nbinutils-aarch64-linux-gnu\t2.40-2\nbinutils-common\t2.40-2\nbison\t2:3.8.2+dfsg-1+b1\nbsdutils\t1:2.38.1-5+deb12u3\nbzip2\t1.0.8-5+b1\nca-certificates\t20250419~deb12u1\nclang\t1:14.0-55.7~deb12u1\nclang-14\t1:14.0.6-12\ncoreutils\t9.1-1\ncpp\t4:12.2.0-3\ncpp-12\t12.2.0-14+deb12u1\ncurl\t7.88.1-10+deb12u15\ndash\t0.5.12-2\ndebconf\t1.5.82\ndebian-archive-keyring\t2023.3+deb12u2\ndebianutils\t5.7-0.5~deb12u1\ndiffutils\t1:3.8-4\ndpkg\t1.21.23\ndpkg-dev\t1.21.23\ne2fsprogs\t1.47.0-2+b2\nfile\t1:5.44-3\nfindutils\t4.9.0-4\ng++\t4:12.2.0-3\ng++-12\t12.2.0-14+deb12u1\ngcc\t4:12.2.0-3\ngcc-12\t12.2.0-14+deb12u1\ngcc-12-base\t12.2.0-14+deb12u1\ngpgv\t2.2.40-1.1+deb12u2\ngrep\t3.8-5\ngzip\t1.12-1\nhostname\t3.23+nmu1\nicu-devtools\t72.1-3+deb12u1\ninit-system-helpers\t1.65.2+deb12u1\nlibacl1\t2.3.1-3\nlibapt-pkg6.0\t2.6.1\nlibargon2-1\t0~20171227-0.3+deb12u1\nlibasan8\t12.2.0-14+deb12u1\nlibatomic1\t12.2.0-14+deb12u1\nlibattr1\t1:2.5.1-4\nlibaudit-common\t1:3.0.9-1\nlibaudit1\t1:3.0.9-1\nlibbinutils\t2.40-2\nlibblkid1\t2.38.1-5+deb12u3\nlibbrotli1\t1.0.9-2+b6\nlibbsd0\t0.11.7-2\nlibbz2-1.0\t1.0.8-5+b1\nlibc-bin\t2.36-9+deb12u14\nlibc-dev-bin\t2.36-9+deb12u14\nlibc6\t2.36-9+deb12u14\nlibc6-dev\t2.36-9+deb12u14\nlibcap-ng0\t0.8.3-1+b3\nlibcap2\t1:2.66-4+deb12u3+b1\nlibcc1-0\t12.2.0-14+deb12u1\nlibclang-common-14-dev\t1:14.0.6-12\nlibclang-cpp14\t1:14.0.6-12\nlibclang1-14\t1:14.0.6-12\nlibcom-err2\t1.47.0-2+b2\nlibcrypt-dev\t1:4.4.33-2\nlibcrypt1\t1:4.4.33-2\nlibctf-nobfd0\t2.40-2\nlibctf0\t2.40-2\nlibcurl4\t7.88.1-10+deb12u15\nlibdb5.3\t5.3.28+dfsg2-1\nlibdebconfclient0\t0.270\nlibdpkg-perl\t1.21.23\nlibedit2\t3.1-20221030-2\nlibexpat1\t2.5.0-1+deb12u5\nlibext2fs2\t1.47.0-2+b2\nlibffi8\t3.4.4-1\nlibgc1\t1:8.2.2-3\nlibgcc-12-dev\t12.2.0-14+deb12u1\nlibgcc-s1\t12.2.0-14+deb12u1\nlibgcrypt20\t1.10.1-3+deb12u1\nlibgdbm-compat4\t1.23-3\nlibgdbm6\t1.23-3\nlibgmp10\t2:6.2.1+dfsg1-1.1\nlibgnutls30\t3.7.9-2+deb12u7\nlibgomp1\t12.2.0-14+deb12u1\nlibgpg-error0\t1.46-1\nlibgprofng0\t2.40-2\nlibgssapi-krb5-2\t1.20.1-2+deb12u5\nlibhogweed6\t3.8.1-2\nlibhwasan0\t12.2.0-14+deb12u1\nlibicu-dev\t72.1-3+deb12u1\nlibicu72\t72.1-3+deb12u1\nlibidn2-0\t2.3.3-1+b1\nlibisl23\t0.25-1.1\nlibitm1\t12.2.0-14+deb12u1\nlibjansson4\t2.14-2\nlibk5crypto3\t1.20.1-2+deb12u5\nlibkeyutils1\t1.6.3-2\nlibkrb5-3\t1.20.1-2+deb12u5\nlibkrb5support0\t1.20.1-2+deb12u5\nlibldap-2.5-0\t2.5.13+dfsg-5\nlibllvm14\t1:14.0.6-12\nliblsan0\t12.2.0-14+deb12u1\nliblz4-1\t1.9.4-1\nliblzma5\t5.4.1-1+deb12u2\nlibmagic-mgc\t1:5.44-3\nlibmagic1\t1:5.44-3\nlibmd0\t1.0.4-2\nlibmount1\t2.38.1-5+deb12u3\nlibmpc3\t1.3.1-1\nlibmpfr6\t4.2.0-1\nlibncursesw6\t6.4-4\nlibnettle8\t3.8.1-2\nlibnghttp2-14\t1.52.0-1+deb12u3\nlibnsl-dev\t1.3.0-2\nlibnsl2\t1.3.0-2\nlibobjc-12-dev\t12.2.0-14+deb12u1\nlibobjc4\t12.2.0-14+deb12u1\nlibonig5\t6.9.8-1\nlibp11-kit0\t0.24.1-2\nlibpam-modules\t1.5.2-6+deb12u2\nlibpam-modules-bin\t1.5.2-6+deb12u2\nlibpam-runtime\t1.5.2-6+deb12u2\nlibpam0g\t1.5.2-6+deb12u2\nlibpcre2-8-0\t10.42-1+deb12u1\nlibperl5.36\t5.36.0-7+deb12u3\nlibpkgconf3\t1.8.1-1\nlibpsl5\t0.21.2-1\nlibpython3-stdlib\t3.11.2-1+b1\nlibpython3.11-minimal\t3.11.2-6+deb12u9\nlibpython3.11-stdlib\t3.11.2-6+deb12u9\nlibreadline8\t8.2-1.3\nlibrtmp1\t2.4+20151223.gitfa8646d.1-2+b2\nlibsasl2-2\t2.1.28+dfsg-10\nlibsasl2-modules-db\t2.1.28+dfsg-10\nlibseccomp2\t2.5.4-1+deb12u1\nlibselinux1\t3.4-1+b6\nlibsemanage-common\t3.4-1\nlibsemanage2\t3.4-1+b5\nlibsepol2\t3.4-2.1\nlibsmartcols1\t2.38.1-5+deb12u3\nlibsodium23\t1.0.18-1+deb12u1\nlibsqlite3-0\t3.40.1-2+deb12u2\nlibsqlite3-dev\t3.40.1-2+deb12u2\nlibss2\t1.47.0-2+b2\nlibssh2-1\t1.10.0-3+deb12u1\nlibssl3\t3.0.20-1~deb12u2\nlibstdc++-12-dev\t12.2.0-14+deb12u1\nlibstdc++6\t12.2.0-14+deb12u1\nlibsystemd0\t252.39-1~deb12u2\nlibtasn1-6\t4.19.0-2+deb12u1\nlibtinfo6\t6.4-4\nlibtirpc-common\t1.3.3+ds-1\nlibtirpc-dev\t1.3.3+ds-1\nlibtirpc3\t1.3.3+ds-1\nlibtsan2\t12.2.0-14+deb12u1\nlibubsan1\t12.2.0-14+deb12u1\nlibudev1\t252.39-1~deb12u2\nlibunistring2\t1.0-2\nlibuuid1\t2.38.1-5+deb12u3\nlibxml2\t2.9.14+dfsg-1.3~deb12u6\nlibxml2-dev\t2.9.14+dfsg-1.3~deb12u6\nlibxxhash0\t0.8.1-1\nlibz3-4\t4.8.12-3.1\nlibzstd1\t1.5.4+dfsg2-5\nlinux-libc-dev\t6.1.187-1\nllvm-14-linker-tools\t1:14.0.6-12\nlogin\t1:4.13+dfsg1-1+deb12u2\nlogsave\t1.47.0-2+b2\nm4\t1.4.19-3\nmake\t4.3-4.1\nmawk\t1.3.4.20200120-3.1\nmedia-types\t10.0.0\nmount\t2.38.1-5+deb12u3\nncurses-base\t6.4-4\nncurses-bin\t6.4-4\nopenssl\t3.0.20-1~deb12u2\npasswd\t1:4.13+dfsg1-1+deb12u2\npatch\t2.7.6-7\nperl\t5.36.0-7+deb12u3\nperl-base\t5.36.0-7+deb12u3\nperl-modules-5.36\t5.36.0-7+deb12u3\npkg-config\t1.8.1-1\npkgconf\t1.8.1-1\npkgconf-bin\t1.8.1-1\npython3\t3.11.2-1+b1\npython3-minimal\t3.11.2-1+b1\npython3.11\t3.11.2-6+deb12u9\npython3.11-minimal\t3.11.2-6+deb12u9\nre2c\t3.0-2\nreadline-common\t8.2-1.3\nrpcsvc-proto\t1.4.3-1\nsed\t4.9-1+deb12u1\nsysvinit-utils\t3.06-4\ntar\t1.34+dfsg-1.2+deb12u1\ntzdata\t2026b-0+deb12u1\nusr-is-merged\t37~deb12u1\nutil-linux\t2.38.1-5+deb12u3\nutil-linux-extra\t2.38.1-5+deb12u3\nxz-utils\t5.4.1-1+deb12u2\nzlib1g\t1:1.2.13.dfsg-1\nzlib1g-dev\t1:1.2.13.dfsg-1\n"
+    }
+  ]
+}

@@ -3,6 +3,14 @@ name: PHP 5.6 security regression
 on:
   push:
     branches: ['codex/php56-cve-2026-109618-109619']
+    paths:
+      - 'Zend/**'
+      - 'main/**'
+      - 'ext/session/**'
+      - 'tests/**'
+      - '.github/php56/**'
+      - '.github/workflows/php56-security.yml'
+      - 'docs/security/testing/**'
   workflow_dispatch:
 permissions:
   contents: read
