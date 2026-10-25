@@ -1,80 +1,247 @@
 name: PHP 7.0 security regression
+# CVE-2026-109618 / CVE-2026-109619 最小缓解分支验证
+# 阶段 1: PHPT 单测 (CVE 聚焦)          — 独立构建, 不依赖 php-cve-e2e
+# 阶段 2: 受影响扩展集成测试             — 同 job, 独立 step
+# 阶段 3: php-cve-e2e 端到端三构建对照   — 拉取 php-cve-e2e 跑 behavior + C 层 trace
+# 阶段 4: 对比报告 + GitHub Pages 发布
 on:
   push:
     branches: ['security/php70-cve-2026-109618-109619']
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
   group: php70-security-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
-  security:
-    name: ${{ matrix.os }} / ${{ matrix.arch }} / ${{ matrix.mode }}
-    runs-on: ${{ matrix.runner }}
-    timeout-minutes: 20
+  # ── 阶段 1 + 2: PHPT 单测与集成测试 (独立构建, 不依赖 php-cve-e2e) ─
+  # 直接在 ubuntu-24.04 runner 裸装依赖原地构建 PHP 7.0 hardened.
+  # git 预提交的 Zend/zend_language_parser.c 不需 bison 重新生成.
+  phpt:
+    name: PHPT (${{ matrix.mode }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - debian:12
-          - ubuntu:22.04
-          - ubuntu:24.04
-          - quay.io/centos/centos:7
-          - quay.io/centos/centos:8
-          - quay.io/centos/centos:stream9
-          - registry.access.redhat.com/ubi9/ubi:latest
         mode: [debug, release]
-        arch: [amd64]
-        runner: [ubuntu-24.04]
-        include:
-          - {os: 'debian:12', mode: debug, arch: arm64, runner: ubuntu-24.04-arm}
-          - {os: 'debian:12', mode: release, arch: arm64, runner: ubuntu-24.04-arm}
-          - {os: 'debian:12', mode: asan, arch: amd64, runner: ubuntu-24.04}
-          - {os: 'debian:12', mode: legacy, arch: amd64, runner: ubuntu-24.04}
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare exact checkout archive
-        run: |
-          mkdir -p "$RUNNER_TEMP/php70/input" "$RUNNER_TEMP/php70/output"
-          git archive HEAD > "$RUNNER_TEMP/php70/input/source.tar"
-          git rev-parse HEAD > "$RUNNER_TEMP/php70/output/source-commit.txt"
-      - name: Build Linux toolchain
-        timeout-minutes: 5
-        env:
-          BASE_IMAGE: ${{ matrix.os }}
-        run: |
-          docker build --build-arg BASE_IMAGE="$BASE_IMAGE" -t php70-ci docs/security/testing
-          mkdir -p "$RUNNER_TEMP/php70/output/logs"
-          docker image inspect php70-ci > "$RUNNER_TEMP/php70/output/logs/toolchain-image.json"
-      - name: Build and run security checks without network
-        timeout-minutes: 10
-        env:
-          BUILD_MODE: ${{ matrix.mode }}
-        run: |
-          docker run --rm --network none --mount type=volume,dst=/work/source \
-            -v "$RUNNER_TEMP/php70/input:/input:ro" \
-            -v "$GITHUB_WORKSPACE/docs/security/testing:/harness:ro" \
-            -v "$RUNNER_TEMP/php70/output:/work" \
-            -e BUILD_JOBS=4 --entrypoint sh php70-ci /harness/ci.sh "$BUILD_MODE"
-      - name: Verify cgroup OOM and replacement workers
-        timeout-minutes: 3
-        if: >-
-          matrix.arch == 'amd64' && (matrix.mode == 'debug' || matrix.mode == 'release') &&
-          (matrix.os == 'debian:12' || matrix.os == 'quay.io/centos/centos:7' ||
-          matrix.os == 'quay.io/centos/centos:8' || matrix.os == 'quay.io/centos/centos:stream9' ||
-          matrix.os == 'registry.access.redhat.com/ubi9/ubi:latest')
-        run: |
-          python3 docs/security/testing/docker-memory-invariants.py \
-            --image php70-ci --install "$RUNNER_TEMP/php70/output/install" \
-            --output "$RUNNER_TEMP/php70/memory"
-      - name: Preserve logs even on failure
-        timeout-minutes: 2
-        if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: php70-${{ strategy.job-index }}-${{ matrix.arch }}-${{ matrix.mode }}
+          fetch-depth: 1
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            autoconf automake bison re2c libxml2-dev libsqlite3-dev \
+            libcurl4-openssl-dev libssl-dev zlib1g-dev python3
+      - name: Build PHP 7.0 (${{ matrix.mode }}, hardened)
+        run: |
+          ./buildconf --force
+          ./configure \
+            --enable-php70-security \
+            --enable-cli --enable-cgi --enable-fpm \
+            --without-pear --without-pcre-jit \
+            --with-zlib --enable-pcntl --enable-posix --enable-sockets \
+            ${{ matrix.mode == 'debug' && '--enable-debug' || '' }}
+          make -j"$(nproc)"
+      - name: Run PHPT (Stage 1 CVE + Stage 2 integration)
+        run: |
+          # 两阶段独立记录; 任一失败 step 失败, 但两阶段都执行保留证据
+          echo ":: Stage 1 - CVE regression PHPT ::"
+          ( NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+              TEST_PHP_EXECUTABLE="$(pwd)/sapi/cli/php" \
+              make test TESTS="Zend/tests/cve_2026_109618_*.phpt ext/session/tests/rfc1867_upload_progress_disabled.phpt tests/basic/rfc1867_*.phpt" ) && s1=0 || s1=1
+          echo ":: Stage 2 - Integration suite (affected dirs) ::"
+          ( NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+              TEST_PHP_EXECUTABLE="$(pwd)/sapi/cli/php" \
+              make test TESTS="Zend/tests/ ext/session/tests/ tests/basic/" ) && s2=0 || s2=1
+          exit $((s1 || s2))
+      - name: Collect PHPT evidence
+        if: always()
+        run: |
+          mkdir -p phpt-evidence
+          find . -maxdepth 5 \( -name "*.diff" -o -name "*.out" -o -name "*.exp" -o -name "*.log" \) \
+            -not -path "./.git/*" -exec cp --parents {} phpt-evidence/ \; 2>/dev/null || true
+          cp config.log phpt-evidence/ 2>/dev/null || true
+          git rev-parse HEAD > phpt-evidence/source-commit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: php70-phpt-${{ matrix.mode }}
+          path: phpt-evidence/
+          if-no-files-found: warn
+
+  # ── 阶段 3: php-cve-e2e 端到端对照 (behavior + C 层 trace) ───────
+  # 拉取 php-cve-e2e, 跑 run.py (非插桩三构建) + trace-run.py (C 层插桩时序),
+  # report.py 汇总完整对比报告 (pass 须 behavior + trace 都通过).
+  e2e:
+    name: E2E comparison (php-cve-e2e)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout php-cve-e2e
+        uses: actions/checkout@v4
+        with:
+          repository: fangfengxiang/php-cve-e2e
+          path: ${{ runner.temp }}/php-cve-e2e
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Record run metadata
+        run: |
+          python3 - <<'PY'
+          import json, os, platform, subprocess
+          from pathlib import Path
+          value = dict(
+              run_id=os.environ.get('GITHUB_RUN_ID', ''),
+              attempt=os.environ.get('GITHUB_RUN_ATTEMPT', '1'),
+              repository=os.environ.get('GITHUB_REPOSITORY', ''),
+              harness_commit='external:fangfengxiang/php-cve-e2e',
+              event=os.environ.get('GITHUB_EVENT_NAME', ''),
+              runner_platform=platform.platform(),
+          )
+          try:
+              value['source_commit'] = subprocess.check_output(
+                  ['git', 'rev-parse', 'HEAD'], text=True).strip()
+          except subprocess.CalledProcessError:
+              value['source_commit'] = None
+          Path(os.environ['RUNNER_TEMP'], 'run-metadata.json').write_text(
+              json.dumps(value, indent=2))
+          PY
+      - name: Run three-build behavior comparison
+        id: e2e
+        continue-on-error: true
+        run: |
+          python3 "${{ runner.temp }}/php-cve-e2e/php70/run.py" \
+            --source "$GITHUB_WORKSPACE" --ref HEAD \
+            --output "$RUNNER_TEMP/php70-e2e" --jobs 2
+      - name: Run C instrumentation trace comparison
+        id: trace
+        if: ${{ !cancelled() && steps.e2e.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          # trace-run.py 复用 run.py 构建的 docker image php-cve-e2e:php70
+          docker image inspect php-cve-e2e:php70 >/dev/null
+          python3 "${{ runner.temp }}/php-cve-e2e/php70/trace-run.py" \
+            --source "$GITHUB_WORKSPACE" --ref HEAD \
+            --image php-cve-e2e:php70 \
+            --output "$RUNNER_TEMP/php70-trace" --jobs 2
+      - name: Generate comparison report
+        id: report
+        if: always()
+        continue-on-error: true
+        run: |
+          python3 "${{ runner.temp }}/php-cve-e2e/tools/report.py" \
+            --e2e "$RUNNER_TEMP/php70-e2e" \
+            --trace "$RUNNER_TEMP/php70-trace" \
+            --metadata "$RUNNER_TEMP/run-metadata.json" \
+            --output "$RUNNER_TEMP/php70-report"
+      - name: Enforce e2e + trace outcome after preserving evidence
+        if: always()
+        env:
+          E2E: ${{ steps.e2e.outcome }}
+          TRACE: ${{ steps.trace.outcome }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          summary = Path(os.environ['RUNNER_TEMP'], 'php70-report/summary.json')
+          if not summary.is_file():
+              raise SystemExit('No e2e report; run.py/trace-run.py/report.py failed')
+          report = json.loads(summary.read_text())
+          if os.environ['E2E'] != 'success':
+              raise SystemExit('behavior comparison (run.py) did not succeed')
+          if os.environ['TRACE'] != 'success':
+              raise SystemExit('trace comparison (trace-run.py) did not succeed')
+          if not report.get('pass'):
+              raise SystemExit('e2e checks failed (behavior or trace); see report')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: php70-e2e-report
           path: |
-            ${{ runner.temp }}/php70/output/logs/
-            ${{ runner.temp }}/php70/output/source-commit.txt
-            ${{ runner.temp }}/php70/memory/
+            ${{ runner.temp }}/php70-e2e/
+            ${{ runner.temp }}/php70-trace/
+            ${{ runner.temp }}/php70-report/
+          if-no-files-found: error
+          retention-days: 90
+
+  # ── 阶段 4a: 对比报告汇总到 step summary ───────────────────────
+  comparison:
+    name: Stage 4 - Comparison summary
+    runs-on: ubuntu-24.04
+    needs: [phpt, e2e]
+    if: always()
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: php70-e2e-report
+          path: ${{ runner.temp }}/e2e-report
+        continue-on-error: true
+      - name: Compose comparison summary
+        run: |
+          {
+            echo "## PHP 7.0 CVE-2026-109618 / 109619 验证对比"
+            echo ""
+            echo "| 阶段 | 内容 | 结果 |"
+            echo "|---|---|---|"
+            echo "| 1-2 PHPT (debug + release, hardened) | CVE 单测 + 受影响目录集成回归 | ${{ needs.phpt.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
+            echo "| 3 E2E behavior (php-cve-e2e run.py) | baseline/legacy/hardened 三构建非插桩对照 | ${{ needs.e2e.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
+            echo "| 3 E2E trace (php-cve-e2e trace-run.py) | C 层插桩时序 (session consumer/handler) | ${{ needs.e2e.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
+            echo ""
+            echo "### 阶段 3 E2E 报告详情"
+            cat "${{ runner.temp }}/e2e-report/php70-report/job-summary.md" 2>/dev/null \
+              || echo "_(e2e 报告未生成, 见 e2e artifact)_"
+            echo ""
+            echo "### GitHub Pages"
+            echo "- 完整报告 (含 index.html / evidence) 发布到本仓库 Pages (pages job)"
+            echo ""
+            echo "### 说明"
+            echo "- PHPT: 本仓库独立构建 PHP 7.0 hardened, 验证源码级行为."
+            echo "- E2E: 拉取 [php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e) 跑 behavior + C 层 trace 完整对照."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ── 阶段 4b: 发布完整报告到 php-src GitHub Pages ────────────────
+  # report.py 生成 index.html, 直接作为 Pages 入口. 每次覆盖最新.
+  pages:
+    name: Stage 4 - Publish report to Pages
+    needs: e2e
+    if: always() && !cancelled() && needs.e2e.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    concurrency:
+      group: php70-pages
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: php70-e2e-report
+          path: ${{ runner.temp }}/incoming
+      - name: Prepare Pages content
+        run: |
+          # report.py 输出在 php70-report/, 含 index.html 作为 Pages 入口
+          mkdir -p "$RUNNER_TEMP/site"
+          cp -r "$RUNNER_TEMP/incoming/php70-report/." "$RUNNER_TEMP/site/"
+          # 确保有 index.html 入口
+          ls "$RUNNER_TEMP/site/index.html"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/site
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

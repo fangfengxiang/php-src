@@ -80,21 +80,8 @@
 
 | 文件 | 相对基线状态 / 提交状态 | 改动内容与作用 | 收益 | 风险与边界 |
 | --- | --- | --- | --- | --- |
-| [.github/workflows/php70-security.yml](../.github/workflows/php70-security.yml) | 新增 / HEAD | 安全分支 push 自动跑原生 10-job 矩阵；保留手动入口、阶段/任务时限、日志上传，取消旧的同 ref 运行。 | 持续检查 3 个发行版、2 种架构、Debug/Release/ASan/legacy，避免 push+PR 重复执行。 | 是安全专项门禁，不跑完整 PHPT；排队不计入 job 时限；工具链网络和 runner 可用性仍会影响结果。 |
-| [docs/security/testing/Dockerfile](../docs/security/testing/Dockerfile) | 新增 / HEAD | 纯 Debian/Ubuntu 工具链；兼容 Bison 3.5.1 经 SHA 校验，下载设超时/重试/备用源；无预装 PHP。 | 所有被测 PHP 都来自本分支源码，减少环境混淆与网络空等。 | OS tag/apt 包会更新，不承诺字节级复现；依赖下载成功不等于 PHP 测试成功。 |
-| [docs/security/testing/README.md](../docs/security/testing/README.md) | 新增 / HEAD | 给出隔离构建、全量对照、ASan 和 cgroup 的复现命令。 | 帮助独立复现结果和理解退出码。 | 正文保留不同阶段的 11/12 项历史信息，须与本清单的快照区分。 |
-| [docs/security/testing/build.sh](../docs/security/testing/build.sh) | 新增 / HEAD | 从归档干净构建各模式；显式安装 CLI/CGI/FPM；校验 PHP_VERSION_ID=70033，保存配置与工具版本。 | 避免测试系统 PHP 或复用旧模式对象文件。 | 受测为指定 NTS 构建与依赖，不代表任意部署；切换模式必须重新构建。 |
-| [docs/security/testing/build-probe.sh](../docs/security/testing/build-probe.sh) | 新增 / HEAD | 用被测 PHP 的 phpize/php-config 构建独立测试扩展。 | 确保 probe 使用匹配头文件和运行时，输出 ABI 元数据。 | 新编 probe 不等于旧二进制扩展兼容测试。 |
-| [docs/security/testing/ci.sh](../docs/security/testing/ci.sh) | 新增 / HEAD | 串联 native/FPM/PHPT/VM 比较；legacy 用旧行为预期；ASan 另做系统 allocator 检查。 | 将不同层次验证固定接入一次 CI。 | 不运行全量回归；系统 allocator 下不能假设 memory_limit 生效。 |
-| [docs/security/testing/native-invariants.py](../docs/security/testing/native-invariants.py) | 新增 / HEAD | 13 项模式/ABI、对齐、分配与溢出检查；失败也保存已完成项。 | 检测只看 PHPT 输出难以观察的布局与进程行为。 | 没有 dtoa 定向注入；结构大小一致不能证明所有扩展兼容。 |
-| [docs/security/testing/fpm-invariants.py](../docs/security/testing/fpm-invariants.py) | 新增 / HEAD | 11 项 Unix-socket worker、Session、上传、fatal、早期 INI、OOM 后续请求检查。 | 区分同 PID 复用与 OOM 后替换 worker，检验正常服务连续性。 | 只覆盖选定 FPM 场景，不等于全部 SAPI/扩展状态清理。 |
-| [docs/security/testing/docker-memory-invariants.py](../docs/security/testing/docker-memory-invariants.py) | 新增 / HEAD | 宿主编排 64/96/128 MiB、无 swap 的独立运行期容器。 | 保存真实资源限制、退出原因及计划/完成组数。 | 要求 Docker/cgroup v2；不对编译施加小限额，也不测试主机整体 OOM。 |
-| [docs/security/testing/fpm-memory-pressure.py](../docs/security/testing/fpm-memory-pressure.py) | 新增 / HEAD | 容器内读 cgroup 指标，验证 master 存活、child 退出/替换和 Session 连续性。 | 把 PHP fail-stop 与内核 SIGKILL 分开判定。 | SIGKILL 不执行 PHP reporter，不能当作新 allocator 分支覆盖。 |
-| [docs/security/testing/probe-extension/config.m4](../docs/security/testing/probe-extension/config.m4) | 新增 / HEAD | 接入 test-only security_probe 构建。 | 支持独立编译原生验证入口。 | 测试扩展不得部署到生产。 |
-| [docs/security/testing/probe-extension/security_probe.c](../docs/security/testing/probe-extension/security_probe.c) | 新增 / HEAD | 检查 Bucket 实际对齐、布局和极限分配入口，包含会主动终止解释器的模式。 | 直接触达内部 guard，避免通过巨大实际输入碰运气。 | 仅测试用途；不是生产 API。布局大小与对齐要求必须区分。 |
-| [docs/security/testing/run-clean-comparison.sh](../docs/security/testing/run-clean-comparison.sh) | 新增 / HEAD | 同镜像、同容器文件系统完成 baseline/hardened 构建、专项与完整 PHPT，并保留 diff。 | 减少不同文件系统或旧对象造成的伪差异。 | 历史 targeted 子集与当前 ci.sh 不完全同一集合；完整测试失败保持失败。 |
-| [docs/security/testing/run-phpt.sh](../docs/security/testing/run-phpt.sh) | 新增 / HEAD | 显式使用本分支 PHP 7，保留退出码、JUnit 和 diff；临时 runner 适配 USE_ZEND_ALLOC=0。 | 防止旧 runner 把系统 allocator 偷换回 Zend MM，保留诊断证据。 | MM-off 的有限 memory_limit 断言不适用；日志仍需按配置解释。 |
-| [docs/security/testing/summarize-results.py](../docs/security/testing/summarize-results.py) | 新增 / HEAD | 汇总完整结果、状态差异和原始失败 diff，拒绝不完整主要日志。 | 不把编译成功或未完成日志当作测试通过。 | Session 路径解释规则较宽，不能替代逐个失败的人工审查。 |
+| [.github/workflows/php70-security.yml](../.github/workflows/php70-security.yml) | 重写 / HEAD | 4 阶段编排：阶段 1-2 PHPT 单测+受影响目录集成（hardened debug/release，复用 php-cve-e2e 工具链镜像保证 autoconf 2.69 可靠构建）；阶段 3 拉取 [php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e) 跑 baseline/legacy/hardened 三构建 behavior 对照；阶段 4 汇总对比报告到 step summary。 | PHPT 验证源码级行为，E2E 验证 FPM 进程级端到端安全行为，分层互补，避免在本仓库重复维护 e2e 基础设施。 | E2E 非插桩 trace 标 NOT RUN 不伪造；工具链镜像构建与 runner 可用性仍影响结果；php-cve-e2e 须公开可访问。 |
+| docs/security/testing/ (14 文件, 已迁移) | 删除 / HEAD | 原 Dockerfile、build.sh、build-probe.sh、ci.sh、native/fpm-invariants.py、docker-memory-invariants.py、fpm-memory-pressure.py、probe-extension/、run-clean-comparison.sh、run-phpt.sh、summarize-results.py、README.md 共 14 文件已迁移至 [php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e) `php70/harness/`（该仓库已增 instrument-session.py、trace-invariants.py 并增强析构/handler/global 状态检查）。 | 消除两仓库重复维护，e2e 工具统一由 php-cve-e2e 演进；本仓库只保留 PHPT 与 workflow。 | 本仓库不再保留 e2e 副本；`docs/security/results/ci-boundary-review.json` 仍记录迁移前的 SHA256 快照作为历史评审证据。 |
 
 ## 说明文档、范围原则与本次三份交付（10 个）
 

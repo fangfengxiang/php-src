@@ -210,7 +210,7 @@ PHP_API_VERSION/ZEND_MODULE_API_NO 为 20151012，ZEND_EXTENSION_API_NO 为 3201
 **收益与代价。** 安全覆盖有重复性、运行成本有执行预算，网络失败与 PHP 断言失败可区分。
 队列时间不受 job 上限约束，下载依赖/runner 仍可能失败；10-job 通过不是完整安全证明。
 
-**证据。** `.github/workflows/php70-security.yml`、`security/testing/`、
+**证据。** `.github/workflows/php70-security.yml`、[php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e) `php70/harness/`、
 [run 39941839719](https://github.com/fangfengxiang/php-src/actions/runs/39941839719)：
 7cd812 原生 10 组成功，2026-10-23 北京时间 18:49:50–18:54:19，4 分 29 秒。
 HEAD 的 12 条安全 PHPT 已进入该轮；本地另两条只有 9/9 邻近回归的本地证据，不能算远程 14 条已通过。
