@@ -112,7 +112,10 @@ GitHub CI 只增加单一 Linux amd64 runner，在其中构建 Debug/Release 并
 保留所有输出；Bison 来源与校验和沿用 PHP 7.0 已审查工具链。首轮 GitHub run 40177481468 在真实 Linux amd64 GCC 上，两种构建各完成定向11、
 native12、FPM13，运行步骤成功；整项 CI 因 root-owned 0700 临时证据目录的上传
 EACCES 失败。原日志已归档。CI trap 已改为在容器退出时给合成测试证据加 a+rX，
-等待后续 run 验证上传修正。文档/结果提交不再重复触发编译，测试和代码变化仍触发。
+[后续 run 40177826320](https://github.com/fangfengxiang/php-src/actions/runs/40177826320)
+已整体 success，Debug/Release 各通过11/12/13，artifact php56-security-linux-amd64
+（id 12592698774）上传成功。该 CI commit 为 eca82a198d2；后续提交仅文档与原始证据，
+运行时代码不变。文档/结果提交不重复触发编译，测试和代码变化仍触发。
 
 ## 尚未验证的范围
 

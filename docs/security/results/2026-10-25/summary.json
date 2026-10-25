@@ -133,6 +133,31 @@
     "url": "https://github.com/fangfengxiang/php-src/actions/runs/40177481468",
     "validation_step": "success"
   },
+  "external_ci_success": {
+    "Debug": {
+      "fpm": 13,
+      "native": 12,
+      "targeted": 11
+    },
+    "Release": {
+      "fpm": 13,
+      "native": 12,
+      "targeted": 11
+    },
+    "artifact": {
+      "id": 12592698774,
+      "name": "php56-security-linux-amd64",
+      "size_bytes": 280194
+    },
+    "commit": "eca82a198d2913a5162048050e15e443f408dbe2",
+    "conclusion": "success",
+    "following_commits": "Documentation and raw evidence only; workflow paths intentionally avoid repeating builds for those changes.",
+    "platform": "real GitHub-hosted Linux amd64 GCC",
+    "raw_log_sha256": "0a35a2d0f3a166e0b316a849fa5f849e20397982986810e3a5469a34f2b55459",
+    "run": 40177826320,
+    "status": "completed",
+    "url": "https://github.com/fangfengxiang/php-src/actions/runs/40177826320"
+  },
   "fpm": {
     "fpm-baseline-early": {
       "binary": "/work/.security-build/clang-baseline/src/sapi/fpm/php-fpm",
