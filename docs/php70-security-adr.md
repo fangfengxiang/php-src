@@ -216,6 +216,27 @@ PHP_API_VERSION/ZEND_MODULE_API_NO 为 20151012，ZEND_EXTENSION_API_NO 为 3201
 HEAD 的 12 条安全 PHPT 已进入该轮；本地另两条只有 9/9 邻近回归的本地证据，不能算远程 14 条已通过。
 历史全量比较保留 35/44 个失败，其中 9 个新增差异逐项解释；汇总工具不能替代失败 diff 审查。
 
+## ADR-012：修正重写后的 CI，保留未迁移的平台职责
+
+**背景。** `431276f` 的远程运行证明外部 checkout 使用了不合法的绝对路径，
+宿主 Bison 3.8 生成的 PHP 7.0 parser 无法正确链接；正向 upload progress 旧测试
+与本修复刻意关闭该功能的行为冲突。外部 harness 并未包含 RPM/cgroup 原有覆盖。
+
+**决策。** 保留独立 PHPT、外部 behavior/trace、报告的结构。源码和固定 SHA 的
+harness 检出在 workspace 的两个同级目录，输出放 runner temp；不污染被测源码。
+PHPT 使用本仓库独立 Docker 工具链与分支编译的 PHP 7.0.33；保留 14 条严格安全测试，
+受影响目录集成明确排除 8 条正向 progress 旧测试，清单和原因随 artifact 保存，
+不修改旧 PHPT 或运行时代码，不把排除后的结果描述成原始目录全绿。
+
+Debian/CentOS 7/8/9/UBI 9、arm64 和 ASan 仍由本地平台工具验证。
+只监听当前分支 push 与手动入口，避免同一提交跑两次；job/步骤都有预算。
+上传外部 reporter 收集的有限证据而非源码、安装树与归档。
+Pages 只在全部门禁通过后发布，不把报告生成成功等同于测试通过。
+
+**代价与边界。** 暂时保留平台工具副本；未来只有外部 harness 实际具备同等覆盖后
+才删除。CI 不替代完整 baseline/hardened PHPT 比较，也不证明其它 SAPI/架构已验证。
+具体复现与失败入口见 [CI 使用说明](../.github/php70/README.md)。
+
 ## 后续决策的准入规则
 
 只有目标漏洞的必要修复、必要 7.0 适配或本次引入回归才进入本 PR。

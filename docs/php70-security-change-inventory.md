@@ -76,12 +76,14 @@
 | [tests/basic/rfc1867_max_multipart_body_parts_derived_zero.phpt](../tests/basic/rfc1867_max_multipart_body_parts_derived_zero.phpt) | 新增 / 本地 | 本地待提交：input/upload 配额均 0，-1 派生出零后拒绝首个 part。 | 补齐本次新增派生函数的零值组合。 | 仅本地 PHP 7.0 验证，尚未进入远程 10-job 结果。 |
 | [tests/basic/rfc1867_max_multipart_body_parts_retained_data.phpt](../tests/basic/rfc1867_max_multipart_body_parts_retained_data.phpt) | 新增 / 本地 | 本地待提交：先接收字段与真实文件，再因后续 part 超限停止，检查元数据和内容。 | 验证新拒绝分支仍走正确的原 cleanup，保留已完成数据。 | 仅本地验证；不覆盖所有扩展上传回调与失败时机。 |
 
-## CI、隔离构建与验证工具（15 个）
+## CI、隔离构建与验证工具
 
-| 文件 | 相对基线状态 / 提交状态 | 改动内容与作用 | 收益 | 风险与边界 |
+| 文件 | 相对基线状态 | 改动内容与作用 | 收益 | 风险与边界 |
 | --- | --- | --- | --- | --- |
-| [.github/workflows/php70-security.yml](../.github/workflows/php70-security.yml) | 重写 / HEAD | 4 阶段编排：阶段 1-2 PHPT 单测+受影响目录集成（hardened debug/release，复用 php-cve-e2e 工具链镜像保证 autoconf 2.69 可靠构建）；阶段 3 拉取 [php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e) 跑 baseline/legacy/hardened 三构建 behavior 对照；阶段 4 汇总对比报告到 step summary。 | PHPT 验证源码级行为，E2E 验证 FPM 进程级端到端安全行为，分层互补，避免在本仓库重复维护 e2e 基础设施。 | E2E 非插桩 trace 标 NOT RUN 不伪造；工具链镜像构建与 runner 可用性仍影响结果；php-cve-e2e 须公开可访问。 |
-| docs/security/testing/ (14 文件, 已迁移) | 删除 / HEAD | 原 Dockerfile、build.sh、build-probe.sh、ci.sh、native/fpm-invariants.py、docker-memory-invariants.py、fpm-memory-pressure.py、probe-extension/、run-clean-comparison.sh、run-phpt.sh、summarize-results.py、README.md 共 14 文件已迁移至 [php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e) `php70/harness/`（该仓库已增 instrument-session.py、trace-invariants.py 并增强析构/handler/global 状态检查）。 | 消除两仓库重复维护，e2e 工具统一由 php-cve-e2e 演进；本仓库只保留 PHPT 与 workflow。 | 本仓库不再保留 e2e 副本；`docs/security/results/ci-boundary-review.json` 仍记录迁移前的 SHA256 快照作为历史评审证据。 |
+| [.github/workflows/php70-security.yml](../.github/workflows/php70-security.yml) | 新增 | PHPT Debug/Release、安全平台矩阵、固定版本外部 behavior/trace、报告与 Pages。仅当前分支 push 和手动触发。 | 分层验证，消除 push/PR 重复运行；发布要求全部门禁成功。 | 外部工具固定为 `7ce13d03c0fcba68e8f6db8a5017d845ad812747`；并非穷尽安全证明。 |
+| [.github/php70/](../.github/php70/) | 新增 | 独立 PHPT 工具链、构建脚本、严格结果检查及 8 条正向 progress 兼容性清单。 | Bison 3.5.1 / autoconf 2.69；强制本分支 PHP 7.0.33，14 条安全测试不得跳过。 | 集成测试明确排除依赖已关闭功能的 8 条旧测试，不能称为原始目录全绿或全量基线比较。 |
+| [.github/php70/platform/](../.github/php70/platform/) | 新增（原 testing 工具迁入） | 保留 Debian、CentOS 7/8/Stream 9、UBI 9 的 native/FPM/PHPT/cgroup，以及 Debian arm64 Debug 和 amd64 ASan。 | 覆盖用户指定的 glibc/工具链及 worker 更换行为。 | 外部 E2E 只有 Debian 工具链，不能宣称旧工具全部已迁移；本地平台副本用于这项尚未迁移的职责。 |
+| docs/security/testing/ | 删除 | 旧目录被移除；可复现的当前入口见 [CI 使用说明](../.github/php70/README.md)。 | 明确当前工具与历史证据的区别。 | 旧文档中 testing/ 链接属于历史路径，不代表当前存在。 |
 
 ## 说明文档、范围原则与本次三份交付（10 个）
 
