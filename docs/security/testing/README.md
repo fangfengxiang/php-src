@@ -57,6 +57,7 @@ python3 docs/security/testing/summarize-results.py --artifacts "$validation_root
 
 完整运行有已记录失败，退出 1 必须保留为失败，不能把构建成功当成测试通过。
 汇总工具拒绝未完成的主要 PHPT 日志；未运行的可选构建以 `not_executed` 标示。
+汇总中的兼容变化分类仅供定位，每个新增失败仍须逐项检查 diff，不能仅凭文件名前缀判为预期。
 初次主机挂载结果仅作历史记录，不与不同文件系统的运行混作补丁收益。
 
 ## 硬化构建验证
@@ -81,12 +82,13 @@ docker run --rm --network none \
 
 完整 PHPT 保留原始期望，会因已记录的环境失败与必要兼容变化退出 1，不能称作全绿。
 原始日志在 `/work/logs/phpt.log`，失败列表与 JUnit 同目录；不要只读取退出码。
-只跑 11 个新增测试时传入以下路径（工作目录 `/work/source`，需先 `cd` 才展开 glob）：
+只跑当前 14 条安全 PHPT 时传入以下路径（工作目录 `/work/source`，需先 `cd` 才展开 glob）：
 
 ```sh
 sh /harness/run-phpt.sh Zend/tests/cve_2026_109618_*.phpt \
     ext/session/tests/rfc1867_upload_progress_disabled.phpt \
     tests/basic/rfc1867_duplicate_headers.phpt \
+    tests/basic/rfc1867_empty_file_nested_name.phpt \
     tests/basic/rfc1867_max_multipart_body_parts*.phpt
 ```
 
@@ -143,4 +145,15 @@ probe 是测试扩展，**不得安装到生产实例**。`build-probe.sh` 将�
 ## 分支自动 CI
 
 新增矩阵、触发条件和 Grok 边界建议评估见 [CI 与边界测试评估](../ci-and-boundary-review.md)。
-本地安全 PHPT 命令另加 `tests/basic/rfc1867_empty_file_nested_name.phpt`，现共 12 项。
+上述安全 PHPT 命令与 `ci.sh`、clean comparison 的专项阶段一致，当前共 14 条。
+默认 Zend MM 的 FPM 检查为 11 项；hardened OOM 要求旧 worker 明确 exit 1，
+不能仅凭 PID 更换判定成功。测试会拒绝 ASan 报错及 worker 崩溃信号。
+native probe 现有 14 项，包括 `zend_safe_addmult()` 的加法溢出入口；历史记录中的 13 项不含此新增用例。
+已完成的 [5c9173b CI](https://github.com/fangfengxiang/php-src/actions/runs/40058565734)
+在原生 amd64/arm64 的 10 个 job 通过，包含 14 条安全 PHPT、13 项 native 和 11 项默认 Zend MM FPM。
+该次运行不包含后来增强的 OOM 退出原因断言与新增 native 用例，不能作为这些新断言的运行证据。
+
+2026-10-25 本地补充验证复用既有 PHP 7.0.33 安装前缀，核对其构建目录的 20 个运行时/构建源码
+与当前分支一致，仅重编测试扩展。Debug、Release、ASan、legacy 各通过 14 项 native、11 项 FPM；
+ASan 系统 allocator 另有 8 项通过、1 项预期跳过。临时脚本将 OOM 请求替换为 worker SIGSEGV，
+新断言按预期拒绝该负面对照。未重编 PHP 运行时、未重跑全量 PHPT，也未据此新增生产适用性声明。

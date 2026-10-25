@@ -49,7 +49,7 @@ for query in ('x[a]=v', 'x[999]=v', 'x[0]=v'):
     assert result['nTableSize'] == (8 if a.legacy else 1), result
     checks.append({'check': 'singleton alignment ' + query, 'pass': True, 'data': result})
 for mode in ('emalloc', 'safe_emalloc', 'estrndup', 'zend_strndup', 'system_malloc',
-             'inline_guard', 'huge_rounding', 'metadata_overflow', 'hash_capacity'):
+             'inline_guard', 'safe_addmult', 'huge_rounding', 'metadata_overflow', 'hash_capacity'):
     r = run('register_shutdown_function(function () { echo "PHP SHUTDOWN\\n"; });'
             'security_probe_allocation(' + json.dumps(mode) + '); echo "UNREACHABLE\\n";')
     if a.legacy:
@@ -63,6 +63,8 @@ for mode in ('emalloc', 'safe_emalloc', 'estrndup', 'zend_strndup', 'system_mall
         assert 'PHP SHUTDOWN' not in r['stdout'] and 'UNREACHABLE' not in r['stdout'], (mode, r)
         assert 'C EXIT CALLBACK' not in r['stderr'], (mode, r)
     assert 'ERROR: AddressSanitizer' not in r['stderr'], (mode, r)
+    if mode == 'safe_addmult':
+        assert 'security_probe offset addition' in r['stdout'] + r['stderr'], (mode, r)
     checks.append({'check': mode, 'pass': True, **r})
 Path(a.output).write_text(json.dumps({'legacy': a.legacy, 'completed': True, 'pass': True, 'checks': checks}, indent=2) + '\n')
 print(json.dumps({'output': a.output, 'passed': len(checks)}))

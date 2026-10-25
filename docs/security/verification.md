@@ -3,6 +3,11 @@
 执行日期：2026-10-22 至 2026-10-23。基线：`bf574c2b67a1f786e36cf679f41b758b973a82c4`。
 分支：`security/php70-cve-2026-109618-109619`。
 
+本文下列构建、计数与全量回归结果保留为 2026-10-22 至 2026-10-23 的历史快照。
+后续 [5c9173b 的原生 amd64/arm64 CI](https://github.com/fangfengxiang/php-src/actions/runs/40058565734)
+已通过 10 个 job；安全 PHPT 为 14 条，默认 Zend MM FPM 为 11 项，native 为 13 项。
+这不重写下面的历史 11 PHPT/9 FPM 结果，也不表示重跑过最新完整 PHPT。当前复现入口见 [testing/README.md](testing/README.md)。
+
 **结论：已实现并验证官方 EOL 最小缓解的 PHP 7.0 适配，交付 Draft 审查；尚不认定具备
 完整安全修复的发布候选资格。** 原有测试存在已记录失败，Apache/Windows/ZTS/32 位及任意
 第三方扩展未验证；旧版本最小缓解也不是受支持 PHP 的完整状态重置方案。

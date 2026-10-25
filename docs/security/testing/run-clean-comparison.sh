@@ -18,7 +18,7 @@ fi
 python3 /harness/fpm-invariants.py --fpm /work/install/sbin/php-fpm --output /work/logs/fpm-early-invariants.json $fpm_option > /work/logs/fpm-early-invariants.log 2>&1
 if test "$mode" = debug; then
  set +e
- sh /harness/run-phpt.sh Zend/tests/cve_2026_109618_*.phpt ext/session/tests/rfc1867_upload_progress_disabled.phpt tests/basic/rfc1867_duplicate_headers.phpt tests/basic/rfc1867_max_multipart_body_parts*.phpt > /work/logs/security-phpt-driver.log 2>&1
+ sh /harness/run-phpt.sh Zend/tests/cve_2026_109618_*.phpt ext/session/tests/rfc1867_upload_progress_disabled.phpt tests/basic/rfc1867_duplicate_headers.phpt tests/basic/rfc1867_empty_file_nested_name.phpt tests/basic/rfc1867_max_multipart_body_parts*.phpt > /work/logs/security-phpt-driver.log 2>&1
  status=$?
  set -e
  for item in log xml; do mv /work/logs/phpt.$item /work/logs/security-phpt.$item; done

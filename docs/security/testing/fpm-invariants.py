@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import signal
 import socket
 import struct
@@ -196,6 +197,21 @@ php_admin_value[log_errors] = 1
                     time.sleep(0.05)
                 def call(query="", **kwargs):
                     return request(address, script, query, **kwargs)
+                def log_positions():
+                    return {path: path.stat().st_size if path.exists() else 0
+                            for path in (logfile, root / "fpm.log")}
+                def require_oom_exit(worker_pid, response, positions):
+                    # PID replacement alone also accepts a crashing worker.
+                    exit_pattern = r"child %d exited with code 1\b" % worker_pid
+                    for unused in range(100):
+                        diagnostic = "".join(path.read_bytes()[offset:].decode(errors="replace")
+                                             for path, offset in positions.items() if path.exists())
+                        if re.search(exit_pattern, diagnostic):
+                            break
+                        time.sleep(0.01)
+                    assert re.search(exit_pattern, diagnostic), (worker_pid, diagnostic[-4000:])
+                    assert "Allowed memory size of 16777216 bytes exhausted" in (
+                        response["raw"] + response["stderr"] + diagnostic), response
                 first = result_json(call())
                 pid = first["pid"]
                 for unused in range(5):
@@ -260,12 +276,14 @@ php_admin_value[log_errors] = 1
                 assert "iconv.input_encoding is deprecated" in diagnostic, early
                 results.append({"check": "early PHP_VALUE diagnostic after fatal and handlers", "pid": pid, "pass": True})
                 if not args.system_allocator:
+                    positions = log_positions()
                     oom = call("action=oom")
                     after = result_json(call())
                     if args.expect_baseline:
                         assert marker.exists() and after["pid"] == pid, (oom, after)
                     else:
                         assert not marker.exists() and after["pid"] != pid, (oom, after)
+                        require_oom_exit(pid, oom, positions)
                     results.append({"check": "script memory_limit OOM matches expected lifecycle", "before_pid": pid, "after_pid": after["pid"], "shutdown_called": marker.exists(), "pass": True})
                     if marker.exists():
                         marker.unlink()
@@ -278,11 +296,14 @@ php_admin_value[log_errors] = 1
                     # A large plain field triggers OOM during request startup,
                     # without manipulating layouts, dangling pointers or objects.
                     body, kind = multipart([("large", b"x" * (32 * 1024 * 1024), None)])
+                    positions = log_positions()
                     startup_oom = call("action=upload", body=body, content_type=kind)
                     after = result_json(call())
                     # PHP 7.0 FPM already retires a child after a failed startup;
                     # the new hard stop additionally protects cleanup itself.
                     assert after["pid"] != pid, (startup_oom, after)
+                    if not args.expect_baseline:
+                        require_oom_exit(pid, startup_oom, positions)
                     assert result_json(call("action=session"))["session_count"] == 3
                     results.append({"check": "startup multipart OOM cannot reuse worker", "before_pid": pid, "after_pid": after["pid"], "pass": True})
                 else:
@@ -297,6 +318,10 @@ php_admin_value[log_errors] = 1
                 if (root / "fpm.log").exists():
                     with logfile.open("ab") as logs:
                         logs.write((root / "fpm.log").read_bytes())
+        diagnostic = logfile.read_text(errors="replace")
+        for unexpected in ("ERROR: AddressSanitizer", "SUMMARY: AddressSanitizer", "AddressSanitizer:DEADLYSIGNAL"):
+            assert unexpected not in diagnostic, diagnostic[-4000:]
+        assert not re.search(r"child \d+ exited on signal (?:4|6|7|11)\b", diagnostic), diagnostic[-4000:]
     output.write_text(json.dumps({"baseline": args.expect_baseline, "system_allocator": args.system_allocator, "checks": results}, indent=2) + "\n")
     print(json.dumps({"output": str(output), "checks_passed": len([r for r in results if r.get("pass")])}))
 

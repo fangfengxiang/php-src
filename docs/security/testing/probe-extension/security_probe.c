@@ -53,6 +53,9 @@ PHP_FUNCTION(security_probe_allocation)
 	} else if (strcmp(mode, "inline_guard") == 0) {
 		/* Deliberately demonstrates code embedded in old binary extensions. */
 		zend_safe_address_guarded((size_t) -1, 2, 0);
+	} else if (strcmp(mode, "safe_addmult") == 0) {
+		/* Multiplication fits; adding the offset must fail before allocation. */
+		zend_safe_addmult((size_t) -1, 1, 1, "security_probe offset addition");
 	} else if (strcmp(mode, "huge_rounding") == 0) {
 		/* Stay within the final 4 KiB page, allowing room for debug
 		 * metadata. -4096 is already page-aligned on x86_64 and tests
