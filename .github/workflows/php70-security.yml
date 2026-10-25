@@ -1,6 +1,6 @@
 name: PHP 7.0 security regression
 # CVE-2026-109618 / CVE-2026-109619 最小缓解分支验证
-# 阶段 1: PHPT 单测 (CVE 聚焦)          — 独立构建, 不依赖 php-cve-e2e
+# 阶段 1: PHPT 单测 (CVE 聚焦)          — 用例、runner、门禁均由本仓库维护
 # 阶段 2: 受影响扩展集成测试             — 同 job, 独立 step
 # 阶段 3: php-cve-e2e 端到端三构建对照   — 拉取 php-cve-e2e 跑 behavior + C 层 trace
 # 阶段 4: 对比报告 + GitHub Pages 发布
@@ -10,12 +10,14 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+env:
+  PHP70_HARNESS_REF: a03ad2f4c092004f651da1e890c61c5848d5ca7d
 concurrency:
   group: php70-security-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # 独立工具链；源码归档在无网络容器中编译，禁止使用 runner 自带 PHP。
+  # 外部共用工具链；本仓库 runner 在分支编译的 PHP 7.0.33 上执行本仓库 PHPT。
   phpt:
     name: PHPT (${{ matrix.mode }})
     runs-on: ubuntu-24.04
@@ -26,14 +28,24 @@ jobs:
         mode: [debug, release]
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: source
+      - name: Checkout external test tools
+        uses: actions/checkout@v4
+        with:
+          repository: fangfengxiang/php-cve-e2e
+          ref: ${{ env.PHP70_HARNESS_REF }}
+          path: harness
       - name: Prepare exact source and PHP 7.0 toolchain
         timeout-minutes: 5
         run: |
-          python3 .github/php70/test-check-phpt.py
+          python3 source/.github/php70/test-check-phpt.py
           mkdir -p "$RUNNER_TEMP/phpt/input" "$RUNNER_TEMP/phpt/output/logs"
-          git archive HEAD > "$RUNNER_TEMP/phpt/input/source.tar"
-          git rev-parse HEAD > "$RUNNER_TEMP/phpt/output/logs/source-commit.txt"
-          docker build -t php70-phpt .github/php70
+          git -C source archive HEAD > "$RUNNER_TEMP/phpt/input/source.tar"
+          git -C source rev-parse HEAD > "$RUNNER_TEMP/phpt/output/logs/source-commit.txt"
+          git -C harness rev-parse HEAD > "$RUNNER_TEMP/phpt/output/logs/harness-commit.txt"
+          docker build -t php70-phpt harness/php70/harness
+          docker image inspect php70-phpt > "$RUNNER_TEMP/phpt/output/logs/toolchain-image.json"
       - name: Build PHP 7.0 and run both PHPT stages
         timeout-minutes: 17
         env:
@@ -41,9 +53,10 @@ jobs:
         run: |
           docker run --rm --network none --mount type=volume,dst=/work/source \
             -v "$RUNNER_TEMP/phpt/input:/input:ro" \
-            -v "$GITHUB_WORKSPACE/.github/php70:/harness:ro" \
+            -v "$GITHUB_WORKSPACE/harness/php70/harness:/harness:ro" \
+            -v "$GITHUB_WORKSPACE/source/.github/php70:/source-ci:ro" \
             -v "$RUNNER_TEMP/phpt/output:/work" \
-            -e BUILD_JOBS=4 --entrypoint sh php70-phpt /harness/run-phpt-stages.sh "$BUILD_MODE"
+            -e BUILD_JOBS=4 --entrypoint sh php70-phpt /source-ci/run-phpt-stages.sh "$BUILD_MODE"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -72,18 +85,27 @@ jobs:
           - {os: 'debian:12', mode: asan, arch: amd64, runner: ubuntu-24.04}
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: source
+      - name: Checkout external test tools
+        uses: actions/checkout@v4
+        with:
+          repository: fangfengxiang/php-cve-e2e
+          ref: ${{ env.PHP70_HARNESS_REF }}
+          path: harness
       - name: Prepare exact checkout archive
         run: |
           mkdir -p "$RUNNER_TEMP/php70/input" "$RUNNER_TEMP/php70/output"
-          git archive HEAD > "$RUNNER_TEMP/php70/input/source.tar"
-          git rev-parse HEAD > "$RUNNER_TEMP/php70/output/source-commit.txt"
+          git -C source archive HEAD > "$RUNNER_TEMP/php70/input/source.tar"
+          git -C source rev-parse HEAD > "$RUNNER_TEMP/php70/output/source-commit.txt"
       - name: Build Linux toolchain
         timeout-minutes: 5
         env:
           BASE_IMAGE: ${{ matrix.os }}
         run: |
-          docker build --build-arg BASE_IMAGE="$BASE_IMAGE" -t php70-ci .github/php70/platform
+          docker build --build-arg BASE_IMAGE="$BASE_IMAGE" -t php70-ci harness/php70/harness
           mkdir -p "$RUNNER_TEMP/php70/output/logs"
+          git -C harness rev-parse HEAD > "$RUNNER_TEMP/php70/output/logs/harness-commit.txt"
           docker image inspect php70-ci > "$RUNNER_TEMP/php70/output/logs/toolchain-image.json"
       - name: Build and run security checks without network
         timeout-minutes: 10
@@ -92,9 +114,11 @@ jobs:
         run: |
           docker run --rm --network none --mount type=volume,dst=/work/source \
             -v "$RUNNER_TEMP/php70/input:/input:ro" \
-            -v "$GITHUB_WORKSPACE/.github/php70/platform:/harness:ro" \
+            -v "$GITHUB_WORKSPACE/harness/php70/harness:/harness:ro" \
+            -v "$GITHUB_WORKSPACE/source/.github/php70:/source-ci:ro" \
             -v "$RUNNER_TEMP/php70/output:/work" \
-            -e BUILD_JOBS=4 --entrypoint sh php70-ci /harness/ci.sh "$BUILD_MODE"
+            -e BUILD_JOBS=4 -e BUILD_MODE --entrypoint sh php70-ci -ec \
+            'sh /harness/platform.sh "$BUILD_MODE"; sh /source-ci/run-source-checks.sh "$BUILD_MODE"'
       - name: Verify cgroup OOM and replacement workers
         timeout-minutes: 3
         if: >-
@@ -103,7 +127,7 @@ jobs:
           matrix.os == 'quay.io/centos/centos:8' || matrix.os == 'quay.io/centos/centos:stream9' ||
           matrix.os == 'registry.access.redhat.com/ubi9/ubi:latest')
         run: |
-          python3 .github/php70/platform/docker-memory-invariants.py \
+          python3 harness/php70/harness/docker-memory-invariants.py \
             --image php70-ci --install "$RUNNER_TEMP/php70/output/install" \
             --output "$RUNNER_TEMP/php70/memory"
       - name: Preserve logs even on failure
@@ -133,7 +157,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: fangfengxiang/php-cve-e2e
-          ref: 7ce13d03c0fcba68e8f6db8a5017d845ad812747
+          ref: ${{ env.PHP70_HARNESS_REF }}
           path: harness
       - uses: actions/setup-python@v5
         with:
