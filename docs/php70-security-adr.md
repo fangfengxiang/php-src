@@ -226,7 +226,7 @@ RPM/cgroup 覆盖。历史修复 `d4dee4a6144` 将代码修复与 `Zend/tests/bu
 **决策。** PHP 源码、PHPT 用例、runner、用例选择和 PHPT 结果门禁属于 php-src，保留原位。
 本仓库 `.github/php70/` 只包含 PHPT/VM 的 CI 调用与完整性检查。Dockerfile、构建脚本、
 native probe、FPM、cgroup 和 behavior/trace 统一维护于 php-security-e2e，不保留本地工具副本。
-外部调用契约见 [php70/CI.md](https://github.com/fangfengxiang/php-security-e2e/blob/bd5f7080231a20b0383f8c97931d2a2093d25d03/php70/CI.md)。
+外部调用契约见 [php70/CI.md](https://github.com/fangfengxiang/php-security-e2e/blob/97f43c6c7f540454a4bc99dd03cd8cbd766b3757/php70/CI.md)。
 
 所有 job 固定同一外部提交，source/harness 同级检出，结果放 runner temp；
 构建后使用本分支 PHP 7.0.33 执行原有 `run-tests.php`，不修改 runner 或运行时代码。

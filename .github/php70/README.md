@@ -5,7 +5,7 @@ PHP 源码、PHPT、run-tests.php、测试选择和结果门禁都在本仓库�
 `.travis.yml`、AppVeyor 和 `Makefile.global` 均调用本仓库 runner，本工作流沿用这个模式。
 
 Docker 工具链、构建、native probe、FPM、cgroup、behavior/trace 属于
-[php-security-e2e](https://github.com/fangfengxiang/php-security-e2e/blob/bd5f7080231a20b0383f8c97931d2a2093d25d03/php70/CI.md)。
+[php-security-e2e](https://github.com/fangfengxiang/php-security-e2e/blob/97f43c6c7f540454a4bc99dd03cd8cbd766b3757/php70/CI.md)。
 本仓库不保存这些工具的副本；CI 固定外部 SHA，source/harness 同级检出。
 所有测试使用指定提交编译的 PHP 7.0.33，不使用宿主 PHP。
 
