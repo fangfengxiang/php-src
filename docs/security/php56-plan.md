@@ -1,6 +1,6 @@
 # PHP 5.6.40 安全回移植实施计划
 
-状态：初版 PR，未完成验证。工作目录为独立 managed worktree，分支
+状态：首轮适配与范围内验证已完成，保留草稿待独立审查。实际结果见 php56-verification.md。工作目录为独立 managed worktree，分支
 codex/php56-cve-2026-109618-109619。原 PHP 7.0 工作区不改动。
 
 1. 根因与来源审计：见 php56-audit.md，基线 4b8f72da5dfb201af4e82dee960261d8657e414f。

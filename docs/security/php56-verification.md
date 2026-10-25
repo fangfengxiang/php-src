@@ -46,7 +46,7 @@ sid_invalid 的早期非法 SID 打开警告消失，文件上传数据仍存在
 没有未解释的新增失败；原有 66 项 FAIL 不在此次修复范围，未顺便修改。
 这不是“全套测试通过”。SKIP 与 XFAIL 也不是已验证行为。
 
-每个变化的原 .diff/.out/.exp 归档在 results/2026-10-25/changed-expectations。
+每个变化的原 .diff/.out/.exp 归档在 results/2026-10-25/changed-expectations.tar.gz（保留原始 CRLF 和空白）。
 PHPT 标题包含括号和换行，初版 runner 的结果解析漏项；已从同一原始日志用修正
 parser 重建逐路径结果并记录 postprocessing，没有重跑或改写 PHP 输出。
 
