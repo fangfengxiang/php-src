@@ -5,7 +5,7 @@ PHP 源码、PHPT、run-tests.php、测试选择和结果门禁都在本仓库�
 `.travis.yml`、AppVeyor 和 `Makefile.global` 均调用本仓库 runner，本工作流沿用这个模式。
 
 Docker 工具链、构建、native probe、FPM、cgroup、behavior/trace 属于
-[php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e/blob/31fe485c059420aa3403e0f31ce8f4f7b2f9e95c/php70/CI.md)。
+[php-security-e2e](https://github.com/fangfengxiang/php-security-e2e/blob/bd5f7080231a20b0383f8c97931d2a2093d25d03/php70/CI.md)。
 本仓库不保存这些工具的副本；CI 固定外部 SHA，source/harness 同级检出。
 所有测试使用指定提交编译的 PHP 7.0.33，不使用宿主 PHP。
 
@@ -38,7 +38,7 @@ PHPT/平台 artifact 与外部 HTML 报告分别保存，目前 HTML 不合并�
 从本仓库根目录执行，外部仓库先检出工作流固定的 SHA，输出目录必须是新的：
 
 ```sh
-PHP70_HARNESS=../php-cve-e2e
+PHP70_HARNESS=../php-security-e2e
 mkdir -p /tmp/php70-ci/input /tmp/php70-ci/output/logs
 git archive HEAD > /tmp/php70-ci/input/source.tar
 docker build -t php70-toolchain "$PHP70_HARNESS/php70/harness"

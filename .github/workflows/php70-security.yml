@@ -2,7 +2,7 @@ name: PHP 7.0 security regression
 # CVE-2026-109618 / CVE-2026-109619 最小缓解分支验证
 # 阶段 1: PHPT 单测 (CVE 聚焦)          — 用例、runner、门禁均由本仓库维护
 # 阶段 2: 受影响扩展集成测试             — 同 job, 独立 step
-# 阶段 3: php-cve-e2e 端到端三构建对照   — 拉取 php-cve-e2e 跑 behavior + C 层 trace
+# 阶段 3: php-security-e2e 端到端三构建对照   — 拉取 php-security-e2e 跑 behavior + C 层 trace
 # 阶段 4: 对比报告 + GitHub Pages 发布
 on:
   push:
@@ -11,7 +11,7 @@ on:
 permissions:
   contents: read
 env:
-  PHP70_HARNESS_REF: 31fe485c059420aa3403e0f31ce8f4f7b2f9e95c
+  PHP70_HARNESS_REF: bd5f7080231a20b0383f8c97931d2a2093d25d03
 concurrency:
   group: php70-security-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout external test tools
         uses: actions/checkout@v4
         with:
-          repository: fangfengxiang/php-cve-e2e
+          repository: fangfengxiang/php-security-e2e
           ref: ${{ env.PHP70_HARNESS_REF }}
           path: harness
       - name: Prepare exact source and PHP 7.0 toolchain
@@ -90,7 +90,7 @@ jobs:
       - name: Checkout external test tools
         uses: actions/checkout@v4
         with:
-          repository: fangfengxiang/php-cve-e2e
+          repository: fangfengxiang/php-security-e2e
           ref: ${{ env.PHP70_HARNESS_REF }}
           path: harness
       - name: Prepare exact checkout archive
@@ -141,11 +141,11 @@ jobs:
             ${{ runner.temp }}/php70/output/source-commit.txt
             ${{ runner.temp }}/php70/memory/
 
-  # ── 阶段 3: php-cve-e2e 端到端对照 (behavior + C 层 trace) ───────
-  # 拉取 php-cve-e2e, 跑 run.py (非插桩三构建) + trace-run.py (C 层插桩时序),
+  # ── 阶段 3: php-security-e2e 端到端对照 (behavior + C 层 trace) ───────
+  # 拉取 php-security-e2e, 跑 run.py (非插桩三构建) + trace-run.py (C 层插桩时序),
   # report.py 汇总完整对比报告 (pass 须 behavior + trace 都通过).
   e2e:
-    name: E2E comparison (php-cve-e2e)
+    name: E2E comparison (php-security-e2e)
     runs-on: ubuntu-24.04
     timeout-minutes: 50
     steps:
@@ -153,10 +153,10 @@ jobs:
         with:
           fetch-depth: 0
           path: source
-      - name: Checkout php-cve-e2e
+      - name: Checkout php-security-e2e
         uses: actions/checkout@v4
         with:
-          repository: fangfengxiang/php-cve-e2e
+          repository: fangfengxiang/php-security-e2e
           ref: ${{ env.PHP70_HARNESS_REF }}
           path: harness
       - uses: actions/setup-python@v5
@@ -198,11 +198,11 @@ jobs:
         if: ${{ !cancelled() && steps.e2e.outcome == 'success' }}
         continue-on-error: true
         run: |
-          # trace-run.py 复用 run.py 构建的 docker image php-cve-e2e:php70
-          docker image inspect php-cve-e2e:php70 >/dev/null
+          # trace-run.py 复用 run.py 构建的 docker image php-security-e2e:php70
+          docker image inspect php-security-e2e:php70 >/dev/null
           python3 "$GITHUB_WORKSPACE/harness/php70/trace-run.py" \
             --source "$GITHUB_WORKSPACE/source" --ref HEAD \
-            --image php-cve-e2e:php70 \
+            --image php-security-e2e:php70 \
             --output "$RUNNER_TEMP/php70-trace" --jobs 4
       - name: Generate comparison report
         id: report
@@ -265,8 +265,8 @@ jobs:
             echo "|---|---|---|"
             echo "| 1-2 PHPT (debug + release, hardened) | CVE 单测 + 受影响目录集成回归 | ${{ needs.phpt.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
             echo "| Linux platform + cgroup | Debian / CentOS 7,8,9 / UBI 9；另含 arm64 与 ASan | ${{ needs.platform.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
-            echo "| 3 E2E behavior (php-cve-e2e run.py) | baseline/legacy/hardened 三构建非插桩对照 | ${{ needs.e2e.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
-            echo "| 3 E2E trace (php-cve-e2e trace-run.py) | C 层插桩时序 (session consumer/handler) | ${{ needs.e2e.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
+            echo "| 3 E2E behavior (php-security-e2e run.py) | baseline/legacy/hardened 三构建非插桩对照 | ${{ needs.e2e.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
+            echo "| 3 E2E trace (php-security-e2e trace-run.py) | C 层插桩时序 (session consumer/handler) | ${{ needs.e2e.result == 'success' && '✅ pass' || '❌ see artifact' }} |"
             echo ""
             echo "### 阶段 3 E2E 报告详情"
             cat "${{ runner.temp }}/e2e-report/php70-report/job-summary.md" 2>/dev/null \
@@ -277,7 +277,7 @@ jobs:
             echo ""
             echo "### 说明"
             echo "- PHPT: 本仓库独立构建 PHP 7.0 hardened, 验证源码级行为."
-            echo "- E2E: 拉取 [php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e) 跑 behavior + C 层 trace 完整对照."
+            echo "- E2E: 拉取 [php-security-e2e](https://github.com/fangfengxiang/php-security-e2e) 跑 behavior + C 层 trace 完整对照."
           } >> "$GITHUB_STEP_SUMMARY"
 
   # ── 阶段 4b: 发布完整报告到 php-src GitHub Pages ────────────────

@@ -210,7 +210,7 @@ PHP_API_VERSION/ZEND_MODULE_API_NO 为 20151012，ZEND_EXTENSION_API_NO 为 3201
 **收益与代价。** 安全覆盖有重复性、运行成本有执行预算，网络失败与 PHP 断言失败可区分。
 队列时间不受 job 上限约束，下载依赖/runner 仍可能失败；10-job 通过不是完整安全证明。
 
-**证据。** `.github/workflows/php70-security.yml`、[php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e) `php70/harness/`、
+**证据。** `.github/workflows/php70-security.yml`、[php-security-e2e](https://github.com/fangfengxiang/php-security-e2e) `php70/harness/`、
 [run 39941839719](https://github.com/fangfengxiang/php-src/actions/runs/39941839719)：
 7cd812 原生 10 组成功，2026-10-23 北京时间 18:49:50–18:54:19，4 分 29 秒。
 HEAD 的 12 条安全 PHPT 已进入该轮；本地另两条只有 9/9 邻近回归的本地证据，不能算远程 14 条已通过。
@@ -225,8 +225,8 @@ RPM/cgroup 覆盖。历史修复 `d4dee4a6144` 将代码修复与 `Zend/tests/bu
 
 **决策。** PHP 源码、PHPT 用例、runner、用例选择和 PHPT 结果门禁属于 php-src，保留原位。
 本仓库 `.github/php70/` 只包含 PHPT/VM 的 CI 调用与完整性检查。Dockerfile、构建脚本、
-native probe、FPM、cgroup 和 behavior/trace 统一维护于 php-cve-e2e，不保留本地工具副本。
-外部调用契约见 [php70/CI.md](https://github.com/fangfengxiang/php-cve-e2e/blob/31fe485c059420aa3403e0f31ce8f4f7b2f9e95c/php70/CI.md)。
+native probe、FPM、cgroup 和 behavior/trace 统一维护于 php-security-e2e，不保留本地工具副本。
+外部调用契约见 [php70/CI.md](https://github.com/fangfengxiang/php-security-e2e/blob/bd5f7080231a20b0383f8c97931d2a2093d25d03/php70/CI.md)。
 
 所有 job 固定同一外部提交，source/harness 同级检出，结果放 runner temp；
 构建后使用本分支 PHP 7.0.33 执行原有 `run-tests.php`，不修改 runner 或运行时代码。
