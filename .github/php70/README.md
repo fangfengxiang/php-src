@@ -4,7 +4,7 @@
 所有 PHP 测试均编译当前提交的 PHP 7.0.33，不使用系统 PHP。
 
 - 独立 PHPT：Debian 12 工具链，Bison 3.5.1（SHA256 校验）、autoconf 2.69；Debug / Release。
-  `phpt.sh` 先运行 14 条安全测试，再运行 Zend/session/basic 的集成选择。
+  `run-phpt-stages.sh` 先运行 14 条安全测试，再运行 Zend/session/basic 的集成选择。
   安全测试必须完整通过，不能 skip；集成的 8 条正向 progress 旧测试列于
   `progress-compatibility.txt`，它们依赖本修复刻意禁用的功能。
   替代安全断言 `rfc1867_upload_progress_disabled.phpt` 仍必须通过。
@@ -28,7 +28,7 @@ docker run --rm --network none --mount type=volume,dst=/work/source \
   -v /tmp/php70-ci/input:/input:ro \
   -v "$PWD/.github/php70:/harness:ro" \
   -v /tmp/php70-ci/output:/work \
-  -e BUILD_JOBS=4 --entrypoint sh php70-phpt /harness/phpt.sh debug
+  -e BUILD_JOBS=4 --entrypoint sh php70-phpt /harness/run-phpt-stages.sh debug
 ```
 
 失败时先看 artifact 的构建日志、阶段 summary JSON、JUnit 和 diagnostics。

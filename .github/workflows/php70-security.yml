@@ -43,7 +43,7 @@ jobs:
             -v "$RUNNER_TEMP/phpt/input:/input:ro" \
             -v "$GITHUB_WORKSPACE/.github/php70:/harness:ro" \
             -v "$RUNNER_TEMP/phpt/output:/work" \
-            -e BUILD_JOBS=4 --entrypoint sh php70-phpt /harness/phpt.sh "$BUILD_MODE"
+            -e BUILD_JOBS=4 --entrypoint sh php70-phpt /harness/run-phpt-stages.sh "$BUILD_MODE"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
