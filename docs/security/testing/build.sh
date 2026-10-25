@@ -43,11 +43,16 @@ export PHP_AUTOHEADER=autoheader2.69
 {
     date -u
     uname -a
+    cat /etc/os-release
     "$CC" --version
     "$PHP_AUTOCONF" --version
     bison --version
     re2c --version
-    dpkg-query -W
+    if command -v dpkg-query >/dev/null; then
+        dpkg-query -W
+    else
+        rpm -qa
+    fi
 } > /work/logs/toolchain.txt 2>&1
 
 echo "Generating PHP 7.0 build configuration ($mode)"

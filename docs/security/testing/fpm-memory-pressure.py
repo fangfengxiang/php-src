@@ -2,10 +2,12 @@
 """Bounded, benign allocation pressure inside one memory-limited cgroup v2."""
 
 import argparse
+import grp
 import importlib.util
 import json
 import os
 from pathlib import Path
+import pwd
 import re
 import signal
 import subprocess
@@ -69,13 +71,14 @@ if (isset($_GET['pressure'])) {
 }
 ''')
         config = root / 'fpm.conf'
+        worker_group = grp.getgrgid(pwd.getpwnam('nobody').pw_gid).gr_name
         config.write_text('''[global]
 daemonize = no
 error_log = {root}/fpm.log
 log_level = notice
 [probe]
 user = nobody
-group = nogroup
+group = {worker_group}
 listen = {socket}
 pm = static
 pm.max_children = 1
@@ -85,7 +88,7 @@ php_admin_value[memory_limit] = {limit}
 php_admin_value[session.save_path] = {root}
 php_admin_value[display_errors] = 0
 php_admin_value[log_errors] = 1
-'''.format(root=root, socket=address, limit=args.memory_limit))
+'''.format(root=root, socket=address, limit=args.memory_limit, worker_group=worker_group))
         def check(name, condition):
             report['checks'].append({'check': name, 'pass': bool(condition)})
             if not condition:

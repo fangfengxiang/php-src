@@ -2,9 +2,11 @@
 """Benign FastCGI lifecycle checks; only a private Unix socket is used."""
 
 import argparse
+import grp
 import json
 import os
 from pathlib import Path
+import pwd
 import re
 import signal
 import socket
@@ -155,13 +157,14 @@ if ($action === 'fatal' || $action === 'oom') {
 }
 """)
         config = root / "fpm.conf"
+        worker_group = grp.getgrgid(pwd.getpwnam("nobody").pw_gid).gr_name
         config.write_text("""[global]
 daemonize = no
 error_log = {root}/fpm.log
 log_level = notice
 [probe]
 user = nobody
-group = nogroup
+group = {worker_group}
 listen = {socket}
 pm = static
 pm.max_children = 1
@@ -176,7 +179,7 @@ php_admin_value[session.upload_progress.enabled] = 1
 php_admin_value[session.upload_progress.cleanup] = 0
 php_admin_value[display_errors] = 1
 php_admin_value[log_errors] = 1
-""".format(root=root, socket=address, session=session))
+""".format(root=root, socket=address, session=session, worker_group=worker_group))
         # Run an unprivileged child against only this private directory.
         root.chmod(0o777)
         session.chmod(0o777)

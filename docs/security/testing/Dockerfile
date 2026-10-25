@@ -3,11 +3,37 @@ FROM ${BASE_IMAGE}
 
 # This image supplies build tools only and contains no preinstalled PHP.
 # Build and test PHP 7.0 from the reviewed branch, using /work/install/bin/php.
-RUN apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 update \
-    && apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends \
+RUN set -eu; \
+    if command -v apt-get >/dev/null; then \
+      apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 update; \
+      apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends \
         autoconf2.69 build-essential ca-certificates curl re2c xz-utils \
-        libxml2-dev libsqlite3-dev python3 zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
+        libxml2-dev libsqlite3-dev python3 zlib1g-dev; \
+      rm -rf /var/lib/apt/lists/*; \
+    else \
+      dnf -y --setopt=install_weak_deps=False --setopt=timeout=20 --setopt=retries=2 install \
+        autoconf gcc gcc-c++ make ca-certificates perl tar xz gzip diffutils findutils \
+        libxml2-devel sqlite-devel python3 zlib-devel which; \
+      autoconf --version | head -n 1 | grep '2\.69'; \
+      ln -s /usr/bin/autoconf /usr/local/bin/autoconf2.69; \
+      ln -s /usr/bin/autoheader /usr/local/bin/autoheader2.69; \
+      dnf clean all; \
+    fi
+
+# RPM images build re2c at Debian 12's version without enabling EPEL or
+# installing a distribution PHP package.
+RUN set -eu; \
+    if command -v re2c >/dev/null; then exit 0; fi; \
+    curl -fsSL --connect-timeout 10 --max-time 45 \
+      --retry 1 --retry-delay 1 --retry-max-time 60 \
+      https://github.com/skvadrik/re2c/releases/download/3.0/re2c-3.0.tar.xz -o /tmp/re2c.tar.xz; \
+    echo 'b3babbbb1461e13fe22c630a40c43885efcfbbbb585830c6f4c0d791cf82ba0b  /tmp/re2c.tar.xz' | sha256sum -c -; \
+    tar -xJf /tmp/re2c.tar.xz -C /tmp; \
+    cd /tmp/re2c-3.0; \
+    ./configure --prefix=/opt/re2c --disable-docs; \
+    make -j4; \
+    make install; \
+    rm -rf /tmp/re2c-3.0 /tmp/re2c.tar.xz
 
 # PHP 7.0's custom parser diagnostics use yystrlen/yystpcpy, which the Bison
 # 3.8 skeleton no longer emits. Keep parser generation on a compatible release.
@@ -27,6 +53,6 @@ RUN set -eu; \
     && make install \
     && rm -rf /tmp/bison-3.5.1 /tmp/bison.tar.xz
 
-ENV PATH="/opt/bison/bin:${PATH}"
+ENV PATH="/opt/bison/bin:/opt/re2c/bin:${PATH}"
 
 WORKDIR /work

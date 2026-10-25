@@ -16,7 +16,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['debian:12', 'ubuntu:22.04', 'ubuntu:24.04']
+        os:
+          - debian:12
+          - ubuntu:22.04
+          - ubuntu:24.04
+          - quay.io/centos/centos:stream9
+          - registry.access.redhat.com/ubi9/ubi:latest
         mode: [debug, release]
         arch: [amd64]
         runner: [ubuntu-24.04]
@@ -52,7 +57,10 @@ jobs:
             -e BUILD_JOBS=4 --entrypoint sh php70-ci /harness/ci.sh "$BUILD_MODE"
       - name: Verify cgroup OOM and replacement workers
         timeout-minutes: 3
-        if: matrix.os == 'debian:12' && matrix.arch == 'amd64' && matrix.mode == 'debug'
+        if: >-
+          matrix.arch == 'amd64' && (matrix.mode == 'debug' || matrix.mode == 'release') &&
+          (matrix.os == 'debian:12' || matrix.os == 'quay.io/centos/centos:stream9' ||
+          matrix.os == 'registry.access.redhat.com/ubi9/ubi:latest')
         run: |
           python3 docs/security/testing/docker-memory-invariants.py \
             --image php70-ci --install "$RUNNER_TEMP/php70/output/install" \
