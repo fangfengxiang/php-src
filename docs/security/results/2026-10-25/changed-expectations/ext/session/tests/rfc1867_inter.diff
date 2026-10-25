@@ -1,0 +1,50 @@
+030+ NULL
+031+ NULL
+030- array(5) {
+031-   [%u|b%"start_time"]=>
+032-   int(%d)
+033-   [%u|b%"content_length"]=>
+034-   int(%d)
+035-   [%u|b%"bytes_processed"]=>
+036-   int(%d)
+037-   [%u|b%"done"]=>
+038-   bool(true)
+039-   [%u|b%"files"]=>
+040-   array(2) {
+041-     [0]=>
+042-     array(7) {
+043-       [%u|b%"field_name"]=>
+044-       %unicode|string%(5) "file1"
+045-       [%u|b%"name"]=>
+046-       %unicode|string%(9) "file1.txt"
+047-       [%u|b%"tmp_name"]=>
+048-       %unicode|string%(%d) "%s"
+049-       [%u|b%"error"]=>
+050-       int(0)
+051-       [%u|b%"done"]=>
+052-       bool(true)
+053-       [%u|b%"start_time"]=>
+054-       int(%d)
+055-       [%u|b%"bytes_processed"]=>
+056-       int(1)
+057-     }
+058-     [1]=>
+059-     array(7) {
+060-       [%u|b%"field_name"]=>
+061-       %unicode|string%(5) "file2"
+062-       [%u|b%"name"]=>
+063-       %unicode|string%(9) "file2.txt"
+064-       [%u|b%"tmp_name"]=>
+065-       %unicode|string%(%d) "%s"
+066-       [%u|b%"error"]=>
+067-       int(0)
+068-       [%u|b%"done"]=>
+069-       bool(true)
+070-       [%u|b%"start_time"]=>
+071-       int(%d)
+072-       [%u|b%"bytes_processed"]=>
+073-       int(1)
+074-     }
+075-   }
+076- }
+077- NULL

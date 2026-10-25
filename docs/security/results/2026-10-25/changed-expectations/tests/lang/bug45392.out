@@ -1,0 +1,3 @@
+2
+
+Fatal error: Allowed memory size of 262144 bytes exhausted at /work/.security-build/clang-hardened/src/main/output.c:905 (tried to allocate 32768 bytes) in /work/.security-build/clang-hardened/src/tests/lang/bug45392.php on line 7
