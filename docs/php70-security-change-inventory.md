@@ -80,9 +80,9 @@
 
 | 文件 | 相对基线状态 | 改动内容与作用 | 收益 | 风险与边界 |
 | --- | --- | --- | --- | --- |
-| [.github/workflows/php70-security.yml](../.github/workflows/php70-security.yml) | 新增 | 本仓库 PHPT Debug/Release、12 组平台检查、固定外部 behavior/trace、报告与 Pages；仅当前分支 push 和手动触发。 | 沿用本仓库 runner，消除重复触发；发布要求全部门禁通过。 | 固定外部 SHA `a03ad2f4c092004f651da1e890c61c5848d5ca7d`；并非穷尽安全证明。 |
+| [.github/workflows/php70-security.yml](../.github/workflows/php70-security.yml) | 新增 | 本仓库 PHPT Debug/Release、12 组平台检查、固定外部 behavior/trace、报告与 Pages；仅当前分支 push 和手动触发。 | 沿用本仓库 runner，消除重复触发；发布要求全部门禁通过。 | 固定外部 SHA `31fe485c059420aa3403e0f31ce8f4f7b2f9e95c`；并非穷尽安全证明。 |
 | [.github/php70/](../.github/php70/) | 新增 | PHPT/VM 的 CI 脚本、结果完整性检查和 8 条 progress 兼容性清单；所有 PHPT 仍在原源码目录。 | 14 条安全用例不得跳过，失败/不完整结果不能误报绿灯；使用本仓库 `run-tests.php`。 | 集成选择不等于原始目录全绿；不改旧测试、PHP runner 或无关运行时代码。 |
-| [php-cve-e2e/php70/harness](https://github.com/fangfengxiang/php-cve-e2e/tree/a03ad2f4c092004f651da1e890c61c5848d5ca7d/php70/harness) | 外部依赖，不计本仓库源码改动 | 唯一工具链、构建、native probe、FPM、cgroup、behavior/trace 实现。 | Debian、CentOS 7/8/Stream 9、UBI 9 共用入口；本仓库不留工具副本。 | 外部项目后续修改须审查并显式更新固定 SHA；容器不验证原生发行版内核。 |
+| [php-cve-e2e/php70/harness](https://github.com/fangfengxiang/php-cve-e2e/tree/31fe485c059420aa3403e0f31ce8f4f7b2f9e95c/php70/harness) | 外部依赖，不计本仓库源码改动 | 唯一工具链、构建、native probe、FPM、cgroup、behavior/trace 实现。 | Debian、CentOS 7/8/Stream 9、UBI 9 共用入口；本仓库不留工具副本。 | 外部项目后续修改须审查并显式更新固定 SHA；容器不验证原生发行版内核。 |
 | docs/security/testing/ | 删除 | 旧目录被移除；当前复现入口见 [CI 使用说明](../.github/php70/README.md)。 | 区分当前调用契约和历史证据。 | 旧文档中的 testing/ 链接是历史路径，不代表当前存在。 |
 
 ## 说明文档、范围原则与本次三份交付（10 个）

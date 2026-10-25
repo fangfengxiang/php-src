@@ -11,7 +11,7 @@ on:
 permissions:
   contents: read
 env:
-  PHP70_HARNESS_REF: a03ad2f4c092004f651da1e890c61c5848d5ca7d
+  PHP70_HARNESS_REF: 31fe485c059420aa3403e0f31ce8f4f7b2f9e95c
 concurrency:
   group: php70-security-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

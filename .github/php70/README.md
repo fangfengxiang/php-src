@@ -5,7 +5,7 @@ PHP 源码、PHPT、run-tests.php、测试选择和结果门禁都在本仓库�
 `.travis.yml`、AppVeyor 和 `Makefile.global` 均调用本仓库 runner，本工作流沿用这个模式。
 
 Docker 工具链、构建、native probe、FPM、cgroup、behavior/trace 属于
-[php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e/blob/a03ad2f4c092004f651da1e890c61c5848d5ca7d/php70/CI.md)。
+[php-cve-e2e](https://github.com/fangfengxiang/php-cve-e2e/blob/31fe485c059420aa3403e0f31ce8f4f7b2f9e95c/php70/CI.md)。
 本仓库不保存这些工具的副本；CI 固定外部 SHA，source/harness 同级检出。
 所有测试使用指定提交编译的 PHP 7.0.33，不使用宿主 PHP。
 
