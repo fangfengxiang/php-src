@@ -1,0 +1,53 @@
+{
+  "baseline": true,
+  "system_allocator": false,
+  "checks": [
+    {
+      "check": "five consecutive normal requests use same worker",
+      "pid": 21814,
+      "pass": true
+    },
+    {
+      "check": "normal session write and read",
+      "pass": true
+    },
+    {
+      "check": "ordinary multipart field and file",
+      "pass": true
+    },
+    {
+      "check": "unknown multipart headers do not accumulate retained memory",
+      "before_pid": 21814,
+      "after_pid": 21815,
+      "pass": true
+    },
+    {
+      "check": "upload progress honors mitigation even when configured on",
+      "has_progress": true,
+      "pass": true
+    },
+    {
+      "check": "ordinary fatal cleanup and safe worker reuse",
+      "pid": 21815,
+      "pass": true
+    },
+    {
+      "check": "early PHP_VALUE diagnostic after fatal and handlers",
+      "pid": 21815,
+      "pass": true
+    },
+    {
+      "check": "script memory_limit OOM matches expected lifecycle",
+      "before_pid": 21815,
+      "after_pid": 21815,
+      "shutdown_called": true,
+      "pass": true
+    },
+    {
+      "check": "startup multipart OOM cannot reuse worker",
+      "before_pid": 21815,
+      "after_pid": 21816,
+      "pass": true
+    }
+  ]
+}

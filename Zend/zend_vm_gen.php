@@ -640,7 +640,7 @@ function gen_code($f, $spec, $kind, $export, $code, $op1, $op2, $name) {
 	}
 
 	/* Remove unused free_op1 and free_op2 declarations */
-	if ($spec && preg_match_all('/^\s*zend_free_op\s+[^;]+;\s*$/me', $code, $matches, PREG_SET_ORDER)) {
+	if ($spec && preg_match_all('/^\s*zend_free_op\s+[^;]+;\s*$/m', $code, $matches, PREG_SET_ORDER)) {
 		$n = 0;
 		foreach ($matches as $match) {
 		  $code = preg_replace('/'.preg_quote($match[0],'/').'/', "\$D$n", $code);

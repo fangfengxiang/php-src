@@ -247,6 +247,21 @@ void shutdown_destructors(void) /* {{{ */
 }
 /* }}} */
 
+/* Isolated reset has no destructors: the legacy cleanup order is preserved. */
+static void zend_executor_reset_hardened(void)
+{
+	/* May be accessed by error handling before init_executor(). */
+	ZVAL_UNDEF(&EG(user_error_handler));
+	ZVAL_UNDEF(&EG(user_exception_handler));
+	memset(&EG(user_error_handlers_error_reporting), 0, sizeof(EG(user_error_handlers_error_reporting)));
+	memset(&EG(user_error_handlers), 0, sizeof(EG(user_error_handlers)));
+	memset(&EG(user_exception_handlers), 0, sizeof(EG(user_exception_handlers)));
+	EG(error_handling) = EH_NORMAL;
+	EG(exception) = NULL;
+	EG(objects_store).object_buckets = NULL;
+	EG(objects_store).top = 1;
+}
+
 void shutdown_executor(void) /* {{{ */
 {
 	zend_function *func;
@@ -406,6 +421,11 @@ void shutdown_executor(void) /* {{{ */
 	EG(ht_iterators_used) = 0;
 	if (EG(ht_iterators) != EG(ht_iterators_slots)) {
 		efree(EG(ht_iterators));
+	}
+
+	/* CVE-2026-109619 / 712e60f9: reset after cleanup, before heap reuse. */
+	if (php70_security_is_hardened()) {
+		zend_executor_reset_hardened();
 	}
 
 	EG(active) = 0;

@@ -1,0 +1,44 @@
+{
+  "baseline": false,
+  "system_allocator": true,
+  "checks": [
+    {
+      "check": "five consecutive normal requests use same worker",
+      "pid": 9,
+      "pass": true
+    },
+    {
+      "check": "normal session write and read",
+      "pass": true
+    },
+    {
+      "check": "ordinary multipart field and file",
+      "pass": true
+    },
+    {
+      "check": "unknown multipart headers do not accumulate retained memory",
+      "before_pid": 9,
+      "after_pid": 9,
+      "pass": true
+    },
+    {
+      "check": "upload progress honors mitigation even when configured on",
+      "has_progress": false,
+      "pass": true
+    },
+    {
+      "check": "ordinary fatal cleanup and safe worker reuse",
+      "pid": 9,
+      "pass": true
+    },
+    {
+      "check": "early PHP_VALUE diagnostic after fatal and handlers",
+      "pid": 9,
+      "pass": true
+    },
+    {
+      "check": "memory_limit OOM",
+      "skip": "USE_ZEND_ALLOC=0 intentionally disables Zend memory_limit"
+    }
+  ]
+}

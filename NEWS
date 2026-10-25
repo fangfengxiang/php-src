@@ -1,5 +1,18 @@
 PHP                                                                        NEWS
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+PHP 7.0.33 unofficial security backport (not a PHP project release)
+
+- Core:
+  . Backported the minimal PHP 7.4 EOL mitigation for CVE-2026-109618 and
+    CVE-2026-109619. Allocation failures and selected size-overflow failures
+    terminate the process without running request cleanup callbacks.
+  . Reset selected executor, SAPI and request state at shutdown. Reduced
+    initial input-array allocation and limited retained multipart headers
+    and body parts. See docs/security/ for coverage and validation limits.
+
+- Session:
+  . Disabled session upload progress regardless of its INI setting.
+
 06 Dec 2018 PHP 7.0.33
 
 - Core:

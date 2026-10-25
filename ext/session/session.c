@@ -2960,6 +2960,11 @@ static int php_session_rfc1867_callback(unsigned int event, void *event_data, vo
 	if (php_session_rfc1867_orig_callback) {
 		retval = php_session_rfc1867_orig_callback(event, event_data, extra);
 	}
+	/* CVE-2026-109619 / 712e60f9: refuse early Session state in place;
+	 * preserve callback chaining and legacy initialization order. */
+	if (php70_security_is_hardened()) {
+		return retval;
+	}
 	if (!PS(rfc1867_enabled)) {
 		return retval;
 	}

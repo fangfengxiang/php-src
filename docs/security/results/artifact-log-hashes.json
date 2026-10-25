@@ -1,0 +1,670 @@
+{
+  "mode-legacy/logs/fpm-invariants.log": {
+    "bytes": 65,
+    "sha256": "cbb236859621728f2304465afa2a49575f27c0feb01e08dc02a3c6164ed1a0c5"
+  },
+  "mode-legacy/logs/fpm-early-invariants.json": {
+    "bytes": 1219,
+    "sha256": "2285beecdc52c5e4950f664e346eefca0f9588159242fd28f27b0a4909276d21"
+  },
+  "mode-legacy/logs/substring-make.log": {
+    "bytes": 33182,
+    "sha256": "742f7ac6912129a9787dc2b7d1890e46f966b8ec77afcd0dd85b294b0cbe660c"
+  },
+  "mode-legacy/logs/substring-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "mode-legacy/logs/fpm-early-invariants.log": {
+    "bytes": 71,
+    "sha256": "af5689528256fdd9080203f1a8476c565877e3390034a098512bc76c20d94d91"
+  },
+  "mode-legacy/logs/phpt-failures.txt": {
+    "bytes": 367,
+    "sha256": "a54ea534a5ea98c4c44c0d9137473f37f4a439508d09cbf49899fcc46a480e5b"
+  },
+  "mode-legacy/logs/final-make.log": {
+    "bytes": 280848,
+    "sha256": "e38ce4eb42ba519b0d9144a748aa67ed00082eb04665187e628e5ab2f0f2005b"
+  },
+  "mode-legacy/logs/fpm-early-invariants.fpm.log": {
+    "bytes": 3012,
+    "sha256": "e0951ec3af53bb6da62c22e0b3404f1f655d3e486f9612fec7ba15ffad082b2f"
+  },
+  "mode-legacy/logs/phpt.log": {
+    "bytes": 52671,
+    "sha256": "991062c59f36decf672f691f87dd497c7265aab88f11a016be0070057a90adcd"
+  },
+  "mode-legacy/logs/final-buildconf.log": {
+    "bytes": 342,
+    "sha256": "78e9be395ed5ac9e7baa0cf9094eb6b47e287d213cb1942856be94bc5fa4f592"
+  },
+  "mode-legacy/logs/probe-abi.json": {
+    "bytes": 177,
+    "sha256": "96ef8e8c37f8727c0cd5991c5778f2cfafd2918a371e99af0a66464b9523358c"
+  },
+  "mode-legacy/logs/fpm-invariants.json": {
+    "bytes": 1097,
+    "sha256": "5d7cd1dc37aa37d4ee2561237daaad0c9c94e94340a5ec7abf87bbe205bda4ca"
+  },
+  "mode-legacy/logs/final-version.txt": {
+    "bytes": 161,
+    "sha256": "6e50cf0a4c906fe7839fe041b559ca155cd29751a5cfff1548f50feb4d3f0dec"
+  },
+  "mode-legacy/logs/final-configure.log": {
+    "bytes": 30937,
+    "sha256": "66072e91359d52fa4d548e329d8ad8fbbf1ca83f9f1b94cb650aab39fc6dde4e"
+  },
+  "mode-legacy/logs/probe-build.log": {
+    "bytes": 9167,
+    "sha256": "f00450782d6fc79edad681a2484b79621f8286faeb2c6971a8db6fb3a2ddc6eb"
+  },
+  "mode-legacy/logs/fpm-invariants.fpm.log": {
+    "bytes": 2380,
+    "sha256": "c1a9235718ab993c5cdac5f983679ffac463a8f9ec5a8ee5f092e848582dcd04"
+  },
+  "mode-legacy/logs/final-modules.txt": {
+    "bytes": 224,
+    "sha256": "08487a02c9dbad8ec6da788267db205cfdda2ffbb770675932f87738b01db978"
+  },
+  "mode-legacy/logs/final-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "mode-legacy/logs/final-source-sha256.txt": {
+    "bytes": 597,
+    "sha256": "20efc294b437b087b9febfdc4460c82c14e321c6447241d4e0f8dc78edc0f8f0"
+  },
+  "mode-legacy/logs/phpt.xml": {
+    "bytes": 53366,
+    "sha256": "89d240b1295d26f147bec9da8c71095cb6c2b083ed8de06cf4695e7c294c2aea"
+  },
+  "mode-legacy/logs/phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  "mode-legacy/logs/native-invariants.log": {
+    "bytes": 62,
+    "sha256": "de706c21087a0e14edfc9d1f556d216d8485551a1c89b436d4bc6f87174a648c"
+  },
+  "mode-legacy/logs/final-vm-make.log": {
+    "bytes": 33314,
+    "sha256": "de0beb12c84e6a9a0f84c749046154944a692a1a6c1cd7e54361739bcde58729"
+  },
+  "mode-legacy/logs/final-vm-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "mode-legacy/logs/legacy-phpt-driver.log": {
+    "bytes": 9777,
+    "sha256": "4d70d59e20ae7da9af05c822aba3ccb1fcb672140969e4c81b86c1aa8ad18dde"
+  },
+  "mode-legacy/logs/native-invariants.json": {
+    "bytes": 3434,
+    "sha256": "080bbb848bccecdea2262ad30b253d9adb4aacdfb101cae9787e6f4745a10e0a"
+  },
+  "patched-debug/logs/fpm-invariants.log": {
+    "bytes": 65,
+    "sha256": "cbb236859621728f2304465afa2a49575f27c0feb01e08dc02a3c6164ed1a0c5"
+  },
+  "patched-debug/logs/fpm-early-invariants.json": {
+    "bytes": 1222,
+    "sha256": "30ee6c85ae68b8e49ba2c65f5675e8dfab272f20632fe3a0cc8ae876789595e9"
+  },
+  "patched-debug/logs/final-clean.log": {
+    "bytes": 911,
+    "sha256": "dbddbbb629f713efdeabae1f32bf93ac0c9258a66d43dc762e4f5cb6bcfd02fe"
+  },
+  "patched-debug/logs/substring-make.log": {
+    "bytes": 33182,
+    "sha256": "742f7ac6912129a9787dc2b7d1890e46f966b8ec77afcd0dd85b294b0cbe660c"
+  },
+  "patched-debug/logs/substring-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "patched-debug/logs/fpm-early-invariants.log": {
+    "bytes": 71,
+    "sha256": "af5689528256fdd9080203f1a8476c565877e3390034a098512bc76c20d94d91"
+  },
+  "patched-debug/logs/phpt-failures.txt": {
+    "bytes": 2607,
+    "sha256": "5ff5d297ea23cd84824d160919636318673cc8414a4724fd013e7f13fa7f4799"
+  },
+  "patched-debug/logs/final-make.log": {
+    "bytes": 241613,
+    "sha256": "832822acfd56ac57e8551f251f16471cab8d848755c9630636b75a66b194e1b9"
+  },
+  "patched-debug/logs/security-phpt.xml": {
+    "bytes": 2616,
+    "sha256": "2ef3e5a007f3fe58d05f91974e88e2d14fd3441815576ea6523e68a1568bb9d7"
+  },
+  "patched-debug/logs/security-phpt-failures.txt": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "patched-debug/logs/fpm-early-invariants.fpm.log": {
+    "bytes": 1884,
+    "sha256": "0843bef8e3666556d68a14e6f86e1f41f63fb1b1c3d7838bb980209e4a52d8f1"
+  },
+  "patched-debug/logs/toolchain.txt": {
+    "bytes": 6571,
+    "sha256": "fa5298517f215d8c9a6c07af073e718028baaf3dc52839ef1efe6ac2bdf013d9"
+  },
+  "patched-debug/logs/phpt.log": {
+    "bytes": 726390,
+    "sha256": "59631aae467a252fb38f5abe1b3fac9d972fbfa080d38e58249039418d671f88"
+  },
+  "patched-debug/logs/final-buildconf.log": {
+    "bytes": 119,
+    "sha256": "98803f6a82cfcb75793c2ef62daea64763ca381ecd061703dfd307128736494a"
+  },
+  "patched-debug/logs/probe-abi.json": {
+    "bytes": 177,
+    "sha256": "95750501171e66671816569d3fd2621efb0f52c5ac83c9b9eb22d7ac34a56364"
+  },
+  "patched-debug/logs/security-phpt.log": {
+    "bytes": 3919,
+    "sha256": "54c6c8532c9737f5ab5a824479e4f02c52ab65cd26c6a3fe1643539642f611d0"
+  },
+  "patched-debug/logs/fpm-invariants.json": {
+    "bytes": 1100,
+    "sha256": "6f22542d29abb41efc1cf626ed7b55beba2798f5588c871df8302ceb7005f8b2"
+  },
+  "patched-debug/logs/final-version.txt": {
+    "bytes": 161,
+    "sha256": "d5ecb2851579a45915b9fd7808dd9a235875ecdfded6d3bac93f543a9bdfd494"
+  },
+  "patched-debug/logs/security-phpt-driver.log": {
+    "bytes": 3919,
+    "sha256": "54c6c8532c9737f5ab5a824479e4f02c52ab65cd26c6a3fe1643539642f611d0"
+  },
+  "patched-debug/logs/final-configure.log": {
+    "bytes": 30938,
+    "sha256": "89755fb80b051a752769f3771548eae2be99dfbe87a8279aedb3cf4a3dc0743e"
+  },
+  "patched-debug/logs/probe-build.log": {
+    "bytes": 9167,
+    "sha256": "f00450782d6fc79edad681a2484b79621f8286faeb2c6971a8db6fb3a2ddc6eb"
+  },
+  "patched-debug/logs/fpm-invariants.fpm.log": {
+    "bytes": 1542,
+    "sha256": "39b625f041dc9b9032642497dbcdc593ec50c7d46ada225abf28e660b655f255"
+  },
+  "patched-debug/logs/final-modules.txt": {
+    "bytes": 224,
+    "sha256": "08487a02c9dbad8ec6da788267db205cfdda2ffbb770675932f87738b01db978"
+  },
+  "patched-debug/logs/final-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "patched-debug/logs/final-source-sha256.txt": {
+    "bytes": 597,
+    "sha256": "20efc294b437b087b9febfdc4460c82c14e321c6447241d4e0f8dc78edc0f8f0"
+  },
+  "patched-debug/logs/phpt.xml": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "patched-debug/logs/native-invariants.log": {
+    "bytes": 62,
+    "sha256": "de706c21087a0e14edfc9d1f556d216d8485551a1c89b436d4bc6f87174a648c"
+  },
+  "patched-debug/logs/security-phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "patched-debug/logs/final-vm-make.log": {
+    "bytes": 33314,
+    "sha256": "de0beb12c84e6a9a0f84c749046154944a692a1a6c1cd7e54361739bcde58729"
+  },
+  "patched-debug/logs/final-vm-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "patched-debug/logs/full-phpt-driver.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "patched-debug/logs/native-invariants.json": {
+    "bytes": 3290,
+    "sha256": "b05290513b41ccd50457cc287417cf8d14afe8cb0e5ff5c1e5472896b2eb0510"
+  },
+  "patched-release/logs/fpm-invariants.log": {
+    "bytes": 65,
+    "sha256": "cbb236859621728f2304465afa2a49575f27c0feb01e08dc02a3c6164ed1a0c5"
+  },
+  "patched-release/logs/fpm-early-invariants.json": {
+    "bytes": 1222,
+    "sha256": "26af8c0780c3170c900e22426d017b21489fb702adadc259a0534e100c8889aa"
+  },
+  "patched-release/logs/final-clean.log": {
+    "bytes": 306,
+    "sha256": "32827ab7c28545d76109b95ee82aa2cd4f347a85c59ea2f100bb91d1fcc2f856"
+  },
+  "patched-release/logs/substring-make.log": {
+    "bytes": 33269,
+    "sha256": "a087bc20eff614ba487f13e115fc9644b7c58a51e25e8adff5cebe2f041b1e73"
+  },
+  "patched-release/logs/substring-install.log": {
+    "bytes": 1171,
+    "sha256": "11cdfcb8bc20e4fd7c2b30317b65e007e2b51a01bebcbd685fb1769741def433"
+  },
+  "patched-release/logs/fpm-early-invariants.log": {
+    "bytes": 71,
+    "sha256": "af5689528256fdd9080203f1a8476c565877e3390034a098512bc76c20d94d91"
+  },
+  "patched-release/logs/final-make.log": {
+    "bytes": 227913,
+    "sha256": "5460b7d0b24bd7e919dddc714fad93c2baa038523b7e4492e6420e24fad63014"
+  },
+  "patched-release/logs/security-phpt.xml": {
+    "bytes": 2617,
+    "sha256": "27da4a53813964a11d0ee48b90c78c9c60184cd9bbfd8d4140ffc2f5f5fb31cd"
+  },
+  "patched-release/logs/security-phpt-failures.txt": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "patched-release/logs/fpm-early-invariants.fpm.log": {
+    "bytes": 1503,
+    "sha256": "c00e91fb05bcc98f2f4cb0a0a7277dac5a55227a66698373caa0771ec1ebe632"
+  },
+  "patched-release/logs/toolchain.txt": {
+    "bytes": 6571,
+    "sha256": "0bbc236d7c55fc1a42e3b074eb29e205af91614901494d7b2ad94337a5302bcf"
+  },
+  "patched-release/logs/final-buildconf.log": {
+    "bytes": 119,
+    "sha256": "98803f6a82cfcb75793c2ef62daea64763ca381ecd061703dfd307128736494a"
+  },
+  "patched-release/logs/probe-abi.json": {
+    "bytes": 177,
+    "sha256": "95750501171e66671816569d3fd2621efb0f52c5ac83c9b9eb22d7ac34a56364"
+  },
+  "patched-release/logs/security-phpt.log": {
+    "bytes": 3919,
+    "sha256": "18bfa249cf6351fe9d809be983b2c33df59f335c24202cafce8af8aae5cba762"
+  },
+  "patched-release/logs/fpm-invariants.json": {
+    "bytes": 1100,
+    "sha256": "e5dc4a72058d4ba645edf14ff31f04772fbec11f7758128818bcc7fe98aab7cb"
+  },
+  "patched-release/logs/final-version.txt": {
+    "bytes": 155,
+    "sha256": "5369d8b86c0d2092aebfa1c5f2dfc4aef5fafb352362d7e22d75e2398592c87b"
+  },
+  "patched-release/logs/security-phpt-driver.log": {
+    "bytes": 3919,
+    "sha256": "18bfa249cf6351fe9d809be983b2c33df59f335c24202cafce8af8aae5cba762"
+  },
+  "patched-release/logs/final-configure.log": {
+    "bytes": 30936,
+    "sha256": "18ff7f66c3a4f1b4f41f8d5ec2c94ed84125593de47b99050261bceb35739fdf"
+  },
+  "patched-release/logs/probe-build.log": {
+    "bytes": 9891,
+    "sha256": "645bba852a439bc34547184005df9655488031ca8ea28ff392660da851e91615"
+  },
+  "patched-release/logs/fpm-invariants.fpm.log": {
+    "bytes": 1331,
+    "sha256": "f888e2aa88871dfbe81d3d996a906db98a62af94ed189538c5760a18f8c2b95b"
+  },
+  "patched-release/logs/final-modules.txt": {
+    "bytes": 224,
+    "sha256": "08487a02c9dbad8ec6da788267db205cfdda2ffbb770675932f87738b01db978"
+  },
+  "patched-release/logs/final-install.log": {
+    "bytes": 1171,
+    "sha256": "11cdfcb8bc20e4fd7c2b30317b65e007e2b51a01bebcbd685fb1769741def433"
+  },
+  "patched-release/logs/final-source-sha256.txt": {
+    "bytes": 597,
+    "sha256": "20efc294b437b087b9febfdc4460c82c14e321c6447241d4e0f8dc78edc0f8f0"
+  },
+  "patched-release/logs/native-invariants.log": {
+    "bytes": 62,
+    "sha256": "de706c21087a0e14edfc9d1f556d216d8485551a1c89b436d4bc6f87174a648c"
+  },
+  "patched-release/logs/security-phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "patched-release/logs/final-vm-make.log": {
+    "bytes": 33279,
+    "sha256": "35d75e7d3b18c299b8b6811fcf8fa850a8265efb84339f95bc582e1490074687"
+  },
+  "patched-release/logs/final-vm-install.log": {
+    "bytes": 1171,
+    "sha256": "11cdfcb8bc20e4fd7c2b30317b65e007e2b51a01bebcbd685fb1769741def433"
+  },
+  "patched-release/logs/native-invariants.json": {
+    "bytes": 3240,
+    "sha256": "553b87d5d27ea9d00b72d9c3246612369828ad7e3b5698b821243aa83dbbf73a"
+  },
+  "baseline-clean/logs/toolchain.txt": {
+    "bytes": 6571,
+    "sha256": "5b574c98c8d6304a5fd14d4e47c0b5021e9a2310583383b89c324b56dfb22a4c"
+  },
+  "baseline-final/logs/fpm-early-invariants.json": {
+    "bytes": 1219,
+    "sha256": "176f61f31c9b04621cb8e25e4fd9fb95ad67deaeacc771f7427de791b1bd5684"
+  },
+  "baseline-final/logs/generated-php_config.h": {
+    "bytes": 58404,
+    "sha256": "9bcbfabcf02dd18ecbaf7909135d71fc6975439039e8e987ec8fac061db7bcd0"
+  },
+  "baseline-final/logs/fpm-early-invariants.log": {
+    "bytes": 71,
+    "sha256": "af5689528256fdd9080203f1a8476c565877e3390034a098512bc76c20d94d91"
+  },
+  "baseline-final/logs/phpt-failures.txt": {
+    "bytes": 4204,
+    "sha256": "52138ec9324eaedc3a8ce42e8994bcafb0e3adde680f5095e1dfbad8bb56bf6d"
+  },
+  "baseline-final/logs/fpm-early-invariants.fpm.log": {
+    "bytes": 2996,
+    "sha256": "cf9826b510421faacacbe3f7c7168d776a8203c01da9cc8ef7b4a3bbd2888ac5"
+  },
+  "baseline-final/logs/toolchain.txt": {
+    "bytes": 6571,
+    "sha256": "1380201740f87c4d72cc16494c8d2c53ec15b6ff30cbc9c277119af73731d521"
+  },
+  "baseline-final/logs/generated-Makefile": {
+    "bytes": 148119,
+    "sha256": "c1d6cf1cca791fb8ac3de08a6990eaf9a11df0e46ac975754c158f38fd5a2137"
+  },
+  "baseline-final/logs/phpt.log": {
+    "bytes": 1858835,
+    "sha256": "ea5b5066df75866aa3aa679316af76a20ad1484172e72454843c19c96c909d62"
+  },
+  "baseline-final/logs/probe-abi.json": {
+    "bytes": 164,
+    "sha256": "21397a318a06b0a545bdc724e2fafa99675ae7ac2f1aeec5c9a6363a3d3ff37d"
+  },
+  "baseline-final/logs/probe-build.log": {
+    "bytes": 9167,
+    "sha256": "e6c6a61fb8bce86e75624b8b10e1092c131ee256e8db615d32c280e465a9ed93"
+  },
+  "baseline-final/logs/final-source-sha256.txt": {
+    "bytes": 510,
+    "sha256": "27f705ed843b65c8f502282332038022564e3fbe1f8a19c83a1d59813a698047"
+  },
+  "baseline-final/logs/phpt.xml": {
+    "bytes": 1869560,
+    "sha256": "4bb27f994b1e487f7dabb1171f45992d3d46c96fc802e300fc3b27056a5d3f0a"
+  },
+  "baseline-final/logs/phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  "baseline-final/logs/full-phpt-driver.log": {
+    "bytes": 6797,
+    "sha256": "b4c8f7153a1eb4584e363cac6ae26719e5910086cffd4cf06e2de72b65548333"
+  },
+  "baseline-debug/logs/phpt-failures.txt": {
+    "bytes": 4845,
+    "sha256": "6e52e756b8d7cff4d44e985218a845c06c92c3538ee29377cc845e6a64f65a1f"
+  },
+  "baseline-debug/logs/toolchain.txt": {
+    "bytes": 6571,
+    "sha256": "5512506a2393908e6fd32f0735a46746d0b6c4cedc2e0187dfa6bd3cc9e239d3"
+  },
+  "baseline-debug/logs/phpt.log": {
+    "bytes": 1860071,
+    "sha256": "67c7ac1f9290c9421992abe5e39b20fc849e07dfaa36beb229a4d8157d8995c7"
+  },
+  "baseline-debug/logs/probe-abi.json": {
+    "bytes": 164,
+    "sha256": "21397a318a06b0a545bdc724e2fafa99675ae7ac2f1aeec5c9a6363a3d3ff37d"
+  },
+  "baseline-debug/logs/fpm-invariants.json": {
+    "bytes": 1066,
+    "sha256": "a4ee2168aa464a2a2c9d6953885588d7853cbbcc9f1c3434accf7b55b433f61e"
+  },
+  "baseline-debug/logs/probe-build.log": {
+    "bytes": 7434,
+    "sha256": "f4742def6f109ed70ae203fde6f58186f1d45734db7b4b0b4841ca2dfac3e8df"
+  },
+  "baseline-debug/logs/fpm-invariants.fpm.log": {
+    "bytes": 2329,
+    "sha256": "b520400bacda039ed041ae814c3c64543e831113f7b0afc76384d6e5525f39ec"
+  },
+  "baseline-debug/logs/phpt.xml": {
+    "bytes": 2132990,
+    "sha256": "835d2b6d1270f5f89cf96dc9d3d6ea6369dd86b35fcccbb87819c40f4ab2cff4"
+  },
+  "baseline-debug/logs/phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  "patched-asan/logs/fpm-invariants.log": {
+    "bytes": 65,
+    "sha256": "cbb236859621728f2304465afa2a49575f27c0feb01e08dc02a3c6164ed1a0c5"
+  },
+  "patched-asan/logs/fpm-early-invariants.json": {
+    "bytes": 1222,
+    "sha256": "3955d1b8f7eda0d5f772a9aeb12c2687baaf3848ce26a1c909081e05ec73966d"
+  },
+  "patched-asan/logs/final-clean.log": {
+    "bytes": 306,
+    "sha256": "32827ab7c28545d76109b95ee82aa2cd4f347a85c59ea2f100bb91d1fcc2f856"
+  },
+  "patched-asan/logs/substring-make.log": {
+    "bytes": 33413,
+    "sha256": "1a8546d4c68ec6a509d50abc215320bf7239f9298736fadc1255ca69dda7a847"
+  },
+  "patched-asan/logs/substring-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "patched-asan/logs/fpm-early-invariants.log": {
+    "bytes": 71,
+    "sha256": "af5689528256fdd9080203f1a8476c565877e3390034a098512bc76c20d94d91"
+  },
+  "patched-asan/logs/system-phpt.xml": {
+    "bytes": 2653,
+    "sha256": "660af8747ae7c6e5585cf74bdc81a4701aa70e4d4f3e65d531d109be476c6db9"
+  },
+  "patched-asan/logs/fpm-system-allocator.log": {
+    "bytes": 71,
+    "sha256": "90ea069e1708797f3c38785e03065484c65167ae5c82620c0fdd50f46d1a5e71"
+  },
+  "patched-asan/logs/final-make.log": {
+    "bytes": 259001,
+    "sha256": "8a6382fd0bc9919d27746206c0c99e637714521544c33d188461f8b659d09805"
+  },
+  "patched-asan/logs/security-phpt.xml": {
+    "bytes": 2618,
+    "sha256": "9b2839d99e574e8b562d96922c345e9cbbc601576eb3fa38ade012d07c7f54ac"
+  },
+  "patched-asan/logs/security-phpt-failures.txt": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "patched-asan/logs/fpm-early-invariants.fpm.log": {
+    "bytes": 1884,
+    "sha256": "6e787ed670fab6d8508a82e33501755557d405f11f3af36bd4520aa9793b6436"
+  },
+  "patched-asan/logs/toolchain.txt": {
+    "bytes": 6571,
+    "sha256": "69fed2614766558f5d3bdaa1251fd0969fb17882096eb98975996d12565f3cd0"
+  },
+  "patched-asan/logs/fpm-system-allocator.json": {
+    "bytes": 992,
+    "sha256": "d202051767cc55b8a08ab1cf750c7e13ec483327399adf05b251e713e19432f2"
+  },
+  "patched-asan/logs/system-phpt-failures.txt": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "patched-asan/logs/final-buildconf.log": {
+    "bytes": 119,
+    "sha256": "98803f6a82cfcb75793c2ef62daea64763ca381ecd061703dfd307128736494a"
+  },
+  "patched-asan/logs/probe-abi.json": {
+    "bytes": 177,
+    "sha256": "95750501171e66671816569d3fd2621efb0f52c5ac83c9b9eb22d7ac34a56364"
+  },
+  "patched-asan/logs/security-phpt.log": {
+    "bytes": 3919,
+    "sha256": "bc3cb327e65e16e08a774fab42ed32b8920aef2e652549494cc98f1f329b93dd"
+  },
+  "patched-asan/logs/fpm-invariants.json": {
+    "bytes": 1100,
+    "sha256": "f3fcbbb75dfb08d3da077ab80184ad8c74e7f38ecc9de09fe3aa53ed5a8aa8ec"
+  },
+  "patched-asan/logs/final-version.txt": {
+    "bytes": 161,
+    "sha256": "cfea91b7b990b82e35da296a4bae4e1bd50ee76a8482bb3e7f3c69647a26deb5"
+  },
+  "patched-asan/logs/security-phpt-driver.log": {
+    "bytes": 3919,
+    "sha256": "bc3cb327e65e16e08a774fab42ed32b8920aef2e652549494cc98f1f329b93dd"
+  },
+  "patched-asan/logs/final-configure.log": {
+    "bytes": 31014,
+    "sha256": "608f6c5c9da7bc3fde79961769b8c4c8a75dad0fffb11d2797eafc48998bdf6e"
+  },
+  "patched-asan/logs/probe-build.log": {
+    "bytes": 9167,
+    "sha256": "f00450782d6fc79edad681a2484b79621f8286faeb2c6971a8db6fb3a2ddc6eb"
+  },
+  "patched-asan/logs/system-phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "patched-asan/logs/fpm-invariants.fpm.log": {
+    "bytes": 1542,
+    "sha256": "3d5b5b5055095c8ba291866146d8ec3e8f2fe312b7f03d5989faf2e4a0c54775"
+  },
+  "patched-asan/logs/final-modules.txt": {
+    "bytes": 224,
+    "sha256": "08487a02c9dbad8ec6da788267db205cfdda2ffbb770675932f87738b01db978"
+  },
+  "patched-asan/logs/final-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "patched-asan/logs/system-phpt-driver.log": {
+    "bytes": 3943,
+    "sha256": "bdbda301fb24422424174e093cad615f0c271a3cfac0a4f26dc14b0c49935240"
+  },
+  "patched-asan/logs/final-source-sha256.txt": {
+    "bytes": 597,
+    "sha256": "20efc294b437b087b9febfdc4460c82c14e321c6447241d4e0f8dc78edc0f8f0"
+  },
+  "patched-asan/logs/native-invariants.log": {
+    "bytes": 62,
+    "sha256": "de706c21087a0e14edfc9d1f556d216d8485551a1c89b436d4bc6f87174a648c"
+  },
+  "patched-asan/logs/security-phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "patched-asan/logs/final-vm-make.log": {
+    "bytes": 33545,
+    "sha256": "9b2e3fb9fcfb2f9bfd7d4f0c301c9b44f7f95afb431ad3026ae8e8f2eab5be6e"
+  },
+  "patched-asan/logs/fpm-system-allocator.fpm.log": {
+    "bytes": 872,
+    "sha256": "7d43fc7fc600aebfca61f434d0a82efea270ad9c01fb0514072e46eb774d0a6a"
+  },
+  "patched-asan/logs/final-vm-install.log": {
+    "bytes": 1168,
+    "sha256": "9c63dead6b97112323bca1c724e1decded7d14b88eaa54983e67e8ef9b8392ef"
+  },
+  "patched-asan/logs/native-invariants.json": {
+    "bytes": 3370,
+    "sha256": "cbecaf4b664e194371ec2ce1306448968e72a3055ed6c24fcabbc67f509b2565"
+  },
+  "patched-asan/logs/system-phpt.log": {
+    "bytes": 3943,
+    "sha256": "bdbda301fb24422424174e093cad615f0c271a3cfac0a4f26dc14b0c49935240"
+  },
+  "hardened-final/logs/fpm-early-invariants.json": {
+    "bytes": 1222,
+    "sha256": "330b5c7a0b99b88c8416768e0c9badc869038f6ee3365e1abe21004d672c4ff5"
+  },
+  "hardened-final/logs/generated-php_config.h": {
+    "bytes": 58476,
+    "sha256": "8ef84550ca935c036ba43bc0c80065ab2705829cd2f01f49080d13de2e833212"
+  },
+  "hardened-final/logs/fpm-early-invariants.log": {
+    "bytes": 71,
+    "sha256": "af5689528256fdd9080203f1a8476c565877e3390034a098512bc76c20d94d91"
+  },
+  "hardened-final/logs/phpt-failures.txt": {
+    "bytes": 4666,
+    "sha256": "0cd1b1d9c5c42832645da5be5bcd7e4a9da517ffcff6dc3723c0ffc31c836163"
+  },
+  "hardened-final/logs/security-phpt.xml": {
+    "bytes": 2618,
+    "sha256": "672edf50424b83cd2fe52d18889cf80565d30670ec00be229c7722b0afaaf2fa"
+  },
+  "hardened-final/logs/security-phpt-failures.txt": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "hardened-final/logs/fpm-early-invariants.fpm.log": {
+    "bytes": 1884,
+    "sha256": "660aacc82cf4c5e533bf753e23bc4f06dd12218b9891c6af8d379c7ad58dfd2b"
+  },
+  "hardened-final/logs/toolchain.txt": {
+    "bytes": 6571,
+    "sha256": "3f6f2a44d8def07747973ffa49a1838b6cd442ef87cbc1b8a3bd55329392756e"
+  },
+  "hardened-final/logs/generated-Makefile": {
+    "bytes": 148171,
+    "sha256": "e8457a46e8722aba74d776fc57242baa265f9a826a1c2a5b9dbb952ed6feb063"
+  },
+  "hardened-final/logs/phpt.log": {
+    "bytes": 1861707,
+    "sha256": "7abd28824f86b033f6a23826810c6eba5ada3a8f1fe9f123df5070e45c9c89b1"
+  },
+  "hardened-final/logs/probe-abi.json": {
+    "bytes": 177,
+    "sha256": "95750501171e66671816569d3fd2621efb0f52c5ac83c9b9eb22d7ac34a56364"
+  },
+  "hardened-final/logs/security-phpt.log": {
+    "bytes": 3919,
+    "sha256": "5a7fb7e7a724ee7037892664bb1902400b9b40f6e68a0cdea332fa8c310c63f1"
+  },
+  "hardened-final/logs/security-phpt-driver.log": {
+    "bytes": 3919,
+    "sha256": "5a7fb7e7a724ee7037892664bb1902400b9b40f6e68a0cdea332fa8c310c63f1"
+  },
+  "hardened-final/logs/probe-build.log": {
+    "bytes": 9167,
+    "sha256": "f00450782d6fc79edad681a2484b79621f8286faeb2c6971a8db6fb3a2ddc6eb"
+  },
+  "hardened-final/logs/final-source-sha256.txt": {
+    "bytes": 597,
+    "sha256": "ff8224896523eab1415e358d195478047eef7f2dfc102608638308efc6d63d54"
+  },
+  "hardened-final/logs/phpt.xml": {
+    "bytes": 1885067,
+    "sha256": "bb180364e40e6eb7b8068e10ac72bf9eb59ffdd93e5986522d949a790d85b6ed"
+  },
+  "hardened-final/logs/phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  "hardened-final/logs/native-invariants.log": {
+    "bytes": 62,
+    "sha256": "de706c21087a0e14edfc9d1f556d216d8485551a1c89b436d4bc6f87174a648c"
+  },
+  "hardened-final/logs/security-phpt-exit-status.txt": {
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "hardened-final/logs/full-phpt-driver.log": {
+    "bytes": 6285,
+    "sha256": "15fa9922a0c4bf59af84780ad68cacabf681e99a29bdabc7c17ad2584d871739"
+  },
+  "hardened-final/logs/native-invariants.json": {
+    "bytes": 3290,
+    "sha256": "b05290513b41ccd50457cc287417cf8d14afe8cb0e5ff5c1e5472896b2eb0510"
+  }
+}

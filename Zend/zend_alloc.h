@@ -27,6 +27,7 @@
 
 #include "../TSRM/TSRM.h"
 #include "zend.h"
+#include "zend_security.h"
 
 #ifndef ZEND_MM_ALIGNMENT
 # define ZEND_MM_ALIGNMENT Z_L(8)
@@ -391,6 +392,8 @@ static void apc_init_heap(void)
 }
  
 */
+
+ZEND_API ZEND_COLD ZEND_NORETURN void zend_mm_safe_error_hardened(const char *format, ...);
 
 END_EXTERN_C()
 
