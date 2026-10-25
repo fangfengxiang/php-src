@@ -135,3 +135,9 @@ PHP 7 的 str_repeat(PHP_INT_MAX) 测试不直接移植：5.6 在到达 safe_ema
 
 用户要求先发布审查 PR，再进行后续验证。此时未宣称成功编译、测试通过或适合部署。
 已经启动的构建日志保存在 worktree 的 .security-build/results，后续按快照归档结果。
+
+## PR 后的编译诊断修正
+
+为新终止 helper 增加 5.6 可用的 GNU noreturn 声明，避免本次改动引入的 inline
+malloc/realloc wrapper “control reaches end”警告；不引入 PHP 7 属性宏。
+arm64 -O2 仍在干净基线的同一 X 约束失败，转用现成的 Linux x86_64 工具链。

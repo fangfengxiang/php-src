@@ -52,8 +52,13 @@ typedef struct _zend_leak_info {
 
 BEGIN_EXTERN_C()
 
+#if defined(__GNUC__) && __GNUC__ >= 3
+ZEND_API void zend_mm_safe_error_ex(const char *format, ...) __attribute__ ((noreturn));
+ZEND_API void zend_out_of_memory(void) __attribute__ ((noreturn));
+#else
 ZEND_API void zend_mm_safe_error_ex(const char *format, ...);
 ZEND_API void zend_out_of_memory(void);
+#endif
 
 ZEND_API char *zend_strndup(const char *s, unsigned int length) ZEND_ATTRIBUTE_MALLOC;
 
